@@ -1,0 +1,393 @@
+<section xml:id="Sec_Variables">
+  <title>Types of Variables and their Relationships (B1)</title>
+  <introduction>
+    <p>
+      When one does statistics, what is it exactly that we are observing and measuring?  What are we computing?
+    </p>
+  <p>
+    In this section, we recognize different types of variables and classify them, and describe potential relationships between variables in a data set.
+  </p>
+
+
+  <exploration xml:id="exploration-sleep">
+      <title>Hours of sleep</title>
+      <introduction>
+      <p>
+        In this introductory activity, we ask ourselves some natural questions that one would ask when collecting and analyzing data.
+      </p>
+    </introduction>
+
+        <task>
+          <p>
+          As a class write down the average time (in hours, to the nearest half-hour) they sleep per night. </p>
+        </task>
+
+        <task>
+          <p>
+            Then create a simple graph (called a dot plot) of the data. 
+      For example, consider the following data:
+
+<me>5, 5.5, 6, 6, 6, 6.5, 6.5, 6.5, 6.5, 7, 7, 8, 8, 9</me>
+
+The dot plot for this data would be as follows:
+
+  <figure>
+  <image source="images/DotPlot.png" width="75%" >
+      <description>Frequency of Average Time (in Hours) Spent Sleeping per Night.</description>
+
+    </image>
+<caption> Frequency of Average Time (in Hours) Spent Sleeping per Night.</caption>
+</figure>
+</p>
+</task>
+
+<task>
+<p>
+Does your dot plot look the same as or different from the example? Why?
+</p>
+</task>
+
+<task>
+<p>
+ If you did the same exercise in an English class with the same number of students, do you think the results would be the same? Why or why not?
+</p>
+</task>
+
+      <task>
+<p>
+  Where do your data appear to cluster? How could you interpret the clustering?
+</p>
+</task>
+      <task>
+<p>
+  What could we say about the Average Sleeping time of other students at your school?  Would it matter if they were taking Statistics?  Why or why not?
+</p>
+</task>
+      <task>
+<p> What are some reasons one may doubt the conclusions you've reached?
+</p>
+</task>
+
+
+  </exploration>
+
+
+  <p>
+    Congratulations!  You're on your way to becoming a Statistician.
+  </p>
+
+  <definition>
+    <statement>
+      <p>
+        <ul>
+          <li> <em>Descriptive Statsitics</em> is the organization and summary of data.</li>
+          <li> <em>Inferential Statistics</em> is using data to infer conclusions, and assesing the relative confidence we can state those conclusions</li>
+        </ul>
+      </p>
+    </statement>
+  </definition>
+
+
+</introduction>
+
+
+<subsection>
+  <title>Types of Variables</title>
+  <p>
+  When we do either descriptive or inferential statistics, we are describing or infering properties of <em>variables</em>.  Variables come in two types, each with two subcategories.</p>
+
+<definition>
+  <ul>
+    <li>
+      <p>
+      <em>Numerical</em> variables are variables who's values are representable as numbers which can meaningfully be summed, subtracted or averaged.
+      <ul>
+        <li> <em>Discrete</em> variables have values spaced out by regular units, typically whole number value.</li>
+        <li><em>Continuous</em> variables have values where number between values are also potential values.</li>
+      </ul>  
+    </p>
+  </li>
+      <li><p>
+
+        <em>Categorical</em> variables have values that are categories rather than numerical.
+      
+        <ul>
+          <li><em>Ordinal</em> variables have values which have a natural ranking.</li>
+          <li><em>Nominal</em> variables do not exhibit a natural ranking.</li>
+         </ul>  
+       </p>
+         </li>
+
+  </ul>  
+
+</definition>
+
+  <activity xml:id="activity-variables">
+      <title>Classifying Variables</title>
+      <task>
+        <p>
+          For each of the following, classify the variable type and subcategory.
+        </p>
+        <p>
+          <ol>
+            <li>The colors of crayons in a 24-crayon box.</li>
+            <li>Student ID Numbers.</li>
+            <li>Grade Point Averages.</li>
+            <li>Pounds of fish caught on a fishing trip.</li>
+            <li>Number of fish caught on a fishing trip.</li>
+            <li>Year of Birth.</li>
+            <li>Annual income in dollars.</li>
+            <li>A satisfaction survey of a social website by number: 1 = very satisfied, 2 = somewhat satisfied, 3 = not satisfied.</li>
+          </ol>
+        </p>
+      </task>
+      <task>
+        <p>
+          Then, for each of the four subcategories, come up with two additional examples.
+        </p>
+      </task>
+  </activity>
+
+  <activity xml:id="activity-variablesR">
+      <title>Classifying Variables from a Data Set</title>
+      <introduction>
+            <p>
+              In this activity, we look at an actual sample of data.
+            </p>
+            <p>
+              Run the following code to download the <c>heart_transplant.csv</c> data and to display it.
+        <sage language="r">
+          <input>
+            heart_transplant = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/heart_transplant.csv")
+            heart_transplant
+          </input>
+        </sage>
+        This data is from a Stanford University study to see if an experimental heart transplant procedure increased lifespan.
+        </p>
+      </introduction>
+        <task>
+        <p>  
+          Run <c>names(heart_transplant)</c> to see just the variable names.
+
+        <sage language="r">
+          <input>
+            names(heart_transplant)
+          </input>
+        </sage>
+
+        The meaning of these variables are:
+        <ul>
+        <li>id - ID number of the patient.</li>
+        <li>acceptyear - Year of acceptance as a heart transplant candidate.</li>
+        <li>age - Age of the patient at the beginning of the study.</li>
+        <li>survived - Survival status with levels alive and dead.</li>
+        <li>survtime - Number of days patients were alive after the date they were determined to be a candidate for a heart transplant until the termination date of the study</li>
+        <li>prior - Whether or not the patient had prior surgery with levels yes and no.</li>
+        <li>transplant - Transplant status with levels control (did not receive a transplant) and treatment (received a transplant).</li>
+        <li>wait - Waiting Time for Transplant</li>
+
+        </ul>
+      </p>
+    </task>
+
+
+        <task>
+        <p>  
+          
+        For each variable in this data set, which type and subcategory is it?
+        </p>
+        </task> 
+          
+
+      
+  </activity>
+
+
+
+
+</subsection>  
+
+
+<subsection xml:id="subsection-relationship">
+<title>Relationships Between Variables</title>
+  <p>
+    Much of data analysis is centered on not one, but two or more variables at the same time, to observe any relationships (or lack thereof) between variables.
+
+
+  </p>
+
+  <p>
+    To facilitate this, we often plot pairs of numerical varaibles as <em>scatterplots</em> where the <m>x</m> and <m>y</m> coordinates are each different numerical variables.  When then look for patterns in the resulting plot.
+
+  </p>
+
+  <activity xml:id="activity-popchangeincome">
+    <title>Population Change vs Per Capita Income</title>
+  <introduction>
+  <p>
+  Consider the following figure comparing change in County's population compared to their median household income.
+  
+  <figure>
+  <image source="images/popincome" width="75%" >
+      <description>Change in popultation vs change in per capita income</description>
+
+    </image>
+<caption> Change in population of a county versus  median household income of the same county.  Owsley
+County of Kentucky, is highlighted, which lost 3.63% of its population from 2010
+to 2017 and had median household income of $22,736. </caption>
+</figure>
+</p>
+</introduction>
+
+  <task>
+        <p>  
+           Does there seem to be a positive, negative, or no relationship between the change in population and the median household income?
+         </p>
+       </task>
+
+    <task>
+        <p>  
+          Is this relationship (if any) strong or weak? 
+        </p>
+      </task>
+
+    <task>
+        <p>  
+          What might account for this relationship, or lack of relationship? 
+        </p>
+      </task>
+  </activity>
+
+  <p>
+  A relationship between variables of this sort is often referred to as <em>correlation</em>.
+  </p>
+
+
+
+  <activity xml:id="activity-multiunitsVsOwnership">
+    <title>Multi-unit Housing Vs. Home Ownership</title>
+  <introduction>
+  <p>
+  Consider the following figure comparing the percentage of housing in a County that is multi-unit compared to home ownership rates in those Counties.
+  <figure>
+  <image source="images/multiunitsVsOwnership" width="75%" >
+      <description>Multi Unit vs Ownership</description>
+
+    </image>
+<caption> Home ownership rates versus  percentage of housing that is multi-unit in the same county.  The highlighted dot represents Chattahoochee
+County, Georgia, which has a multi-unit rate of 39.4% and a homeownership
+rate of 31.3%. </caption>
+</figure>
+</p>
+</introduction>
+
+  <task>
+        <p>  
+           Does there seem to be a positive, negative, or no relationship between the percentage of housing that is multi-unit and the home ownership rate? 
+         </p>
+       </task>
+
+    <task>
+        <p>  
+          Is this relationship (if any) strong or weak?
+        </p>
+      </task>
+
+    <task>
+        <p>  
+          What might account for this relationship, or lack of relationship? 
+        </p>
+      </task>
+  </activity>
+
+  <activity xml:id="activity-ageofpatientvssurvival">
+    <title>Age of Patients vs. Days Survived</title>
+  <introduction>
+  <p>
+  Recall the Heart Transplant Data from <xref ref="activity-variablesR"/> Run the following code to plot the age of a patient at the start of the study compared to number of days the patient survived over the course of the study.
+  
+
+  <sage language="r">
+          <input>
+            plot(heart_transplant$age, heart_transplant$survtime, main="Age of Patient vs Days Survived",
+   xlab="Age of Patient ", ylab="Days Survived ", pch=19)
+
+
+          </input>
+        </sage>
+      </p>
+    </introduction>
+
+
+  <task>
+        <p>  
+          
+          Does there seem to be a positive, negative, or no relationship between the age of a patient and the number of days they survived?
+        </p>
+      </task>
+
+    <task>
+        <p>  
+           Is this relationship (if any) strong or weak?
+         </p>
+       </task>
+
+    <task>
+        <p>  
+          What might account for this relationship, or lack of relationship? 
+        </p>
+      </task>
+  </activity>
+
+
+  <definition xml:id="definition-explanatoryresponse">
+  <statement>
+  <p>
+    When we suspect one variable might causally affect another, we label the first variable the
+<em>explanatory variable</em> and the second the <em>response variable</em>.
+
+  </p>
+
+  <p>
+  Note that for a given pair of variables <em>unless</em> we hypothesize a relationship between them, <em>neither</em> label would apply.
+
+
+  </p>
+  </statement>
+  </definition>
+
+  <remark xml:id="remark-corrcause">
+  <statement>
+  <p>
+    Note that if two variables have a positive or negative relationship, even a strong one, that there does <em>not</em> neccesarily exist any casual link between them!
+
+  </p>
+
+  <p>
+  Correlation <m>\neq</m> Causation!
+  </p>
+
+  </statement>
+  </remark>
+
+  <activity xml:id="activity-corrcause">
+      <title>Correlation and Causation</title>
+      <task>
+        <p>  
+          
+        Come up with a pair of variables who may be strongly correlated (positively or negatively) but have no casual relationship.
+      </p>
+    </task>
+  </activity>
+
+<p>
+For more (some funny!) examples, visit the site Spurious Correlations: <url href="https://www.tylervigen.com/spurious-correlations"/>.
+</p>
+
+
+</subsection>
+
+
+
+
+</section>

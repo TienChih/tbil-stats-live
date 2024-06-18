@@ -1,0 +1,19 @@
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude"  xml:id="Chap_Distributions">
+  <title>Distributions (D)</title>
+  <objectives>
+        <ul>
+            <xi:include href="outcomes.ptx"/>
+        </ul>
+    </objectives>
+  <xi:include  href="Sec_StandardNormal.ptx"/> 
+  <xi:include  href="Sec_GeneralNormal.ptx"/> 
+
+  <xi:include  href="Sec_Counting.ptx"/>
+  <xi:include  href="Sec_Binomial.ptx"/> 
+  <xi:include  href="Sec_NormalApprox.ptx"/> 
+  
+
+
+
+  
+</chapter>

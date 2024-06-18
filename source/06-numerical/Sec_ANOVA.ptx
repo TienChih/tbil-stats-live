@@ -1,0 +1,666 @@
+<section xml:id="Sec_ANOVA">
+    <title>ANOVA: Analysis of Variation (N6)</title>
+
+   <introduction>
+        <p> In <xref ref="Sec_TwoVarNum"/>, we compared populations seperated into two groups to see if some variable differed on average between the groups.  In this section, we will look at comparing across more than two groups.
+        </p>
+
+        <p>
+          Suppose you had variable of interest across <m>k</m> seperate populations.  So long as the following conditions are met:
+
+          <ul>
+            <li>Observations are independent across groups.</li>
+            <li>Observations within groups are approximately normal.</li>
+            <li>Variability across groups is roughly equal.</li>
+          </ul>
+
+          Then we may perform ANOVA (Analysis of Variation) to perform a test on the following hypothesis:
+          <ul>
+            <li><m>H_0:</m> The means are the same across groups, that is: <m>\mu_1=\mu_2\cdots=\mu_k</m>.</li>
+            <li><m>H_A::</m> At least one of the means is different from another.</li> 
+          </ul>
+
+
+        </p>
+
+
+
+  
+    <exploration xml:id="exploration-battingaverage">
+        <title>Batting Average and Position</title>
+        <introduction>
+            <p>
+              Is there any difference in batting average between different positions?  We examine 1270 players from the 2018 MLB season, and observe their batting average and position:  <c>1B</c> = first base, <c>2B</c> = second base, <c>3B</c> = third base, <c>C</c> = catcher, <c>CF</c> = center field (outfield), <c>DH</c> = designated hitter, <c>LF</c> = left field (outfield), <c>P</c> = pitcher, <c>RF</c> = right field (outfield), <c>SS</c> = shortstop.
+            </p>
+
+
+            <p>
+                Run the following code to download  the <c>mlb_players_18.csv</c> the data set which contains information about 1270 players from the 2018 MLB season and display it's variables:
+
+                <sage language="r">
+                <input>
+                mlb18 = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/mlb_players_18.csv")
+                
+                names(mlb18)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=mlb_players_18"/>.
+
+              </p>
+            
+        </introduction>
+
+
+        <task>
+          <p>
+            Since they are special players, let's consider a subset of the players without pitchers or designated hitters.  Run the following code to produce <c>batters</c> a subset of <c>mlb18</c> with no pitchers or designated hitters.
+            <sage language="r">
+                <input>
+                batters=subset(mlb18, mlb18$position!="P" &amp; mlb18$position!="DH")
+                summary(batters)
+                </input>
+                </sage>
+          </p>
+        </task>
+
+
+
+        <task>
+          <p>
+            Run the following code to plot a boxplot for the batting averages of <c>batters</c> seperated by position.
+            <sage language="r">
+                <input>
+                boxplot(batters$AVG~batters$position)
+                </input>
+                </sage>
+                Is it obvious that these values come from different distributions?  Is it obvious they couldn't have?
+          </p>
+        </task>
+    </exploration>
+
+    <exploration xml:id="exploration-randomnessANOVA">
+        <title>Randomness</title>
+        <introduction>
+            <p>
+              Much like in <xref ref="exploration-fooledbyrandom"/>, the issue is that it's certainly possible for two different distributions to produce similar looking samples, or for identical distributions to produce very different looking examples.
+            </p>
+            
+        </introduction>
+
+        <task>
+          <p>
+            Run the following code to produce a data frame with two variables, a <c>group</c> variable with values <c>A</c>, <c>B</c> and <c>C</c>, and a <c>values</c> variable that is identical across group, and plot boxplots of <c>values</c> across the groups.
+            <sage language="r">
+                <input>
+                group1=c(rep("A", 30), rep("B", 30), rep("C", 30))
+                values1=c(rnorm(30,100,35), rnorm(30,100,35), rnorm(30,100,35))
+
+                dummy1 = data.frame(group1, values1)
+                summary(dummy1)
+                boxplot(dummy1$values1~dummy1$group1)
+
+                </input>
+                </sage>
+          </p>
+        </task>
+
+         <task>
+          <p>
+            Run the following code to produce another data frame with the same variables, but the <c>B</c> group has a different distribution than the others.
+            <sage language="r">
+                <input>
+                group2=c(rep("A", 30), rep("B", 30), rep("C", 30))
+                values2=c(rnorm(30,100,35), rnorm(30,90,35), rnorm(30,100,35))
+
+                dummy2 = data.frame(group2, values2)
+                summary(dummy2)
+                boxplot(dummy2$values2~dummy2$group2)
+
+                </input>
+                </sage>
+          </p>
+        </task>
+
+        <p>
+          As usual, computation by some sort of <m>p</m> value is how we shall determine if we can conclude that there is variation between groups.
+        </p>
+    </exploration>
+
+
+
+       </introduction>
+
+
+<subsection>
+  <title>Intuition of ANOVA</title>
+
+  <remark>
+    <title>Idea behind ANOVA</title>
+    <p>
+      The null hypothesis of ANOVA testing is that all of the groups have identical distributions, and the alternative is that they do not.  <em>If</em> the null hypothesis were true, then it must follow that all the variation between the groups is driven by the natual variation of the variable itself.
+    </p>
+
+    <p>
+      So what we will do is compare the variation <em>between</em> groups, and variation <em>within</em> groups.  If the null hypothesis holds, them we would expect that these values are comparable.  If there is some discrepency, then we become more suspicious of the null.  As usual, this level of suspicion will be measured with a <m>p</m>-value, which measure the probability that: should the null be true that we see the levels of discrepency or greter than what's observed.
+    </p>
+  </remark>
+
+
+  <activity xml:id="activity-cropsvariationbetween">
+      <title>Fetilizer and Crop Yields: Variation <em>between</em> Groups</title>
+      <introduction>
+          <p>
+            Over the next few activities, we will explore how ANOVA works with a small data set, one that is honestly too samll to be considered a serious data set in practice.  However, it will allow us to see the inner workings of ANOVA without getting bogged down in huge computations.
+          </p>
+
+          <p>
+            A farmer tests 3 types of fertilizer, A, B and C, on her crops.  She segements her farmland into different plots, applies one type of fertilizer for each plot, and in the end, records the bushels per acre for that plot.  The results are as follows: 
+
+            <me>
+            \begin{array}{c|c|c}
+            \text{Fertilizer A} \amp \text{Fertilizer B} \amp \text{Fertilizer C} \\
+            \hline
+            176 \amp 168 \amp 177\\
+            173 \amp 171 \amp 179\\
+            175 \amp 172 \amp 173\\
+            179 \amp     \amp 176\\
+                \amp     \amp 181\\
+
+            \end{array}
+          </me>
+          </p>
+      </introduction>
+      <task>
+        <p>
+          Compute <m>\bar{x}</m> the overall sample mean production rate for all 12 plots.
+          <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="26lqjkar0v"/>
+
+                    </p>
+
+                  </hint>
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Compute <m>\bar{x}_1</m> the sample mean production rate for Fertilizer A.  Repeat for <m>\bar{x}_2</m> for Fertilizer B and <m>\bar{x}_3</m> for Fertilizer C.
+          <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="26lqjkar0v"/>
+
+                    </p>
+
+                  </hint>
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Now that we have the overall mean, and the mean of each group, we compute the <q>variation</q> amongst the groups.
+
+        </p>
+        <p>
+          Compute <m>n_1(\bar{x}_1-\bar{x})^2+n_2(\bar{x}_2-\bar{x})^2+n_3(\bar{x}_3-\bar{x})^2</m>, where <m>n_i</m> is the size of the appropriate group.  This computes the <q>difference</q> from each groups mean from the overall mean, squared to remove signs, and weighted for the size of the group.  Call this value <m>SSG</m> or the <q>sum of squares for groups</q>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Since there are <m>k=3</m> groups, the <em>degrees of freedom for groups</em>: <m>df_G</m> is <m>k-1=3-1=2</m>.  Compute the <q>mean square for groups</q>: <m>MSG=\frac{SSG}{df_G}.</m>
+        </p>
+        <p>
+          This value measure the variation between groups, normalized for the number of groups.  (If there were a lot of groups, we would see a lot of variation even if they were distributed identically, so we account for that.)
+        </p>
+      </task>
+
+  </activity>
+
+
+  <activity xml:id="activity-cropsvariationwithin">
+      <title>Fetilizer and Crop Yields: Variation <em>within</em> Groups</title>
+      <introduction>
+          <p>
+            We now continue from <xref ref="activity-cropsvariationbetween"/> to analyze variation within groups.
+          </p>
+      </introduction>
+      <task>
+        <p>
+          Luckily there is a statistic which measures variation (it's implied by the name).  Compute <m>Var_1</m>, the sample variance for the yield rates for Fertlizer A.  Repeat for <m>Var_2, Var_3</m>.
+          <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="26lqjkar0v"/>
+
+                    </p>
+
+                  </hint>
+        </p>
+      </task>
+
+      
+
+      <task>
+        <p>
+          Now that we have the variance within each group, we compute the the total variation.
+
+        </p>
+        <p>
+          Compute <m>(n_1-1)Var_1+(n_2-1)Var_2+(n_3-1)Var_3</m>.  This computes the total variance within groups, weighted for the size of the group.  Call this value <m>SSE</m> or the <q>sum of squares for errors</q>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Compute the <q>degrees of freedom for errors</q> by summing the degrees of freedom for each group: <m>df_{E}=(n_1-1)+(n_2-1)+(n_3-1).</m>
+        </p>
+      </task>
+
+
+      <task>
+        <p>
+           Compute the <q>mean square error</q>: <m>MSE=\frac{SSE}{df_E}.</m>
+        </p>
+        <p>
+          This value measure the variation within groups, normalized by the size of the groups.)
+        </p>
+      </task>
+
+  </activity>
+
+
+  <activity xml:id="activity-cropsFstat">
+      <title>Fetilizer and Crop Yields: <m>F</m>-statistic and <m>p</m>-value</title>
+      <introduction>
+          <p>
+            We  continue from <xref ref="activity-cropsvariationwithin"/> to produce a <m>p</m>-value.
+          </p>
+      </introduction>
+      <task>
+        <p>
+          Compute <m>F=\frac{MSG}{MSE}</m>.  This is a comparison between the variation between groups and the variation within groups.
+        </p>
+      </task>
+
+      
+
+      <task>
+        <p>
+          The <m>F</m>-distribution is a random variable who has two parameters, <c>d_f1</c> and <c>d_f2</c> two sets of degrees of freedom.  We compute the proportion of the distribution greater than <m>F</m> where <c>d_f1</c><m>=df_G</m>, <c>d_f2</c><m>=df_E</m>.
+        </p>
+        <p>
+          Adjust the values for <c>d_f1</c>, <c>d_f2</c> and <c>F</c> to compute the <m>p</m>-value <c>p</c>.
+          <interactive desmos="hxyoc4lcbh"/>
+        </p>
+        
+
+      </task>
+
+      <task>
+        <p>
+          Edit and run the following code to produce the <m>p</m>-value through <c>R</c>.
+            <sage language="r">
+                <input>
+                pf(FIXME_F, FIXME_dfG, FICME_dfE, lower.tail = FALSE)
+
+                </input>
+                </sage>
+
+        </p>
+      </task>
+
+  </activity>
+
+  <remark>
+    <p>
+          The details of the <m>F</m> distribution are extremely technical.  This is what you should take away:  <m>F=\frac{MSG}{MSE}</m>, where <m>MSG</m> measure the variability between groups and <m>MSE</m> measure the variability within groups.
+          <ul>
+            <li>If  <m>MSE</m> is big compared to <m>MSG</m> then there is a lot of variability within groups.  This variability easily explains the variability between the groups.  Thus <m>F</m> is small,  and the tail, and thus <m>p</m>-value, is big.  We fail to reject the null because the variability within groups plausibly explains our data.</li>
+            <li>On the other hand, if <m>MSG</m> is big compared to <m>MSE</m>, then there is a lot of variability between groups.  More than the natural variation can explain.  There is likely some <em>actual</em> differences between the groups.  In these cases, <m>F</m> is big, the tails are small and so are the <m>p</m>-values.  We reject the null (when <m>p</m>-value <m>\lt 0.05</m>) when it's no longer plausible that natural variation within groups can explain our data.</li>
+          </ul>
+        </p>
+      </remark>
+
+
+      <remark xml:id="remark-ANOVAsteps">
+        <title>Recap of ANOVA</title>
+        <p>
+          To recall the steps of ANOVA from <xref ref="activity-cropsvariationbetween"/>, <xref ref="activity-cropsvariationwithin"/> and <xref ref="activity-cropsFstat"/>: suppose that we have a <m>n</m> total observations from <m>k</m> different groups.  There are <m>n_i</m> observations from group <m>i</m>.  We then:
+          <ol>
+            <li>Compute <m>\bar{x}</m> the overall sample mean.</li>
+            <li>Compute <m>\bar{x}_i</m> the sample mean for each group.</li>
+            <li>Compute <m>SSG=\sum n_i(\bar{x}_i-\bar{x})^2</m> the sum of squares for groups.</li>
+            <li>Compute <m>df_G=k-1</m> the degrees of freedom for groups.</li>
+            <li>Compute <m>MSG=\frac{SSG}{df_G}</m> the mean squares for groups.</li>
+            <li>Compute <m>Var_i</m> for each group.</li>
+            <li>Compute <m>SSE=\sum (n_i-1)Var_i</m> the sum of squares for errors.</li>
+            <li>Compute <m>df_E=\sum (n_i-1)=n-k</m> the degrees of freedom for errors.</li>
+            <li>Compute <m>MSE=\frac{SSE}{df_E}</m> the mean squares for errors.</li>
+            <li>Compute <m>F=\frac{MSG}{MSE}</m> the <m>F</m> statistic.</li>
+            <li>Compute <m>P(F\lt X)</m> where <m>X</m> is a <m>F</m> distributed variable with parameters <m>df_G, df_E</m>.  This value is the <m>p</m>-value.</li>
+            <li>Reject the  null hypothesis if <m>p</m>-value <m>\lt 0.05</m>.</li>
+            <li>Marvel that even for statistics, this is a <em>lot</em> of computation.</li>
+          </ol>
+        </p>
+      </remark>
+
+
+
+
+</subsection>
+
+
+<subsection>
+  <title>ANOVA and <c>R</c></title>
+
+  <remark>
+    <p>
+      Note that none of the steps in <xref ref="remark-ANOVAsteps"/> are particularly difficult, just long and tedious.  But they're fairly straightforward tasks, and one can automate much of the work.  By entering the group sizes, sample means and sample standard deviations into <c>N</c>, <c>M</c>, <c>S</c> below, one can compute all the necessary values:
+      <interactive desmos="bkimjzoxki"/>
+    </p>
+    <p>
+      But we could automate more than that.
+    </p>
+  </remark>
+
+  <activity xml:id="activity-cropANOVAR">
+      <title>Fetilizer and Crop Yields: <c>R</c></title>
+      <introduction>
+          <p>
+            We can use commands in <c>R</c> to do ANOVA directly from data.
+          </p>
+          
+      </introduction>
+      <task>
+        <p>
+          Run the following code to produce a dataframe <c>crops</c> with variables <c>yield</c> and <c>fertilizer</c>.
+            <sage language="r">
+                <input>
+                fertilizer=c("A", "A", "A", "A", "B", "B", "B", 
+                  "C","C","C","C","C")
+                yield=c(176, 173, 175, 179, 168, 171, 172, 177, 179, 173, 176, 181)
+
+                crops = data.frame(yield, fertilizer)
+
+                </input>
+                </sage>
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Run the following code to create an <c>aov</c> model of <c>crop</c> and summarize it.
+            <sage language="r">
+                <input>
+                cropsaov=aov(yield~fertilizer, data=crops)
+                summary(cropsaov)
+
+                </input>
+                </sage>
+                How do these values compare to what we found before?
+        </p>
+      </task>
+       <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+  </activity>
+
+
+
+
+  <activity xml:id="activity-battingaverage">
+      <title>Fetilizer and Crop Yields: <c>R</c></title>
+      <introduction>
+          <p>
+            We can finish what we started with <xref ref="exploration-battingaverage"/>.
+          </p>
+          
+      </introduction>
+      <task>
+          <p>
+            Run the following code to re-plot a boxplot for the batting averages of <c>batters</c> seperated by position.
+            <sage language="r">
+                <input>
+                boxplot(batters$AVG~batters$position)
+                </input>
+                </sage>
+          </p>
+        </task>
+
+      <task>
+        <p>
+          Run the following code to create an <c>aov</c> model of <c>batters</c> and summarize it.
+            <sage language="r">
+                <input>
+                battersaov=aov(AVG~position, data=batters)
+                summary(battersaov)
+
+                </input>
+                </sage>
+        </p>
+      </task>
+       <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+  </activity>
+
+
+
+<activity xml:id="activity-relaxation">
+      <title>Relaxation and Degree Attainment: <c>R</c></title>
+      <introduction>
+          <p>
+            Is there any impact on degree attainment and the amount of time spent relaxing?
+          </p>
+
+           <p>
+                Run the following code to download  the <c>gss2010.csv</c>  data set which contains information from the 2010 social survey and display it's variables:
+
+                <sage language="r">
+                <input>
+                gss2010 = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/gss2010.csv")
+                
+                names(gss2010)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=gss2010"/>.
+
+
+
+              </p>
+          
+      </introduction>
+      <task>
+          <p>
+            Run the following code to rplot a boxplot for the hours of relaxation in a day seperated by degree attainment.
+            <sage language="r">
+                <input>
+                boxplot(hrsrelax ~ degree, data=gss2010)
+                </input>
+                </sage>
+          </p>
+        </task>
+
+      <task>
+        <p>
+          Run the following code to create an <c>aov</c> model of <c>gss2010</c> and summarize it.
+            <sage language="r">
+                <input>
+                relaxaov=aov(hrsrelax ~ degree, data=gss2010)
+                summary(relaxaov)
+
+                </input>
+                </sage>
+        </p>
+      </task>
+       <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                      <task>
+                        <p><c>mntlhlth</c> measures <q>For how many days during the past 30 days was your mental health, which includes stress, depression, and problems with emotions, not good?</q></p>
+                        <p>
+                          Re-run the above comparing this variable across degree attainment.
+                        </p>
+                      </task>
+
+                      <task>
+                        <p><c>hrs1</c> measures <q>Hours worked each week.</q></p>
+                        <p>
+                          Re-run the above comparing this variable across degree attainment.
+                        </p>
+                      </task>
+
+
+
+  </activity>
+
+
+
+     <activity xml:id="activity-starbucksfoodtype">
+      <title>Starbucks Nutrition and Item Type: <c>R</c></title>
+      <introduction>
+          <p>
+            Is there any impact on the type of item Starbucks serves, <c>bakery</c>, <c>bistro box</c>, <c>hot breakfast</c>, <c>parfait</c>, <c>petite</c>, <c>salad</c>,  <c>sandwich</c> ,and nutrition?
+          </p>
+
+           <p>
+            Run the following code to download <c>starbucks.csv</c> a data set comtaining information about 77 Starbucks menu items their nutritional value and show it's variable names.
+
+             <sage language="r">
+                <input>
+                starbucks = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/starbucks.csv")
+                
+                names(starbucks)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=starbucks"/>.
+          </p>
+          
+      </introduction>
+    <task>
+          <p>
+            Run the following code to rplot a boxplot for <c>fiber</c> fiber in g, seperated by food type <c>type</c>.
+            <sage language="r">
+                <input>
+                boxplot(fiber ~ type, data=starbucks)
+                </input>
+                </sage>
+          </p>
+        </task>
+
+       <task>
+        <p>
+          Run the following code to create an <c>aov</c> model of <c>starbucks</c> and summarize it.
+            <sage language="r">
+                <input>
+                starbucksaov=aov(fiber ~ type, data=starbucks)
+                summary(starbucksaov)
+
+                </input>
+                </sage>
+        </p>
+      </task>
+
+       <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Re-run the above comparing another nutrtional variable across food type.
+                        </p>
+                      </task>
+
+
+
+  </activity> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</subsection>
+
+
+
+
+
+</section>

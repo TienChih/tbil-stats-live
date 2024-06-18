@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<li xmlns:xi="http://www.w3.org/2001/XInclude">
+        <p>
+F: Can I perform the fundamental tasks of statistical inference?
+        </p>
+        <ul>
+            <li>
+                <p>
+F1: I can identify point estimates for parameters of interest.
+                </p>
+            </li>
+            <li>
+                <p>
+F2: I can find a confidence interval for the true proportion of a categorical variable, given a sample, and interpret the meaning of this interval.
+                </p>
+            </li>
+            <li>
+                <p>
+F3: I can test hypothesis about the true proportion of a categorical variable, given a sample: stating the null and alternative hypothesis, computing a <m>p</m>-value, explaining the meaning of the <m>p</m>-value and drawing a conclusion.
+                </p>
+            </li>
+        </ul>
+</li>

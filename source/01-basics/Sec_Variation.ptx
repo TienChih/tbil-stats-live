@@ -1,0 +1,633 @@
+<section xml:id="Sec_Variation">
+
+    <title>Variation of Data (B5)</title>
+<introduction>
+  <p>
+    Knowing averages or center of data sets only tells part of the story.  We also should know how the data <em>varies</em> or <em>spread</em>.  As in the idea of averages,  there are different ways to approach this. 
+
+  </p>
+
+
+  <p>
+    In this section, we will show how to identify and compute different notions of variations.
+  </p>
+
+    <p>
+  Run the following code to download the <c>ncbirths.csv</c> data set:
+
+  <sage language="r">
+          <input>
+            ncbirths = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/ncbirths.csv")
+            names(ncbirths)
+          </input>
+        </sage>
+
+</p>
+
+<p>
+  In 2004, the state of North Carolina released to the public a large data set containing information on births recorded in this state. This data set has been of interest to medical researchers who are studying the relation between habits and practices of expectant mothers and the birth of their children. This is a random sample of 1,000 cases from this data set.
+
+
+</p>
+
+</introduction>
+
+
+<subsection>
+  <title>Variance and Standard Deviation</title>
+
+
+
+<exploration xml:id="measurement-spread-preview">
+        <introduction>
+            <p>
+Consider the data in the lists
+<c>L1=[13, 13, 12, 10, 10, 14, 12, 11, 10, 14, 15, 10, 11, 13, 14, 14, 14, 15, 14, 11]</c>
+and
+<c>L2=[19, 12, 13, 9, 15, 5, 7, 12, 9, 14, 8, 20, 19, 15, 13, 8, 14, 14, 7, 17]</c>.
+            </p>
+        </introduction>
+        <task>
+            <p>
+Show that the mean, median, and mode for the data in the first list are the same as the second list.
+            </p>
+        </task>
+        <task>
+            <p>
+Draw a dot plot or histogram visualizing the data in each list.
+
+<sage language="r">
+          <input>
+           
+
+          </input>
+        </sage>
+
+        <hint>
+          <title>Desmos</title>
+          <p>
+            <interactive desmos="gwpku3krgv"/>
+          </p>
+        </hint>
+
+
+
+  
+            </p>
+        </task>
+        <task>
+            <p>
+What does the visualization tell you about the data that the measures of center do not?
+            </p>
+        </task>
+    </exploration>
+
+
+
+
+    <activity>
+        <introduction>
+            <p>
+Often we are interested in the <term>spread</term> of values in a dataset. The simplest
+measure of spread is the <term>range</term> of data: the difference between its
+largest value (its <term>maximum</term>) and its smallest value (its <term>minimum</term>).
+For example, the range of the values in
+<m>3,3,6,7,12,12,16,19</m> is <m>\text{max}-\text{min}=19-3=16</m>.
+            </p>
+        </introduction>
+        <task>
+            <p>
+Find the maximum, minimum, and range for the values
+<m>9, 2, 3, 5, 3, 6, 2, 8</m>.
+            </p>
+        </task>
+        <task>
+            <p>
+Find the maximum, minimum, and range for the values
+<m>5, 0, 4, 500, 2, 5, 4, 2</m>.
+            </p>
+        </task>
+        <task>
+            <p>
+What do you notice about the previous tasks? How does the range
+relate (or not relate) to the majority of the data?
+            </p>
+        </task>
+        
+    </activity>
+
+
+<activity xml:id="activity-derivingvariation">
+    <title>Measuring the Spread of Data</title>
+<introduction>
+    <p>Intuitively, we likely think of the <q>spread</q> as a sort of summed distance of data points from the center of the data.  The more points are far away from the center, or the farther away they are, the more <q>spread</q> out the data is.  We will walk through a formulation of this notion.</p>
+    
+</introduction>
+
+<task>
+    <p>Consider the data set <c>S=[1,2,3,4,5]</c>.  Compute the mean of <m>S</m>, <m>\bar{x}</m>.</p>
+</task>
+
+<task>
+    <p>Compute a list of differences of each data point from the mean: <m>[1-\bar{x}, 2-\bar{x}, 3-\bar{x}, 4-\bar{x}, 5-\bar{x} ]</m>.</p>
+</task>
+
+<task>
+    <p>As a proposed measure of spread, compute a sum of all these values: <m>(1-\bar{x})+ (2-\bar{x})+ (3-\bar{x})+ (4-\bar{x})+ (5-\bar{x}) </m>.</p>
+</task>
+
+<task>
+    <p>What do you think of the proposed measure we computed?  What, if anything, may be wrong with it? </p>
+</task>
+
+
+<task>
+    <p>To modify this proposed measure of spread, compute a sum of all the differences <em>squared</em>: <m>(1-\bar{x})^2+ (2-\bar{x})^2+ (3-\bar{x})^2+ (4-\bar{x})^2+ (5-\bar{x})^2 </m>.  What is this change meant to fix?</p>
+</task>
+
+<task>
+    <p>What do you think of the modified measure we computed compared to what we did in (c)? </p>
+</task>
+
+<task>
+    <p>Consider the data set <c>T=[1,1,2,2,3,3,4,4,5,5]</c>.  Compute the mean of <m>T, \bar{x}'</m>.  Do we think <m>T</m> is more, less or equally spread out than <m>S</m>?</p>
+</task>
+
+<task>
+    <p>Repeat the process done in (e) but for <m>T</m>, that is <m>(1-\bar{x})^2+ (1-\bar{x})^2+ (2-\bar{x})^2+(2-\bar{x})^2+ (3-\bar{x})^2+(3-\bar{x})^2+ (4-\bar{x})^2+(4-\bar{x})^2+ (5-\bar{x})^2+(5-\bar{x})^2 </m>.  How does this value compare to the value found in (e)?  What is accounting for this difference?</p>
+</task>
+
+<task>
+    <p>Repeat the process done in (e) but for <m>T</m>.  How does this value compare to the value found in (e)?  What is accounting for this difference?</p>
+</task>
+
+<task>
+    <p>Divide the value found in (e) by the number of data points in <m>S</m> and the value found in (h) by the number of data points in <m>T</m>.  How do these values compare?</p>
+</task>
+
+<p>
+  What we just computed was the <em>population variance</em> for these data sets.
+</p>
+
+</activity>
+
+
+
+
+<definition xml:id="definition-popvariance">
+  <p>
+    <ol>
+      <li> The <em> population variance</em>  of a data set is a measure of <q>spread</q> denoted by <me>V_P:=\frac{\sum (x_i-\mu)^2}{n} </me></li>
+
+      <li> A theoretically useful measure of spread with the same units as the original variable would be the <em>population standard deviation</em> denoted by  <me>\sigma:=\sqrt{V_P}=\sqrt{\frac{\sum (x_i-\mu)^2}{n}} </me></li>
+
+     </ol> 
+
+
+  </p>
+</definition>
+
+
+
+<p>
+  Naturally, if we have a notion of a <em>population</em> variance or standard deviation, then we should have a notion for <em>sample</em> deviation or variance.
+</p>
+
+
+<definition>
+  <p>
+    <ol>
+      <li> The <em> sample variance</em>  is  denoted by <me>V_S:=\frac{\sum (x_i-\bar{x})^2}{n-1} </me></li>
+
+      <li> The <em>sample standard deviation</em> is denoted by  <me>s:=\sqrt{V_S}=\sqrt{\frac{\sum (x_i-\bar{x})^2}{n-1}} </me></li>
+
+     </ol> 
+
+
+  </p>
+</definition>
+
+
+
+<activity xml:id="activity-simulatedssd">
+    <title>Simulated Sample Standard Deviation</title>
+    <introduction>
+        <p>
+          One may wonder at this point, why compute population and sample variances or deviations differently?  here, we illustrate why.
+
+        </p>
+            </introduction>
+
+
+        <task>
+            <p>
+              Compute the population and sample deviations for <c>L=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5]</c>.
+
+              <sage language="r">
+          <input>
+           
+
+          </input>
+        </sage>
+              <hint>
+                <title>Desmos</title>
+              <p>
+
+              <interactive desmos="kzztoxadul"/>
+
+
+            </p>
+          </hint>
+            </p>
+        </task>
+
+        <task>
+            <p>
+              Run the following code to:
+              <ul>
+                <li>Generates a sample of size 10 from <c>L</c> above and computes the sample standard deviation.</li>
+                <li>Repeats the above 1000 times.</li>
+                <li>Plots the distribution of the above 1000 deviations, and computes the <em>average</em> deviation.</li>
+
+               </ul> 
+             
+
+          <sage language="r">
+          <input>
+          L=c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,5,5,5,5,5)
+
+          samp_sd = rep(NA, 1000)         #creates an empty vector of length 100
+
+
+          for(i in 1:1000){
+            samp = sample(L, 10, replace=TRUE)         # obtain a sample of size 10 from the L
+            samp_sd[i] = sd(samp)        # save sample sd in ith element of samp_sd
+            }
+
+          m=mean(samp_sd)  
+          hist(samp_sd)                   #plots a histogram of the sample deviations
+          abline(v = m, col = "red")
+          print(m)
+
+          </input>
+          </sage>
+
+
+            </p>
+        </task>
+      
+        <task>
+          <p>
+            These values are all <em>sample</em> standard deviations.  Which of the deviations computed in (a) do they most closely resemble?
+          </p>
+        </task>
+
+</activity>
+
+
+
+
+<activity xml:id="activity-ncbirthsdeviation">
+    <title>Birth Weight Standard Deviation</title>
+    <task>
+      <p>
+      Run the following code to display the standard deviation of the birth weight of babies from North Carolina in 2004 in pounds:
+      <sage language="r">
+          <input>
+          sd(ncbirths$weight)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+    <task>
+      <p>
+      Run the following code to display the histogram birth weight of babies from North Carolina in 2004 in pounds, along with the mean, plus and minus 1 standard deviation:
+      <sage language="r">
+          <input>
+          m=mean(ncbirths$weight)
+          s=sd(ncbirths$weight)
+          hist(ncbirths$weight)
+          abline(v = m, col = "red")
+          abline(v = m-s, col = "forestgreen")
+          abline(v = m+s, col = "forestgreen")
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     
+
+
+
+</activity>
+
+
+
+<activity xml:id="activity-ncbirthsdeviation2">
+    <title>Standard Deviation of Variable of Choice</title>
+    <task><p>
+      Follow this link and identify a numerical vairable whose standard deviation you wish to find. <url href="https://www.openintro.org/data/index.php?data=ncbirths"/>.
+    </p></task>
+    <task>
+      <p>
+      Fix the following code to display the standard deviation of a variable of your choosing:
+      <sage language="r">
+          <input>
+          sd(ncbirths$FIXME)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+    <task>
+      <p>
+      Fix the following code to display the histogram of your chosen variable, along with the mean, plus and minus 1 standard deviation:
+      <sage language="r">
+          <input>
+          m=mean(ncbirths$FIXME)
+          s=sd(ncbirths$FIXME)
+          hist(ncbirths$FIXME)
+          abline(v = m, col = "red")
+          abline(v = m-s, col = "forestgreen")
+          abline(v = m+s, col = "forestgreen")
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     
+
+
+
+</activity>
+
+</subsection>
+
+
+
+<subsection>
+  <title>Quartiles and IQR</title>
+
+<activity xml:id="activity-quartiles">
+    <title>Introducing Quartiles</title>
+<introduction>
+    <p>Consider the set of data <c>[40, 19, 33, 42, 48, 23, 13, 16, 47,  6, 32,  9, 12, 31,  4, 43, 49, 25, 37, 26]</c></p>
+    
+</introduction>
+
+<task>
+    <p>Write out this list in order and identify the median.  (Not just the value but specifically which term, or between which terms).  Label this <m>Q_2</m>.</p>
+</task>
+
+<task>
+    <p> If the median is a part of the data set, then remove it and seperate the terms before and after <m>Q_2</m> into two seperate equally sized set.</p>
+</task>
+
+<task>
+    <p> Find the median of the set of data before <m>Q_2</m>.  Call this value <m>Q_1</m>.</p>
+</task>
+
+<task>
+    <p> Find the median of the set of data after <m>Q_2</m>.  Call this value <m>Q_3</m>.</p>
+</task>
+
+<task>
+    <p> What proportion of the data is less than <m>Q_1</m>?  Between <m>Q_1</m> and <m>Q_2</m>?  Between <m>Q_2</m> and <m>Q_3</m>?  Greater than <m>Q_3</m>?</p>
+</task>
+
+<task>
+    <p> Compute the <m>IQR</m> where <me>IQR:=Q_3-Q_1.</me></p>
+</task>
+
+</activity>
+
+<definition>
+  <p>
+    The <em>First Quartile</em> usually denoted <m>Q_1</m> is a value for which 25% of the data lies below this value.  The <em>Third Quartile</em> usually denoted <m>Q_3</m> is a value for which 25% of the data lies above <m>Q_3</m>.  The <m>IQR</m> is the difference between these values, and is also a measure of <m>spread</m>.
+  </p>
+
+</definition>
+
+<remark>
+  <p>
+    Note that a quarter of the data (hence the name) falls below <m>Q_1</m>, a quarter between <m>Q_1</m> and the median <m>Q_2</m>, a quarter between <m>Q_2</m> and <m>Q_3</m> and the final quarter above <m>Q_3</m>.
+  </p>
+  </remark>
+
+  <definition>
+  <p>
+    A <em>boxplot</em> is a plot summarizing the min, max and 3 quartiles of a data set:
+  </p>
+  <figure>
+  <p>
+    <interactive desmos = "pae5y6rt2g"/>
+  </p>
+  <caption>A boxplot summarizing the findings of <xref ref="activity-quartiles"/>.  Click on the histogram button to show the data distribution.</caption>
+</figure>
+
+</definition>
+
+
+
+
+
+
+<activity xml:id="activity-outliers">
+    <title>Identifying Outliers</title>
+<introduction>
+  <p>
+    Quartiles and the <m>IQR</m> provide a useful heuristic to identify outliers to our data.  Outliers are data points that are outlandishly distinct from the rest of the data set and can potentially screw the results.
+  </p>
+    <p>Consider the set of data <c>[2,66,8,14,9,2,3,11,62,8,45,19,12,41,5,5,5,85,52,8,96,5,2,2,15,12,0,1]</c></p>
+    
+</introduction>
+
+<task>
+    <p>Identify the min, <m>Q_1</m>, median, <m>Q_3</m> and max for this data set.  This is called the <em>5 number summary</em>.</p>
+</task>
+
+<task>
+    <p> We define <em>right outliers</em> to be any data points in the set greater than <m>Q_3+1.5\cdot IQR</m>.</p>
+    <p> We define <em>left outliers</em> to be any data points in the set less than <m>Q_1-1.5\cdot IQR</m>.</p>
+    <p>Does this set have any outliers?  What (if any) are they?</p>
+</task>
+
+<task>
+    <p> Remove the outliers from the set and recompute the min, <m>Q_1</m>, median, <m>Q_3</m> and max for the modified data set.</p>
+</task>
+
+<task>
+    <p> Plot a boxplot for the original data set.</p>
+    <p> <interactive desmos="fxqeuayamh"/></p>
+</task>
+
+<task>
+    <p>Click <c>Exclude Outliers</c>, how does this boxplot compare to what we found in (c).</p>
+</task>
+
+</activity>
+
+
+
+
+
+
+<activity xml:id="activity-ncbirthsdboxplot">
+    <title>Birth Weight Box Plot</title>
+    <task>
+      <p>
+      Run the following code to display a summary of the birth weight of babies from North Carolina in 2004 in pounds:
+      <sage language="r">
+          <input>
+          summary(ncbirths$weight)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+    <task>
+      <p>
+      Run the following code to display the boxplot for birth weight of babies from North Carolina in 2004 in pounds.  Note that this command automatically removed the outliers.
+      <sage language="r">
+          <input>
+          boxplot(ncbirths$weight)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     <task>
+         <p>Look at the 5 numbers listed below the <c>$stats</c> output.  This is the 5 number summary of the data set with the outliers removed.  What are the min, <m>Q_1</m>, median, <m>Q_3</m>, max of this data with outliers removed?</p>
+     </task>
+
+
+
+</activity>
+
+
+
+
+<activity xml:id="activity-ncbirthsdboxplot2">
+    <title>Box Plot of Variable of Choice</title>
+    <task><p>
+      Follow this link and identify a numerical vairable whose box plot you wish to find. <url>https://www.openintro.org/data/index.php?data=ncbirths</url>.
+    </p></task>
+    <task>
+      <p>
+      Fix the following code to display a summary of the numerical variable of your choice:
+      <sage language="r">
+          <input>
+          summary(ncbirths$FIXME)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+    <task>
+      <p>
+      Fix the following code to display the boxplot the numerical variable of your choice.  Note that this command automatically removed the outliers.
+      <sage language="r">
+          <input>
+          boxplot(ncbirths$FIXME)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     <task>
+         <p>Look at the 5 numbers listed below the <c>$stats</c> output.  This is the 5 number summary of the data set with the outliers removed.  What are the min, <m>Q_1</m>, median, <m>Q_3</m>, max of this data with outliers removed?</p>
+     </task>
+
+
+
+</activity>
+
+
+
+<activity xml:id="activity-subgroups">
+    <title>Comparing Subgroups</title>
+    <introduction>
+        <p>Box plots can be used to quickly compare the distribution of a random variable across different groups.</p>
+        
+
+    </introduction>
+
+
+    <task>
+      <p>
+      Run the following code to display a boxplots of the birth weight of babies from North Carolina in 2004 in pounds, as seperated into smoker and nonsmoker categories:
+      <sage language="r">
+          <input>
+          boxplot(ncbirths$weight~ncbirths$habit)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task><p> What do these boxplots tell you about birth weights between smoking and nonsmoking mothers?</p></task>
+
+</activity>
+
+
+<activity xml:id="activity-subgroups2">
+    <title>Comparing Subgroups of Chosen Variable</title>
+     <task><p>
+      Follow this link and identify a numerical vairable whose box plots you wish to find, and a categorical variable you wish to seperate the data by. <url>https://www.openintro.org/data/index.php?data=ncbirths</url>.
+    </p></task>
+
+
+    <task>
+      <p>
+      Fix the following code to display a boxplots of the numerical variable of your choice, as seperated by your chosen categorical variable:
+      <sage language="r">
+          <input>
+          boxplot(ncbirths$FIXME~ncbirths$FIXME)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task><p> What does these boxplots tell you about your chosen variables?</p></task>
+
+</activity>
+
+
+
+
+<activity xml:id="activity-robustness">
+    <title>Robustness of Measurements</title>
+    <introduction>
+    <p>
+    Mean and standard deviation are typically what are used to measure centrality and spread, and have many theoritical properties which make them well suited for this purpose.  One may wonder what purpose median and <m>IQR</m> serve.  We will explore that here.
+  </p>
+    <p>Consider the set of data <c>[7,5,1,2,10,9,4,1,8,3,9,1,4,3,4]</c></p>
+    
+</introduction>
+
+<task>
+         <p>Compute the mean, and sample standard deviation, then the median and <m>IQR</m>:</p>
+         <p> <interactive desmos="nrzkxjx7oi"/></p>
+     </task>
+
+     <task>
+      <p>  Add the data point <c>100</c> to this list and recompute the mean, and sample standard deviation, then the median and <m>IQR</m>.
+      </p>
+     </task>
+
+     <task><p> Which values shifted more by adding the extremal value?  Which stayed closer to their original values?</p></task>
+
+</activity>
+
+
+
+</subsection>
+
+
+</section>

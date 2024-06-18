@@ -1,0 +1,377 @@
+<section xml:id="Sec_GeneralNormal">
+
+    <title>General Normal Distribution (D2)</title>
+
+   <introduction>
+        <p>We begin our discussion with the standard normal distribution to build intuition about normal distributions, but most naturally occuring normally distributed things do not have mean 0 and standard deviation 1. Things that are generally normally distributed may have any mean and standard deviation, but what makes them normally distributed is that they have the <em>same fundamental shape</em> as the standard normal, a bell curved symmetric shape.  In the standard normal curve, the standard deviation is 1, so the units of <m>z</m> are standard deviations.  We can translate values from any <m>X</m> normally distributed random variable to the standard distribution through <term><m>z</m>-scores</term>.</p>
+
+        <p>
+        In this section, we will compute probabilities of general normal random variables given bounds, and bounds given probabilities.
+      </p>
+        
+    </introduction>
+
+    <exploration>
+      <title>Pine Trees</title>
+      <introduction>
+          <p>Suppose the height of Pine Trees is <em>normally distributed</em> with mean 33 m and standard deviation 3 m.</p>
+          
+      </introduction>
+
+      <task>
+          <p>How many points above or below the mean is a height of 39 m?</p>
+      </task>
+
+      <task>
+          <p>How many <em>standard deviations</em> above or below the mean is a height of 39 m? (A standard deviation is 3 m.)</p>
+      </task>
+
+      <task>
+          <p>How many points above or below the mean is a height of 30 m?</p>
+      </task>
+
+      <task>
+          <p>How many <em>standard deviations</em> above or below the mean is a height of 30 m? </p>
+      </task>
+
+      <task>
+          <p>How many points above or below the mean is a height of 38 m?</p>
+      </task>
+
+      <task>
+          <p>How many <em>standard deviations</em> above or below the mean is a height of 38 m? </p>
+      </task>
+
+    </exploration>
+
+    <definition xml:id="definition-zscore">
+  <p>
+  Given a random variable <m>X</m> with mean <m>\mu</m> and standard deviation <m>\sigma</m>, the <term><m>z</m>-score</term> of a value <m>x</m> of <m>X</m> is the number of standard deviations <m>x</m> is above or below the mean.  This is computed <me>z=\frac{x-\mu}{\sigma}.</me>
+</p>
+</definition>
+
+
+<remark>
+  <p>
+    Consider a normal distribution with mean <m>\mu</m> and standard deviation <m>\sigma</m>, often denoted <m>N(\mu, \sigma)</m>.  every value <m>x</m> in <m>N(\mu, \sigma)</m> has a corresponding <m>z</m>-score in <m>N(0,1)</m>.  So for a random variable <m>X</m> which has distribution <m>N(\mu, \sigma)</m>, we can find <m>P(a\lt X\lt b)</m> by finding <m>P(z_a\lt Z\lt z_b)</m> in <m>N(0,1)</m> where <m>z_a, z_b></m> are the <m>z</m>-scores of <m>a, b</m>.
+    <interactive desmos="0znk7lhy30"/>  
+
+  </p>
+
+  <p>
+    This is because all normal curves are transformations of the same curve, so every point on one curve corresponds to a point on the other, as do regions and their areas.
+  </p>
+
+</remark>
+
+
+<activity xml:id="activity-tuna">
+    <title>Ahi Tuna: Computing Probabilities</title>
+    <introduction>
+        <p>Suppose Ahi tuna weights are normally distributed with mean 120 lbs and standard deviation 25 lb's.  Suppose a fisherman goes out fishing.  Let <m>X</m> denote the weight of a random fish.
+          <interactive desmos="84dbdr69to"/>
+        </p>
+        
+    </introduction>
+
+    <task>
+      <p>
+        Consider a tuna fish weighing 150 lbs.  What is <m>z</m>-score of 150 lbs?  Call this value <m>z_0</m>.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Consider a tuna fish weighing 150 lbs.  What is <m>z</m>-score of 150 lbs?  Call this value <m>z_0</m>.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Find the probability that a random tuna fish weighs more than 150 lbs by computing <m>P(Z>z_0)</m>.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Set <c>m=120</c>, <c>s=25</c>, <c>a=150</c>, <c>b=infinity</c> to compute <m>P(X>150)</m> directly.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        What is the probability that a tuna he catches weighs between 50 and 100 lbs?
+      </p>
+    </task>
+
+</activity>
+
+
+<activity xml:id="activity-tuna2">
+    <title>Ahi Tuna part 2: Computing Weights</title>
+    <introduction>
+        <p> Suppose Ahi tuna weights are normally distributed with mean 120 lbs and standard deviation 25 lb's as in <xref ref="activity-tuna"/>.    Let <m>X</m> denote the weight of a random fish.
+          <interactive desmos="t9afcecsoi"/>
+        </p>
+        
+    </introduction>
+
+    <task>
+      <p>
+        Suppose our fisherman wants to know whether or not a fish they catch weighs in the top 25% of Ahi tuna.  For what value <m>z_0</m> is <m>P(Z>z_0)=0.25</m> in the standard distribution.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        What is the <m>X</m> value (<m>x_0</m>) corresponding to this <m>z</m>-score?  This is the cutoff-weight for the top 25%.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Set <c>m=120</c>, <c>s=25</c>, <c>P=0.25</c>, and select <c>From the right</c> to compute <m>x_0</m> directly.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Find a value <m>k</m> so that <m>P(120-k\lt X\lt 120+k)=0.8</m>.  (Remember <xref ref="remark-always"/>)
+      </p>
+    </task>
+
+</activity>
+
+
+<activity xml:id="activity-tuna3">
+    <title>Ahi Tuna part 3: R</title>
+    <introduction>
+        <p> Suppose Ahi tuna weights are normally distributed with mean 120 lbs and standard deviation 25 lb's as in <xref ref="activity-tuna"/>.    Let <m>X</m> denote the weight of a random fish.
+        </p>
+        
+    </introduction>
+
+    <task>
+      <p>
+        Fix and run the following code to compute the probability that a tuna weighs less than 130 lb's: <m>P(X\lt 130)</m>:
+        <sage language="r">
+          <input>
+          pnorm(130, mean=FIXME, sd=FIXME)
+          </input>
+          </sage>
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Use (a) to compute <m>P(X\geq 130)</m>.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Adjust and run the code in (a) to compute <m>P(X\lt 100)</m>.
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Use (a) and (c) to compute <m>P(100\lt X\lt 130)</m>.
+      </p>
+    </task>
+
+
+    <task>
+      <p>
+        Fix and run the following code to compute the value <m>x_0</m> such that <m>P(X\lt x_0)=0.1</m>:
+        <sage language="r">
+          <input>
+          qnorm(0.1, mean=FIXME, sd=FIXME)
+          </input>
+          </sage>
+      </p>
+    </task>
+
+    <task>
+        <p>
+          Suppose I want to find a <m>k</m> such that <m>P(120-k\lt X\lt 120+k)=0.90</m>.  What is the area of each tail?  What is <m>P(Z\lt 120+k)</m>?  (Remember <xref ref="remark-always"/>)
+        </p>
+      </task>
+
+       <task>
+        <p>
+          Adjust and run the above code to compute <m>120+k</m>, and then find <m>k</m>.
+        </p>
+      </task>
+
+</activity>
+
+
+<activity xml:id="activity-tuna4">
+    <title>Ahi Tuna part 4: Simulation</title>
+    <introduction>
+        <p> Suppose Ahi tuna weights are normally distributed with mean 120 lbs and standard deviation 25 lb's as in <xref ref="activity-tuna"/>.    Let <m>X</m> denote the weight of a random fish.
+        </p>
+        
+    </introduction>
+
+    <task>
+      <p>
+        Run the following code to simulate the weights of 1000 random Ahi Tuna:
+        <sage language="r">
+          <input>
+          n=1000
+          ahiweight=rnorm(n,mean=120, sd=25)
+          hist(ahiweight)
+          </input>
+          </sage>
+      </p>
+    </task>
+
+
+    
+
+
+    <task>
+      <p>
+        Run the following code to see what proportion of tuna weighing over 150 lbs:
+        <sage language="r">
+          <input>
+          length(which(ahiweight>150))/n
+          </input>
+          </sage>
+          How does this value compare to what you found in <xref ref="activity-tuna"/> (c)?
+      </p>
+    </task>
+
+
+    <task>
+      <p>
+        Run the following code setting <c>X0</c> to be the <m>x_0</m> found in <xref ref="activity-tuna2"/> (b).
+        <sage language="r">
+          <input>
+          X0=FIXME
+          length(which(ahiweight>X0))/n
+          </input>
+          </sage>
+          How does this compare to what you observed in  <xref ref="activity-tuna2"/> (b)?
+      </p>
+    </task>
+
+
+    <task>
+      <p>
+        Run the following code to see what proportion of tuna weigh between 50 and 100 pounds:
+        <sage language="r">
+          <input>
+          length(which(100>ahiweight &amp; ahiweight>50))/n
+          </input>
+          </sage>
+          How does this value compare to what you found in <xref ref="activity-tuna"/> (e)?
+      </p>
+    </task>
+
+
+    <task>
+      <p>
+        Run the following code setting <c>k</c> to be the <m>k</m> found in <xref ref="activity-tuna2"/> (d).
+        <sage language="r">
+          <input>
+          k=FIXME
+          length(which(120+k>ahiweight &amp; ahiweight>120-k))/n
+          </input>
+          </sage>
+          How does this compare to what you observed in <xref ref="activity-tuna2"/> (d)?
+      </p>
+    </task>
+
+    
+
+</activity>
+
+
+
+
+
+<remark xml:id="remark-proborvalue">
+  <p>
+    It's always important to bear in mind when doing a computation, whether or not one is given bounds and finding an area/probability, or given an area/probability and trying to find bounds.
+
+<figure>
+<caption>Which direction are you going? </caption>      
+      <image>
+ <description>Arrows from values to Probabilities and vice versa.</description>   
+    <latex-image>
+<![CDATA[\begin{tikzpicture}
+\node[draw,circle, minimum size=3cm] (A) at (0,0) {Values/Bounds};
+\node[draw,circle, minimum size=3cm] (B) at (6,0) {Areas/Prob};
+
+    \draw[->, dashed] (A)  to [out=20,in=160] node[above]{?} (B);
+   \draw[->, dashed] (B)  to [out=-160,in=-20] node[below]{?} (A);
+
+\end{tikzpicture}
+]]>
+</latex-image>
+</image>
+</figure>
+
+  </p>
+</remark>
+
+
+
+<activity xml:id="activity-marathon">
+    <title>Marathon</title>
+    <introduction>
+        <p> Suppose Marathon running times are normally distributed with mean 4.5 hours and standard deviation 1 hour.   Let <m>X</m> denote the time in hours for a random runner to finish.
+        </p>
+
+        <hint>
+
+        <p>
+          <interactive desmos="npukubqd60"/>
+          <interactive desmos="mbwwtysjw3"/>
+          <sage language="r">
+          <input>
+          
+
+          </input>
+          </sage>
+        </p>
+
+        </hint>
+    </introduction>
+
+    <task>
+      <p>
+       What proportion of runners would take over 6 hours?
+      </p>
+    </task>
+
+    <task>
+      <p>
+       Suppose a special award is given to the top 5% fastest runners.  What would be the predicted cutoff for this time?
+      </p>
+    </task>
+
+    <task>
+      <p>
+       What is the probability a random runner finishes between 3 and 4 hours?
+      </p>
+    </task>
+
+    <task>
+      <p>
+       Find <m>k</m> so that 90% of runners finish betwee <m>4.5-k, 4.5+k</m> hours.
+      </p>
+    </task>
+
+    
+
+</activity>
+
+
+
+
+
+</section>

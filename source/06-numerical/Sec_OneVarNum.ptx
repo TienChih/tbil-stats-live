@@ -1,0 +1,1103 @@
+<section xml:id="Sec_OneVarNum">
+    <title>Confidence Intervals and Hypothesis Testing for a single Numerical Variable (N2)</title>
+
+   <introduction>
+        <p> In this section, we apply the concepts of confidence intervals and hypothesis testing to <em>numerical</em> rather than categorical variables.
+        </p>
+
+       
+
+        
+    </introduction>
+
+
+    <subsection>
+      <title>Confidence Intervals</title>
+      
+      <remark xml:id="remark-numCI">
+        <p>
+          Recall <xref ref="definition-CIprop"/>.  For a <em>numerical</em> variable in particular, a C% confidence interval is an interval <m>[L, U]</m> so that the true mean of the variable, <m>\mu</m>, has a C% chance of lying within the interval.
+        </p>
+
+        <p>
+          For a numerical sample of size <m>n</m> with sample mean <m>\bar{x}</m> and sample standard deviation <m>s</m>, we recall that the standard error is <m>SE=\frac{s}{\sqrt{n}}</m>.  Thus, we can compute a C% confidence interval via <me>\left[\bar{x}-t^*SE, \bar{x}+t^*SE\right]=\left[\bar{x}-t^*\frac{s}{\sqrt{n}}, \bar{x}+t^*\frac{s}{\sqrt{n}}\right]</me> where <m>t^*</m> is the <m>t</m> value so that <m>P(-t^*\lt t \lt t^*)=C\%</m> for a <m>t</m>-distribution with <m>n-1</m> degrees of freedom.
+
+          <figure>
+<caption>A C% confidence interval for <m>\mu</m>.  There is a C% chance the population mean <m>\mu</m> lies in this interval.</caption>      
+      <image>
+ <description>A C% confidence interval for <m>\mu</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=red!20, draw=none, domain=-1.96:1.96] {gauss(0,1)} \closedcycle;
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,0.02) --node[above]{$\bar{x}$} (axis cs:0,0.02);
+
+  \draw (axis cs:1.96,-0.02) -- (axis cs:1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) -- (axis cs:-1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) --node[below]{\tiny$\bar{c}-t^*\frac{s}{\sqrt{n}}$} (axis cs:-1.96,-0.02);
+  \draw (axis cs:1.96,-0.02) --node[below]{\tiny$\bar{c}-t^*\frac{s}{\sqrt{n}}$} (axis cs:1.96,-0.02);
+
+  \draw [yshift=-0.8cm, latex-latex](axis cs:-1.96,0) -- node [fill=white] {$C\%$} (axis cs:1.96,0);
+
+  \draw (axis cs:1,-0.02) -- (axis cs:1,0.02);
+  \draw (axis cs:1,0.02) --node[above]{$\mu?$} (axis cs:1,0.02);
+
+  \draw (axis cs:-3,-0.02) -- (axis cs:-3,0.02);
+  \draw (axis cs:-3,0.02) --node[above]{$\mu?$} (axis cs:-3,0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+        </p>
+</remark>
+
+
+        <activity xml:id="activity-CreditCardDebt">
+            <title>Credit Card Debt</title>
+            <introduction>
+                <p>
+                  Suppose we wanted to find a 95% confidence interval for the average credit card debt of a student.  In a sample of 25 college students, the sample average debt was <m>\$375</m> with sample standard deviation <m>\$85</m>.
+                </p>
+                
+            </introduction>
+            <task>
+              <p>
+                Which of the following are given to us:
+                <ul>
+                  <li><m>n</m> the sample size.</li>
+                  <li><m>\bar{x}</m> the sample mean.</li>
+                  <li><m>s</m> the sample standard deviation.</li>
+                  <li><m>\mu</m> the population mean.</li>
+                  <li><m>\sigma</m> the population standard deviation.</li>
+                </ul>
+              </p>
+            </task>
+            <task>
+              <p>
+                Which of the following is the parameter of interest:
+                <ul>
+                  <li><m>n</m> the sample size.</li>
+                  <li><m>\bar{x}</m> the sample mean.</li>
+                  <li><m>s</m> the sample standard deviation.</li>
+                  <li><m>\mu</m> the population mean.</li>
+                  <li><m>\sigma</m> the population standard deviation.</li>
+                </ul>
+              </p>
+            </task>
+
+            <task>
+              <p>
+              Compute the standard error <m>SE</m>.
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Compute the degrees of freedom.
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Find <m>t^*</m> such that for a <m>t</m>-distribution with the appropriate degrees of freedom, <m>P(-t^*\lt t\lt t^*)=0.95</m>.
+
+               <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Use <xref ref="remark-numCI"/> to compute a 95% confidence interval for <m>\mu</m>.
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Which one of the following describe this interval?
+              <ol>
+                <li>95% of student's credit card debt fall within this interval.</li>
+                <li>There is a 95% chance the average student credit card debt falls within this window.</li>
+                <li>95% of students have credit card debt.</li>
+              </ol>
+            </p>
+            </task>
+
+        </activity>
+
+
+        <activity xml:id="activity-amesCI">
+            <title>Average Housing Price in Ames, IA</title>
+            <introduction>
+                <p>
+                  We examine confidence intervals for the average housing price in Ames, IA.
+                </p>
+
+                <p>
+                Run the following code to download  the <c>ames.csv</c> data set which contains information of houses in Ames, Iowa, and to see it's variable names:
+
+                <sage language="r">
+                <input>
+                ames = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/ames.csv")
+                
+                names(ames)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=ames"/>.
+
+              </p>
+                
+            </introduction>
+
+            <task>
+              <p>
+                Suppose we wanted to take samples of <c>n=50</c> houses to determine a confidence interval.  Find <m>t^*</m>so that for a <m>t</m>-distribution with 49 degrees of freedom, we have: <m>P(-t^*\lt t\lt t^*)=0.95</m>.
+
+                <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+                </p>
+              </task>
+
+             <task>
+                <p>
+                  Run the following code to take a sample of size <c>n=50</c> houses from <c>ames</c> and display their price.
+                  <sage language="r">
+                      <input>
+                      n=50
+                      index = sample(1:nrow(ames), n)
+                      samp=ames[index,]
+                      samp$price
+        
+                      </input>
+                  </sage>
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Run the following code to display the sample mean and standard deviation for this sample.
+                  <sage language="r">
+                      <input>
+                      print(mean(samp$price))
+                      print(sd(samp$price))
+        
+                      </input>
+                  </sage>
+                </p>
+              </task>
+
+              <task>
+                <p>
+                Use the sample mean <m>\bar{x}</m>, sample standard deviation <m>s</m>, sample size <m>n</m> and <m>t^*</m> to compute a 95% confidence interval for the average housing price of Ames, IA.
+                </p>
+              </task>
+
+              <task>
+                <p>
+                Use the sample mean <m>\bar{x}</m>, sample standard deviation <m>s</m>, sample size <m>n</m> and <m>t^*</m> to compute a 95% confidence interval for the average housing price of Ames, IA.
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Explain the meaning of your confidence interval in a complete sentence within the context of this problem.
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Run the following code, to compute a 95% confidence interval for the average housing price of Ames, IA.  How does it compare to what you found in (d)?
+                   <sage language="r">
+                      <input>
+                      t.test(samp$price, conf.level=0.95)$conf.int
+        
+                      </input>
+                  </sage>
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Run the following code, to compute the actual average housing price of Ames, IA.  Does it fall within your interval?
+                   <sage language="r">
+                      <input>
+                      mean(ames$price)
+        
+                      </input>
+                  </sage>
+                </p>
+              </task> 
+
+
+              <task>
+            <p>
+              Fix and run the following code to, for 100 times, sample 50 homes and construct a 95% confidence interval based on the results.  Let <c>tstar</c>=<m>t^*</m>.
+
+                <sage language="r">
+                  <input>
+                    numsamp=100
+                    mu=mean(ames$price)
+                    tstar=FIXME
+
+                    samp_mean = rep(NA, numsamp)
+                    samp_SE = rep(NA, numsamp)
+                    color_vec=rep(NA, numsamp)
+
+                  for(i in 1:numsamp){
+                  samp = sample(ames$price, n) # obtain a sample of size n  from the population
+                  samp_mean[i] = mean(samp)    # Find the mean for this sample
+                  samp_SE[i] = sd(samp)/sqrt(n) # Find the standard error
+                  }
+                  lower_vector = samp_mean - tstar * samp_SE
+                  upper_vector = samp_mean + tstar * samp_SE
+
+                  for (j in 1:numsamp){
+                    color_vec[j]="red"
+                    if(mu>=lower_vector[j] &amp; upper_vector[j]>=mu){color_vec[j]="blue"}
+                  }
+                  plot(c(min(lower_vector),max(upper_vector)), c(0, 1 + numsamp), type = "n")
+                  for (i in 1:numsamp) lines( c(lower_vector[i], upper_vector[i]),c(i, i), lwd = 2, col=color_vec[i], add=TRUE)
+                  abline(v = mu, lwd = 2, lty = 2)
+          </input>
+          </sage>
+            </p>
+            <p>
+              How many of these intervals do <em>not</em> contain the average housing price?  Is this suprising?
+            </p>
+            </task>
+
+
+        </activity>
+
+
+
+
+
+
+    </subsection>  
+
+
+    <subsection>
+      <title>Hypothesis Testing with a Single Numerical Variable</title>
+
+
+      <exploration xml:id="exploration-runningtime">
+          <title>Running Times</title>
+          <introduction>
+              
+          
+          <p>
+            In 2020, the average finishing time of a race was 95 minutes.  The race organizer believes that in 2021, the average finishing time will be less.  They sample 20 random runners from the 2021 race and their finishing times in minutes were: <me>88,  99,  9,  72,  77,  64,  93,  87,  72,  93,</me> <me>80, 117, 101, 106,  87,  60,  90,  85,  61, 111.</me>
+          </p>
+        </introduction>
+        <task>
+          <p>
+            What is the sample size <m>n</m>, mean <m>\bar{x}</m>, and standard deviation <m>s</m> of this distribution?
+          </p>
+        </task>
+        <task>
+          <p>
+            What is the standard error <m>SE</m> for this distribution?  (Recall <xref ref="theorem-CLTnum"/>)
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Suppose hypothetically that the average finishing time had <em>not</em> changed, so <m>\mu=95</m>.  Find <m>t_{\bar{x}}</m>, the <m>t</m>-score for <m>\bar{x}</m>.  (Recall <xref ref="activity-tscore"/>)
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Find the probability that, if the average finishing time had <em>not</em> changed, that you could sample 20 runners and have an average running speed of <m>\bar{x}</m> or lower by computing <m>P(t\lt t_{\bar{x}})</m> for a <m>t</m>-distribution with the appropriate degrees of freedom.
+
+            <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Is it plausible that the average finishing time could still be 95 minutes?
+          </p>
+        </task>
+      </exploration>
+
+
+      <remark xml:id="remark-numericalHT">
+        <title>Numerical Hypothesis Testing</title>
+        <p>
+          Hypothesis Testing for a numerical variable follows similarly from how it does for categorical variables as seen in <xref ref="Sec_HypothesisTesing"/>.  There is a random numerical variable with unknown true mean <m>\mu</m>, that we want to say something about, and we gather data to reject or fail to reject a null hypothesis.
+        </p>
+
+        <p>
+              When doing numerical hypothesis testing, there are three types of Alternative Hypothesis:
+              <ul>
+                <li><m>H_A: \mu\neq \mu_0</m></li>
+                <li><m>H_A: \mu>\mu_0</m></li>
+                <li><m>H_A: \mu\lt \mu_0</m></li>
+              </ul>
+              Corresponding to <q>the true mean is (not equal to/greater than/less than) <m>\mu_0</m></q> for some value <m>\mu_0</m>.
+            </p>
+
+            <p>
+              In all of these cases, the Null Hypothesis will be: <m>H_A: \mu=\mu_0</m>, that is, the true mean could be <m>\mu_0</m>.
+            </p>
+
+            <p>
+              Then as before, we're given a sample from which we can compute a sample mean, <m>\bar{x}</m>, standard deviation <m>s</m> and sample size <m>n</m>.  We then compute a <m>p</m>-value for the alternative hypothesis.  <alert>The <m>p</m>-value still represent: <q>The probability that if we were to assume the null hypothesis, that we could observe values as or more extremal than the sample.</q></alert>
+            </p>
+
+            <p>
+              The way <m>p</m>-values are computed depends on the form of the alternative hypothesis:
+
+              <ul>
+                <li><alert>If <m>H_A</m> is of the form <m>\mu>\mu_0</m></alert> then allowing <m>X</m> to be the <m>t</m>-variable with mean <m>\mu_0</m>, standard deviation <m>SE=\frac{s}{\sqrt{n}}</m> and <m>n-1</m> degrees of fredom, the <m>p</m>-value is <me>p\text{-value}=P(X>\mu_0).</me>
+
+                   <figure>
+<caption><m>p</m>-value for <m>H_A:\mu>\mu_0</m>.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:\mu>\mu_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$\mu_0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:2,-0.02) --node[below]{$\bar{x}$} (axis cs:2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+      We do this by finding the corresponding <m>t</m>-score of <m>\bar{x}</m> and find the probability that <m>P(t>z_{\bar{x}})</m> for the standard <m>t</m> variable with <m>n-1</m> degrees of freedom:
+
+      <figure>
+<caption><m>p</m>-value for <m>H_A:\mu>\mu_0</m> using <m>t</m>-scores.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:\mu>\mu_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:2,-0.02) --node[below]{$t_{\bar{x}}$} (axis cs:2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+
+    </li>
+
+
+        <li><alert>If <m>H_A</m> is of the form <m>\mu\lt \mu_0</m></alert> then allowing <m>X</m> to be the <m>t</m>-variable with mean <m>\mu_0</m>, standard deviation <m>SE=\frac{s}{\sqrt{n}}</m> and <m>n-1</m> degrees of fredom, the <m>p</m>-value is <me>p\text{-value}=P(X\lt \mu_0).</me>
+
+                   <figure>
+<caption><m>p</m>-value for <m>H_A:\mu\lt \mu_0</m>.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:\mu\lt \mu_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$\mu_0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$\bar{x}$} (axis cs:-2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+            We do this by finding the corresponding <m>t</m>-score of <m>\bar{x}</m> and find the probability that <m>P(t\lt t_{\bar{x}})</m> for the standard <m>t</m>-variable with <m>n-1</m> degrees of freedom:
+
+            <figure>
+<caption><m>p</m>-value for <m>H_A:\mu\lt \mu_0</m> using <m>t</m>-scores.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:\mu\lt \mu_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$t_{\bar{x}}$} (axis cs:-2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+
+    </li>
+
+
+
+    <li><alert>If <m>H_A</m> is of the form <m>\mu\neq \mu_0</m></alert> then things are more complicated.  We still let <m>X</m>  be the <m>t</m>-variable with mean <m>\mu_0</m>, standard deviation <m>SE=\frac{s}{\sqrt{n}}</m> and <m>n-1</m> degrees of freedom.   But in this case, extremal means at least as far to the left <em>or</em> the right of <m>\mu_0</m>. So we can compute the <m>p</m>-value via <me>p\text{-value}=P(|X-\mu_0|> |\bar{x}-\mu_0|)=P(X>\mu_0+|\mu_0-\bar{x}|)+P(X\lt \mu_0-|\mu_0-\bar{x}|). </me>
+
+                   <figure>
+<caption><m>p</m>-value for <m>H_A:\mu\neq \mu_0</m>.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:\mu\neq \mu_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,0.02) -- (axis cs:0,-0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$p_0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$\mu_0-|\mu_0-\bar{x}|$} (axis cs:-2,-0.02);
+  \draw (axis cs:+2,-0.02) --node[below]{$\mu_0+|\mu_0-\bar{x}|$} (axis cs:+2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+            We do this by finding the corresponding <m>t</m>-score of <m>\bar{x}</m> and find the probability that <m>P(|t|> |t_{\bar{x}}|)=P(t> |t_{\bar{x}}|)+P(t\lt -|t_{\bar{x}}|)</m> for the standard <m>t</m>-variable with <m>n-1</m> degrees of freedom:
+
+            <figure>
+<caption><m>p</m>-value for <m>H_A:\mu\neq \mu_0</m> using <m>t</m>-scores.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:\mu\neq \mu_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$-|t_{\bar{x}}|$} (axis cs:-2,-0.02);
+  \draw (axis cs:+2,-0.02) --node[below]{$|t_{\bar{x}}|$} (axis cs:+2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+      It's also worth noting that for either of these tails, <m>P(X>\mu_0+|\bar{x}-\mu_0|)=P(X\lt \mu_0-|\bar{x}-\mu_0|)</m>   and <m>P(t> |t_{\bar{x}}|)=P(t\lt -|t_{\bar{x}}|)</m>.  So if you find one of these tails, you can double it to find the sum of both tails.
+
+    </li>
+
+
+
+  </ul>
+
+
+            </p>
+
+
+
+          </remark>
+
+          <example xml:id="example-finishingtime">
+              <title>Running Times</title>
+              <p>
+                In <xref ref="exploration-runningtime"/>, we had an alternative hypothesis that the average running time was less than 95 minutes.  This gives us:
+                <ul>
+                  <li><m>H_A:\mu\lt 95</m>.</li>
+                  <li><m>H_0:\mu= 95</m>.</li>
+                </ul>
+                We were able to compute <m>\bar{x}=82.6</m>, <m>s\approx 23.50006</m>.  Given that <m>n=20</m> we are able top find <m>SE\approx 5.25477</m>.
+              </p>
+              <p>
+                In (c), we assumed <m>\mu=95</m>, the null hypothesis, then found that the <m>t_{\bar{x}}</m> value was <me>t_{\bar{x}}=\frac{82.6-95}{5.25477}\approx −2.35976</me>.  In (d), we computed the <m>p</m>-value by finding <m>P(t\lt −2.35976)\approx 0.01457</m> in a <m>t</m>-distribution with 19 degrees of freedom.
+              </p>
+          </example>
+
+
+          <activity xml:id="activity-timeonsocialmedia">
+              <title>Time on Social Media</title>
+              <introduction>
+              <p>
+                A researcher believes adults spend on average 2 hours and 20 minutes a day on social media.  Their colleague disagrees.  They survey 100 adults, and found a sample mean of 2 hours and 17 minutes, with standard deviation 23.5 minutes.   Suppose we had a level of significance <m>\alpha=0.1</m>.
+              </p>
+            </introduction>
+
+            <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu\lt 140</m> minutes.</li>
+                            <li><m>\mu> 140</m> minutes.</li>
+                            <li><m>\mu\neq 140</m> minutes.</li>
+                            <li><m>\mu= 140</m> minutes.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu\lt 140</m> minutes.</li>
+                            <li><m>\mu> 140</m> minutes.</li>
+                            <li><m>\mu\neq 140</m> minutes.</li>
+                            <li><m>\mu= 140</m> minutes.</li>
+                          </ul>
+                        </p>
+                      </task>
+                <task>
+                  <p>      
+                    Find the standard error <m>SE</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Find <m>t</m>-score for <m>\bar{x}</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+          </activity>
+
+
+          <activity xml:id="activity-averagebill">
+              <title>Restaurant Bill</title>
+              <introduction>
+                  <p>Our recurring restaurateur believes that the average amount spent by customers is over $12.  She plans on polling 50 customers to test this.  Suppose we had a level of significance <m>\alpha=0.05</m>.</p>
+
+                  </introduction>
+
+                   <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu\lt \$12</m>.</li>
+                            <li><m>\mu> \$12</m>.</li>
+                            <li><m>\mu\neq \$12</m>.</li>
+                            <li><m>\mu= \$12</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu\lt \$12</m>.</li>
+                            <li><m>\mu> \$12</m>.</li>
+                            <li><m>\mu\neq \$12</m>.</li>
+                            <li><m>\mu= \$12</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+              <task>
+                <p>
+                  Let's poll some customers!  Run the following code to poll 50 customers and how much money they spent.
+                  <sage language="r">
+                      <input>
+                      n=50
+                      mu=runif(1, 10, 15)
+                      samp=round(rnorm(n, mu, 4), digits=2)
+        
+                      </input>
+                      </sage>
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Run the following code to find the sample mean and sample standard deviation.
+                  <sage language="r">
+                      <input>
+                      print(mean(samp))
+                      print(sd(samp))
+        
+                      </input>
+                      </sage>
+                </p>
+              </task>
+
+              <task>
+                  <p>      
+                    Find the standard error <m>SE</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Find <m>t</m>-score for <m>\bar{x}</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                 <task>
+                 <p>
+                 Run the following to see what the true mean was:
+                 <sage language="r">
+                      <input>
+                      print(mu)
+        
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+
+                  <task>
+                 <p>
+                 Run the following to compute the <m>p</m>-value another way, how does this compare to what you did in (f)?
+                 <sage language="r">
+                      <input>
+                      t.test(samp, mu=12, alternative="greater")
+        
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+
+          </activity>
+
+         <activity xml:id="activity-ttestR">
+                <title>Using <c>R</c> to Hypothesis Test</title>
+                <introduction>
+                    <p>As in <xref ref="activity-proptestR"/>, we can use <c>R</c> to Hypothesis Test Directly.  The structure of the command is <c>t.test(data, mu=mu_0, alternative="greater, less, two.sided" depending on H_A)</c></p>
+                    
+                </introduction>
+
+                <task>
+                  <p>
+                    Suppose we wanted to know if the average number of chocolate donuts sold by a shop per day is more than 55 chocolate donuts  <m>(H_A:\mu>55)</m>.  We sample 12 random days and the number of chocolate donuts sold were <me>55, 59, 59, 56, 55, 58, 53, 59, 50, 51, 60, 51.</me>  Run the following code to obtain the <m>p</m>-value:
+                    <sage language="r">
+                      <input>
+                      t.test(c(55, 59, 59, 56, 55, 58, 53, 59, 50, 51, 60, 51), mu=55, alternative="greater")
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+
+                  <task>
+                  <p>
+                    Suppose we wanted to know if the average number of  donuts with filling sold by a shop per day is less than 100  donuts  <m>(H_A:\mu\lt 100)</m>.  We sample 10 random days and the number of  donuts with filling sold were <me>55, 59, 59, 56, 55, 58, 53, 59, 50, 51, 60, 51.</me>  Run the following code to obtain the <m>p</m>-value:
+                    <sage language="r">
+                      <input>
+                      t.test(c(83, 83, 112, 108, 99, 104, 107, 113, 101, 107), mu=100, alternative="less")
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+                  <task>
+                  <p>
+                    Suppose we wanted to know if the average number of sprinkled donuts sold per day was or wasn't 120 <m>(H_A:\mu\neq120)</m>.  We sample 16 random days and the number of sprinkled donuts sold were <me>139, 101, 131, 122, 136, 123, 129, 127, 106, 109, 101, 117, 120, 136, 109, 124.</me>  Run the following code to obtain the <m>p</m>-value:
+                    <sage language="r">
+                      <input>
+                      t.test(c(139, 101, 131, 122, 136, 123, 129, 127, 106, 109, 101, 117, 120, 136, 109, 124), mu=120, alternative="two.sided")
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+            </activity>
+
+
+            <activity xml:id="activity-mpgprius">
+                <title>Miles per Gallon of a Prius</title>
+                <introduction>
+                    <p>
+                      According to Business Insider, the average gas mileage of a car sold in America is 25 miles per gallon.  One would hope that a hybrid car such a Prius would get better gas mileage.  In fact it's plausible a hybrid car could get over 100 miles per gallon.  Data is collected on 19 Prius drivers to see if Prius's have better than 100 mpg gas mileage on average.
+                    </p>
+
+                    <p>
+                Run the following code to download  the <c>prius_mpg.csv</c> data set which contains information about 19 Prius drivers, and display the variables:
+
+                <sage language="r">
+                <input>
+                prius = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/prius_mpg.csv")
+                
+                names(prius)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=prius_mpg"/>.
+
+              </p>
+            </introduction>
+
+              <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu\lt 100</m> mpg.</li>
+                            <li><m>\mu> 100</m> mpg.</li>
+                            <li><m>\mu\neq 100</m> mpg.</li>
+                            <li><m>\mu= 100</m> mpg.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu\lt 100</m> mpg.</li>
+                            <li><m>\mu> 100</m> mpg.</li>
+                            <li><m>\mu\neq 100</m> mpg.</li>
+                            <li><m>\mu= 100</m> mpg.</li>
+                          </ul>
+                        </p>
+                      </task>
+                      <task>
+                      <p>
+                Run the following code to display a histogram of the mpg of the 19 drivers, including a line indicating 100 mpg:
+
+                <sage language="r">
+                <input>
+                hist(prius$average_mpg)
+                abline(v = 100, col="red", lwd=3, lty=2)
+                </input>
+                </sage>
+                Based on this graphic, do we think the null hypothesis is plausible?
+
+              </p>   
+              </task>   
+
+              <task>
+                <p>
+                  Run the following code to find the sample mean and sample standard deviation.
+                  <sage language="r">
+                      <input>
+                      print(mean(prius$average_mpg))
+                      print(sd(prius$average_mpg))
+        
+                      </input>
+                      </sage>
+                </p>
+              </task>
+
+              <task>
+                  <p>      
+                    Find the standard error <m>SE</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Find <m>t</m>-score for <m>\bar{x}</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                 
+
+
+                  <task>
+                 <p>
+                 Run the following to compute the <m>p</m>-value another way, how does this compare to what you did in (f)?
+                 <sage language="r">
+                      <input>
+                      t.test(prius$average_mpg, mu=100, alternative="greater")
+        
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+            </activity>
+
+
+
+
+    </subsection>
+</section>

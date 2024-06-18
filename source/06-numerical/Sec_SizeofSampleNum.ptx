@@ -1,0 +1,930 @@
+<section xml:id="Sec_SizeofSampleNum">
+    <title>Size of Samples of Numerical Variables (N5)</title>
+
+   <introduction>
+        <p> In often, gathering data, conducting experiments or studies, and performing statistical analysis can be time consuming, arduous or expensive.  If we wish to achieve a certain level of precision in our results, we need samples of sufficient size.  We've done this for categorical variables in <xref ref="Sec_SizeofSampleCat"/>  In this section, we estimate the minimum size of a sample which will provide the precision of our choice for <em>numerical</em> variables.
+        </p>
+
+       </introduction>
+
+
+       <subsection>
+        <title>Sample Size and Margins of Error</title>
+
+        <remark xml:id="remark-sizeofsampnumCI">
+          <p>
+            In <xref ref="remark-numCI"/> we spoke about computing confidence intervals for the means of numerical variables.  Recall from <xref ref="definition-MoEprop"/> that the margin of error for a confidence interval is the distance from the endpoints of the interval to it's center, or <m>\frac{UB-LB}{2}</m>.  Since a numerical confidence interval is computed as: <me>\left[\bar{x}-t^*\frac{s}{\sqrt{n}}, \bar{x}+t^*\frac{s}{\sqrt{n}}\right]</me> from <xref ref="remark-numCI"/>, the margin of error of a numerical confidence interval is <me>ME=t^*\frac{s}{\sqrt{n}}.</me>
+
+
+            <figure>
+<caption>Margin of Error.</caption>      
+      <image>
+ <description>Margin of Error.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=red!20, draw=none, domain=-1.96:1.96] {gauss(0,1)} \closedcycle;
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,0.02) --node[above]{$\bar{x}$} (axis cs:0,0.02);
+
+  \draw (axis cs:1.96,-0.02) -- (axis cs:1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) -- (axis cs:-1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) --node[below]{\tiny$LB$} (axis cs:-1.96,-0.02);
+  \draw (axis cs:1.96,-0.02) --node[below]{\tiny$UB$} (axis cs:1.96,-0.02);
+
+  \draw [yshift=-0.6cm, latex-latex](axis cs:-1.96,0) -- node [fill=white] {$ME$} (axis cs:0,0);
+  \draw [yshift=-0.6cm, latex-latex](axis cs:0,0) -- node [fill=white] {$ME$} (axis cs:1.96,0);
+
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+          </p>
+
+
+
+          <p>
+            But note from <xref ref="definition-tcurve"/> that as <m>n</m> increases, the <m>t</m>-distribution greatly resembles the normal distribution.  In other words <m>t^*\approx z^*</m>.
+          </p>
+        </remark>
+
+
+        <activity xml:id="activity-findingsampsizeforME">
+          <introduction>
+              <p>
+                Here, we walk through the steps of finding the sample size to estimate a confidence interval within a given margin of error.
+              </p>
+
+              <p>
+                Suppose you sample a numerical variable and found a sample standard deviation <m>s=25</m>.  We want to find a sample size <m>n</m> so that we can take a sample of size <m>n</m> and get a 95% confidence interval with margin of error <m>ME=3</m>.
+              </p>
+              
+          </introduction>
+         <task>
+            <p>
+              Find <m>z^*</m> such that <m>P(-z^*\lt Z\lt z^*)=0.95</m> where <m>Z</m> is the standard normal variable.
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+
+           <p>
+              Also see <xref ref="remark-otherCI"/>.
+
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Recall from <xref ref="activity-findingsampsizeforME"/> that <me>ME=t^*\frac{s}{\sqrt{n}}.</me>  Using <m>t^*=z^*, s=25</m> and <m>ME=3</m>, solve for <m>n</m>.
+            </p>
+          </task>
+
+          <task>
+            <p>
+              How large should your sample size be to get a 95% confidence interval with margin of error at least <m>3</m>?  (It should be a whole number).
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Repeat the above tasks for a 99% confidence interval.
+            </p>
+          </task>
+        </activity>
+
+
+        <remark>
+          <p>
+          Note that if we have <me>ME=z^*\frac{s}{\sqrt{n}}</me>
+          it follows algebraiacally:
+          <me>n=\frac{(z^*s)^2}{ME^2}.</me>
+        </p>
+      </remark>
+
+
+        <activity xml:id="activity-averageheight">
+            <title>Confidence Intervals for Average Test Scores</title>
+            <introduction>
+                <p>
+                  Let's put this in practice.  Recall that for <m>s</m> to be good estimate for <m>\sigma</m> and <m>z^*</m> to be a good estimate for <m>t^*</m>, the sample size should be at least 30.
+                </p>
+
+                <p>
+              The <c>studentscleaned.csv</c> data set consists of a sample of 4892 students who have taken a statistics course.  It records information such as their gender, major, whether or not they've participated in online statistics tutoring and their scores on the two exams in the course.
+            </p>
+
+            <p>
+            Run the following code to download <c>studentscleaned.csv</c> and display it's variables.
+             <sage language="r">
+                      <input>
+                      students = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/studentscleaned.csv")
+                      names(students)
+                      </input>
+                      </sage>
+          
+          </p>
+
+          <p>
+            Our goal will be to find a confidence interval for the average score of Exam 1 with margin of error 2 points.
+           </p>     
+            </introduction>
+
+            <task>
+              <p>
+                Run the following code to sample 30 scores from Exam 1:
+
+                <sage language="r">
+                      <input>
+                      samp1=sample(students$score1, 30)
+                      </input>
+                      </sage> 
+              </p>
+            </task>
+
+
+            <task>
+              <p>
+                Run the following code to find a sample standard deviation:
+
+                <sage language="r">
+                      <input>
+                      sd(samp1)
+                      </input>
+                      </sage> 
+              </p>
+            </task>
+
+            <task>
+            <p>
+              Find <m>z^*</m> such that <m>P(-z^*\lt Z\lt z^*)=0.95</m> where <m>Z</m> is the standard normal variable.
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+
+           <p>
+              Also see <xref ref="remark-otherCI"/>.
+
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Recall from <xref ref="activity-findingsampsizeforME"/> that <me>ME=t^*\frac{s}{\sqrt{n}}.</me>  Using <m>t^*=z^*, s</m> and <m>ME=2</m>, solve for <m>n</m>.
+            </p>
+          </task>
+
+          <task>
+            <p>
+              How large should your sample size be to get a 95% confidence interval with margin of error at least <m>2</m>?  (It should be a whole number).
+            </p>
+          </task>
+
+           <task>
+              <p>
+                Fix and run the following code to sample <c>n</c> scores from Exam 1, and compute a 95% confidence interval:
+
+                <sage language="r">
+                      <input>
+                      n=FIXME
+
+                      samp2=sample(students$score1, n)
+                      t.test(samp2, conf.level=0.95)$conf.int
+                      </input>
+                      </sage>
+                What is the margin of error?  (Recall that <m>s</m> was just an estimator for <m>\sigma</m>.)     
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Repeat the above for Exam 2.
+              </p>
+            </task>
+
+
+        </activity>
+
+
+
+</subsection>
+
+
+<subsection>
+  <title>Power Calculations for difference of Means</title>
+  <introduction>
+      <p>
+        We know from the computation of the standard error that the larger the sample size, the smaller the standard error.  A moderate sample may be able to detect moderate differences in means, but be unable to detect smaller differences.  For that, we would need to find a bigger sample.
+      </p>
+      
+  </introduction>
+
+
+  <activity xml:id="activity-bloodpressure">
+      <title>Blood Pressure and Medication</title>
+      <introduction>
+          <p>
+            A team of medical researchers want to study the effects of two different medications on blood pressure, A and B.  They're interested to see if there is any difference in average blood pressure of patients who take either medication.  Prior research suggests that the standard deviation of blood pressure for patients who take either medication will be 12mmHG.  They test the drug on patients with two groups of 100 each. <alert>Unbeknowst to the researchers, medication B lowers blood pressure by 3 mmHG on average.</alert>
+          </p>
+          
+      </introduction>
+      <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu_1-\mu_2\lt 0</m> mmGH.</li>
+                            <li><m>\mu_1-\mu_2> 0</m> mmGH.</li>
+                            <li><m>\mu_1-\mu_2\neq 0</m> mmGH.</li>
+                            <li><m>\mu_1-\mu_2= 0</m> mmGH.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu_1-\mu_2\lt 0</m> mmGH.</li>
+                            <li><m>\mu_1-\mu_2> 0</m> mmGH.</li>
+                            <li><m>\mu_1-\mu_2\neq 0</m> mmGH.</li>
+                            <li><m>\mu_1-\mu_2= 0</m> mmGH.</li>
+                          </ul>
+                        </p>
+                      </task>
+                      
+
+              <task>
+                  <p>      
+                    Assume that <m>s_1=12=s_2</m>.  Find the standard error <m>SE</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Suppose that, suprise suprise! The results are back and <m>\bar{x}_1-\bar{x}_2=3</m>. Find <m>t</m>-score for <m>\bar{x}_1-\bar{x}_2</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+               
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error <alert>did we</alert> make? (Type 1 or Type 2)</p>
+                      </task>
+
+                     
+
+      </activity>
+
+<p>
+  The issue of course is that this difference between medications A and B is potentially important and we would like to know it!
+</p>
+
+
+  <activity xml:id="activity-bloodpressure2">
+      <title>Blood Pressure and Medication: Power Computation</title>
+      <introduction>
+          <p>
+            There is of course some chance that with 100 people in each group, that just by sheer chance the blood pressures are such that the null hypothesis can be rejected.  What are the chances of this?
+          </p>
+
+          <p>
+            For simplicities sake, we will assume that this sample size allows a normal distribution to be utilized in place of a <m>t</m>-distribution. 
+          </p>
+          
+      </introduction>
+      <task>
+        <p>
+        Recall that for a normal distribution with mean <m>\mu=0</m> and standard deviation <m>SE</m> that 95% of the distribution falls between <m>-1.96SE, 1.96SE</m>.  Compute these values with the <m>SE</m> we found in <xref ref="activity-bloodpressure"/>.
+      </p>
+      </task>
+      <task>
+        <p>
+        Recall that we reject the null hypothesis if <m>\bar{x}_1-\bar{x}_2</m> falls into the 2.5% tail regions:
+        <figure>
+<caption>2.5% Tails.</caption>      
+      <image>
+ <description>2.5%tails.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=teal!20, draw=none, domain=-5:-1.96] {gauss(0,1)} \closedcycle;
+  \addplot [fill=teal!20, draw=none, domain=1.96:5] {gauss(0,1)} \closedcycle;
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:1.96,-0.02) -- (axis cs:1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) -- (axis cs:-1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) --node[below]{\tiny$-1.96SE$} (axis cs:-1.96,-0.02);
+  \draw (axis cs:1.96,-0.02) --node[below]{\tiny$1.96SE$} (axis cs:1.96,-0.02);
+
+  \draw [yshift=-0.6cm, latex-latex](axis cs:-5,0) -- node [fill=white] {\tiny$2.5\%$} (axis cs:-1.96,0);
+  \draw [yshift=-0.6cm, latex-latex](axis cs:1.96,0) -- node [fill=white] {\tiny$2.5\%$} (axis cs:5,0);
+
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+    </p>
+    <p>
+
+        For what values of <m>\bar{x}_1-\bar{x}_2</m> would we actually reject the null?
+      </p>
+      </task>
+
+      <task>
+        <p>
+          But note that the <em>actual</em> sampling distribution would be centered at <m>\mu_1-\mu_2=-3</m>:
+
+          <figure>
+<caption>The real sampling distribution and the assumed null distribution.</caption>      
+      <image>
+ <description>The real sampling distribution and the assumed null distribution.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-10:10, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [fill=teal!20, draw=none, domain=-10:-1.96*1.7] {gauss(-3,1.7)} \closedcycle;
+
+  \addplot [very thick,cyan!50!black] {gauss(0,1.7)};
+  \addplot [very thick,teal!50!black] {gauss(-3,1.7)};
+
+  
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:1.96*1.7,-0.02) -- (axis cs:1.96*1.7,0.037);
+  \draw (axis cs:-1.96*1.7,-0.02) -- (axis cs:-1.96*1.7,0.23);
+
+  \draw (axis cs:-3,-0.04) -- (axis cs:-3,0.02);
+  \draw (axis cs:-3,-0.04) --node[below]{\tiny$\mu_1-\mu_2-3$} (axis cs:-3,-0.04);
+  \draw (axis cs:-1.96*1.7,-0.02) --node[below left]{\tiny$-1.96SE$} (axis cs:-1.96*1.7,-0.02);
+  
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+    </p>
+    <p>
+      So what's the probability that this study would actually have statistically significant results?  Compute <m>P(Y\lt -1.96SE)</m> where <m>-1.96SE</m> as we've already computed, and <m>Y</m> is the sampling distribution, a normal variable with mean <m>-3</m> and standard deviation <m>SE</m>.
+
+       <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+    </p>
+    <p>
+      This probability is called the <em>power</em> of the test for a difference of <m>-3</m>.
+    </p>
+  </task>
+
+
+   <task>
+                        <p>
+                        To see what an actual study would look like, run the following code to sample <c>n1=100</c>, <c>n2=100</c> people from two distributions where the mean is different by 3, and see if we can reject the null hypothesis.
+                         <sage language="r">
+                      <input>
+                      n1=100
+                      n2=100
+
+                      sampA=rnorm(n1, 135, 12)
+                      sampB=rnorm(n2, 132, 12)
+                      boxplot(sampA, sampB)
+                      t.test(sampA, sampB, alternative="two.sided")
+
+        
+                      </input>
+                      </sage>
+                      </p>
+                      </task>
+
+        <task>
+          <p>
+        Run the following code to simiulate 1000 trials of this medication with 100 subjects in each group, and record the <c>p.value</c> from each trial, and display a histogram of the results.       
+
+        <sage language="r">
+                      <input>
+                      n1=100
+                      n2=100
+                      trials=1000
+
+                      pvec=rep(NA, trials)
+
+                      for(i in 1:trials){
+                        sampA=rnorm(n1, 135,12)
+                        sampB=rnorm(n2, 132, 12)
+                        pvec[i]=t.test(sampA, sampB, alternative="two.sided")$p.value
+                      }
+
+                      hist(pvec, breaks=25)
+                      abline(v = 0.05, col="red", lwd=3, lty=2)
+
+        
+                      </input>
+                      </sage>
+
+                      Then run the following to see what proportion of the time we reject the null:
+                      <sage language="r">
+                      <input>
+                      length(which(pvec &lt; 0.05))/trials
+
+        
+                      </input>
+                      </sage>
+                      How does this value compare to the power of the test which you computed in (c)?
+            </p>
+            </task>                 
+
+
+
+  </activity>
+
+
+
+  <remark>
+    <p>
+      So, this isn't fantastic.  Turns out there is a real difference in the efficacy of these two medications, but it's simply to small for our study to reliably detect.  The researchers may not know that this difference in the medication exists, but they're certainly aware that something like this could be an issue.
+    </p>
+    <p>
+      The problem fundamentally is that the standard error <m>SE</m> is simply to large, and the test is thus insensitive to this difference.  Since <me>SE=\sqrt{\frac{s_1^2}{n}+\frac{s_2^2}{n}}</me> we could shrink the standard error by increasing <m>n</m> and taking a larger sample.  But we can't just keep testing bigger and bigger groups, there are time and financial limitations.  Also the researchers don't know there is a difference to be found, and don't want their time looking for a difference that doesn't exist.
+    </p>
+  </remark>
+
+
+  <activity xml:id="activity-bloodpressure3">
+      <title>Medication and Blood Pressure: Sample Size</title>
+      <introduction>
+          <p>The researchers decide to give the experiment one more chance, and they want to recruit enough subjects to that <em>if</em> there is a difference of 3 mmGH, there is an 80% chance that they detect it.  In other words, they want to solve for <m>n</m> for a power of 80%.</p>
+          
+      </introduction>
+      <task>
+        <p>
+          So if there was a difference of 3 mmGH, the sampling distribution would have mean <m>\mu_1-\mu_2=-3</m> as in <xref ref="activity-bloodpressure2"/>. 
+
+          <figure>
+<caption>80% tail of the real sampling distribution.</caption>      
+      <image>
+ <description>80% tail of the real sampling distribution.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-10:10, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [fill=teal!20, draw=none, domain=-10:-3+1.071*0.8476] {gauss(-3,1.071)} \closedcycle;
+
+  %\addplot [very thick,cyan!50!black] {gauss(0,1.7)};
+  \addplot [very thick,teal!50!black] {gauss(-3,1.071)};
+
+  
+
+
+  %\draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  %\draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  %\draw (axis cs:1.96*1.7,-0.02) -- (axis cs:1.96*1.7,0.037);
+  %\draw (axis cs:-1.96*1.7,-0.02) -- (axis cs:-1.96*1.7,0.23);
+
+  \draw (axis cs:-3,-0.02) -- (axis cs:-3,0.02);
+  \draw (axis cs:-3,0.02) --node[above]{\tiny$-3$} (axis cs:-3,0.02);
+
+  \draw (axis cs:-3+1.071*0.8476,0.26) -- (axis cs:-3+1.071*0.8476,-0.02);
+  \draw (axis cs:-3+1.071*0.8476,-0.02) --node[below]{\tiny$-3+z^*SE$} (axis cs:-3+1.071*0.8476,-0.02);
+  
+
+  \draw [yshift=-0.6cm, latex-latex](axis cs:-10,0) -- node [fill=white] {\tiny$80\%$} (axis cs:-3+1.071*0.8476,0);
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+    </p>
+
+
+
+          <p> Find a <m>z^*</m> so that <m>P(Z\lt z^*)=0.8</m>, where <m>Z</m> is the standard normal variable.</p>
+
+        </task>
+
+        <task>
+          <p>
+            For these values to be statistically significant, they have to be less than <m>-1.96SE</m>:
+
+            <figure>
+<caption>80% tail is statistically significant.</caption>      
+      <image>
+ <description>80% tail is statistically significant.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-10:10, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [fill=teal!20, draw=none, domain=-10:-3+1.071*0.8476] {gauss(-3,1.071)} \closedcycle;
+  \addplot [fill=teal!20, draw=none, domain=-10:-1.96*1.071] {gauss(0,1.071)} \closedcycle;
+   \addplot [fill=teal!20, draw=none, domain=1.96*1.071:10] {gauss(0,1.071)} \closedcycle;
+
+  \addplot [very thick,cyan!50!black] {gauss(0,1.071)};
+  \addplot [very thick,teal!50!black] {gauss(-3,1.071)};
+
+  
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,0.02) --node[above]{\tiny$0$} (axis cs:0,0.02);
+
+  %\draw (axis cs:1.96*1.7,-0.02) -- (axis cs:1.96*1.7,0.037);
+  %\draw (axis cs:-1.96*1.7,-0.02) -- (axis cs:-1.96*1.7,0.23);
+
+  \draw (axis cs:-3,-0.02) -- (axis cs:-3,0.02);
+  \draw (axis cs:-3,0.02) --node[above]{\tiny$-3$} (axis cs:-3,0.02);
+
+  \draw (axis cs:-3+1.071*0.8476,0.26) -- (axis cs:-3+1.071*0.8476,-0.02);
+  \draw (axis cs:-3+1.071*0.8476,-0.02) --node[below]{\tiny$-3+z^*SE$ \\ $=-1.96SE$} (axis cs:-3+1.071*0.8476,-0.02);
+  
+
+ % \draw [yshift=-0.6cm, latex-latex](axis cs:-10,0) -- node [fill=white] {\tiny$80\%$} (axis cs:-3+1.071*0.8476,0);
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+    </p>
+    <p>
+      Find <m>SE</m> so that <m>-3+z^*SE=-1.96SE.</m>
+    </p>
+  </task>
+
+  <task>
+    <p>
+      Using the fact that <m>SE=\sqrt{\frac{s_1^2}{n}+\frac{s_2^2}{n}}</m> and <m>s_1=12=s_2</m>, solve for <m>n</m>.
+    </p>
+  </task>
+
+  <task>
+    <p>
+      How many people should be recruited to test each medication?  Recall this must be a whole number.
+    </p>
+  </task>
+
+
+  <task>
+          <p>
+        Fix and run the following code to simiulate 1000 trials of this medication with <c>n</c> subjects in each group, and record the <c>p.value</c> from each trial, and display a histogram of the results.       
+
+        <sage language="r">
+                      <input>
+                      n=FIXME
+                      trials=1000
+
+                      pvec=rep(NA, trials)
+
+                      for(i in 1:trials){
+                        sampA=rnorm(n, 135,12)
+                        sampB=rnorm(n, 132, 12)
+                        pvec[i]=t.test(sampA, sampB, alternative="two.sided")$p.value
+                      }
+
+                      hist(pvec, breaks=25)
+                      abline(v = 0.05, col="red", lwd=3, lty=2)
+
+        
+                      </input>
+                      </sage>
+
+                      Then run the following to see what proportion of the time we reject the null:
+                      <sage language="r">
+                      <input>
+                      length(which(pvec &lt; 0.05))/trials
+
+        
+                      </input>
+                      </sage>
+                      How does this value compare to the power of 80% we hoped to achieve?
+            </p>
+            </task> 
+
+            <task>
+              <p>
+                Convince yourself that if patients taking medication B had on average blood pressure 3 mmGH <em>higher</em> than those on medication A, that a sample size each of <m>n</m> would also allow you to detect it 80% of the time.
+              </p>
+            </task>
+
+        </activity>
+
+
+
+        <remark>
+          <p>
+            Note that in practice, one rarely knows what the actual <m>\mu_1, \mu_2</m> were (and if you did, there would be no need to run experiments!).  But what we've done in <xref ref="activity-bloodpressure3"/> is show that <em>should</em> there be a difference of 3 mmGH, we would be able to detect it 80% of the time with sample sizes of size <m>n</m>.
+          </p>
+        </remark>
+
+
+        <remark xml:id="remark-computepower">
+          <p>
+            Following <xref ref="activity-bloodpressure2"/>, given a hypothesis test where <me>H_A: \mu_1-\mu_2\neq 0, H_0 \mu_1-\mu_2 = 0</me> and the null distribution has standard error <m>SE</m> (as computed via <xref ref="remark-diffofmeans"/>),  the <em>power</em> of a difference <m>\mu_d \lt 0</m> is the probability that this hypothesis test is able to detect a difference of <m>\mu_1-\mu_2=\mu_d</m>.
+          </p>
+
+          <p>
+            We compute the power to be <m>P(Y\lt -1.96SE)</m> where <m>Y</m> is a normal variable with mean <m>\mu_d</m> and standard deviation SE.
+            <interactive desmos="wcbzhb0g1e"/>
+          </p>
+        </remark>
+
+
+        <remark xml:id="remark-computepowersize">
+          <p>
+            Following <xref ref="activity-bloodpressure3"/>, given a difference <m>\mu_d \lt 0</m> and a  <em>power</em> <m>P</m> of  <m>\mu_d \lt 0</m>, 
+             we compute the following to obtain a sample size which will give us this power for the test and difference.
+            <ol>
+              <li>Find <m>z^*</m> so that <m>P(Z\lt z^*)=P</m> where <m>Z</m> is the standard normal variable.</li>
+              <li>Set <m>\mu_d+z^*SE=-1.96SE</m> and solve for <m>SE</m>.</li>
+              <li>Use <m>SE=\sqrt{\frac{s_1^2}{n}+\frac{s_2^2}{n}}</m> to solve for <m>n</m>.  Remember to then round <m>n</m> up.</li>
+            </ol>
+          </p>
+          <p>
+            <interactive desmos="m2sbxb9mph"/>
+          </p>
+        </remark>
+
+
+
+
+       <activity xml:id="activity-evalsbias">
+           <title>Student Evaluations and Gender Bias</title>
+           <introduction>
+               <p>
+                 An education researcher is studying gender bias in student valuations.  Student evaluations are score from 1-5 and generally are distributed with standard deviation 1.1 (regardless of gender).  They are looking to recruit an equal number of men and women to observe any average difference in the evaluations.  They want to be able to detect at least a 0.25 difference in average scores.
+               </p>
+               
+           </introduction>
+
+           <task>
+            <p>
+              Follow <xref ref="remark-computepower"/> to compute the power of this hypothesis test for a difference of <m>0.25</m> if they recruit 50 men and 50 women to the study.
+
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Explain what this power represents in the context of this problem using complete sentences.
+            </p>
+          </task>
+
+          <task>
+            <p>
+              How many participants of both genders would need to be recruited to achieve a power of 90% for the 0.25 difference?  Follow <xref ref="remark-computepowersize"/>.
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+       </activity>
+
+
+
+       <activity xml:id="activity-dataentry">
+           <title>Time Spent in Data Entry</title>
+           <introduction>
+               <p>
+                 A nonprofit organization wants to test which data-entry system saves the most time for their volunteers.  They recruit an equal number of volunteers to test systems A and B.  The standard deviation of time spent in data entry is 45 minutes for both methods.  Suppose they wish to detect a difference of 15 minutes.
+               </p>
+               
+           </introduction>
+
+           <task>
+            <p>
+              Follow <xref ref="remark-computepower"/> to compute the power of this hypothesis test for a difference of <m>15</m> minutes if they recruit 40 people for each method.
+
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Explain what this power represents in the context of this problem using complete sentences.
+            </p>
+          </task>
+
+          <task>
+            <p>
+              How many participants for both methods would need to be recruited to achieve a power of 85% for the 15 minute difference?  Follow <xref ref="remark-computepowersize"/>.
+
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+       </activity>
+
+
+
+
+</subsection>
+</section>

@@ -1,0 +1,921 @@
+<section xml:id="Sec_TwoVarCat">
+    <title>Comparing Two Categorical Variables (C2)</title>
+
+   <introduction>
+        <p> In this section, we consider what happens when we want to compare proportions between 2 categorical variables.
+        </p>
+
+        <exploration xml:id="exploration-genderdisc">
+        	<title>Gender and Raises</title>
+        	<introduction>
+        	    <p>A watchdog group concerned about gender discrimination at a company randomly polls 528 of the company's employees, 312  men and 216  women.  At the end of last year of those surveyed, 102 employees recieved raises: 72 men and 30 women.  The watchdog group points out that the proportion of men who got raises is significantly greater than the proportion of women who got raises and suggests this is due to inequitable practices within the company.  The company claims that any difference between the rates and men and women getting raises is purely by random chance.</p>
+        	    
+        	</introduction>
+
+        	<task>
+        		<p>
+        			Find <m>\hat{p}</m> the proportion of the sampled employees of the company who got a raise.
+        		</p>
+        	</task>
+
+        	<task>
+        		<p>
+        			How many more men than women in this sample got raises this year?
+        		</p>
+        	</task>
+
+	      	<task>
+        		<p>
+        			The company claims that rates of raises are equal across gender and any deviation in a given year is by chance. If this were true, we would expect more men than women to get raises since there are more men in the sample.  But by how much?</p>
+
+        			<p>Let's put the companies claim to the test.  Run the following code to simulate a <c>raise_rate</c> of <m>\hat{p}</m> found in (a).  We then simulate how many <c>num_men=312</c> and <c>num_women=216</c> got raises and calculate their difference <c>d</c>.
+        			<sage language="r">
+                      <input>
+                      raise_rate=FIXME
+                      num_men=312
+                      num_women=216
+
+                      menraise=sample(c("RAISE", "NO"), num_men, replace=TRUE, prob=c(raise_rate, 1-raise_rate))
+                      womenraise=sample(c("RAISE", "NO"), num_women, replace=TRUE, prob=c(raise_rate, 1-raise_rate))
+                      
+                      d=length(which(menraise=="RAISE"))-length(which(womenraise=="RAISE"))
+                      print(d)
+                      </input>
+                      </sage>
+
+                      How does this value compare to what you found in (b)?
+        		</p>
+        	</task>
+
+        	<task>
+        		<p>
+        			Let's take it a step further.  Fix and run the following code to simulate a 1000 random promotion schedules, and plot a distribution of the differences between men and women promoted.  Enter in <c>observed_diff</c> to be the value found in (b)
+        			<sage language="r">
+                      <input>
+                      observed_diff=FIXME
+                      
+                      diff_vec=rep(NA,1000)
+
+                      for(i in 1:1000){
+                      	menraise=sample(c("RAISE", "NO"), num_men, replace=TRUE, prob=c(raise_rate, 1-raise_rate))
+                      	womenraise=sample(c("RAISE", "NO"), num_women, replace=TRUE, prob=c(raise_rate, 1-raise_rate))
+                      	d=length(which(menraise=="RAISE"))-length(which(womenraise=="RAISE"))
+                      	diff_vec[i]=d
+                      }	
+                      hist(diff_vec)
+                      abline(v = observed_diff, col="red", lwd=3, lty=2)
+                      print(observed_diff)
+                      </input>
+                      </sage>
+
+                      How likely is the difference you observed in (b)?
+        		</p>
+        	</task>
+
+        	<task>
+        		<p>
+        			Run the following code to see the proportion of trials where the difference in promotions was as big or greater as found in (b).
+        			<sage language="r">
+                      <input>
+                      length(which(diff_vec>=observed_diff))/1000
+                      </input>
+                      </sage>
+
+                      
+        		</p>
+        	</task>
+
+        	<task>
+        		<p>
+        			How plausible is the companies claim that this differences in promotion rates is purely due to chance?
+        		</p>
+        	</task>
+
+
+
+        </exploration>
+
+
+        
+    </introduction>
+
+<subsection>
+	<title>Differences of Proportion Variables</title>
+
+	<remark>
+		<p>
+			In this section, we sample two categorical variables <m>X_1, X_2</m>.  Each variable has its own sample size <m>n_1, n_2</m> and own sample proportion <m>\hat{p_1}, \hat{p_2}</m>.  If we want to compare the proportions of each variable, we do so by looking at their difference: <me>D=\hat{p_1}-\hat{p_2}.</me>
+		</p>
+	</remark>
+
+	<remark xml:id="remark-varprop">
+		<p>
+			Recall that via <xref ref="theorem-CLTprop"/> that the <em>Variance</em> of a sampling proportion distribution is <me>Var_{\hat{p}}=\frac{p(1-p)}{n}.</me>
+		</p>
+	</remark>
+
+
+
+<activity xml:id="activity-smokingweight">
+    <title>Smoking and Baby Weight</title>
+    <introduction>
+        <p>A 1967 study shows that the probability that a baby has low birth weight is about 7.8% if the mother smokes, and 2.9% if the mother does not.</p>
+        
+    </introduction>
+
+    <task>
+    	<p>
+    		Suppose we sampled 500 babies from mothers who smoke (<m>n_1=500</m>).  We are given the probability a given baby is underweight is <m>p_1=0.078</m>.  Following <xref ref="theorem-CLTprop"/> what is the expected proportion of this sample to be underweight: <m>\hat{p_1}</m>?
+    	</p></task>
+
+    	<task>
+    	<p>
+    		Use <xref ref="remark-varprop"/> to find the variance of <m>\hat{p_1}</m>: <m>Var_{\hat{p_1}}</m>.
+    	</p></task>
+
+    	 <task>
+    	<p>
+    		Suppose we sampled 1000 babies from mothers who do not  smoke (<m>n_2=1000</m>).  We are given the probability a given baby is underweight is <m>p_2=0.029</m>.  Following <xref ref="theorem-CLTprop"/> what is the expected proportion of this sample to be underweight: <m>\hat{p_2}</m>?
+    	</p></task>
+
+    	<task>
+    	<p>
+    		Use <xref ref="remark-varprop"/> to find the variance of <m>\hat{p_2}</m>: <m>Var_{\hat{p_2}}</m>.
+    	</p></task>
+
+    	<task>
+    	<p>
+    		Let <m>D</m> denote the difference between the sampling distributions.  Use <xref ref="remark-linofEandV"/> to find <m>\mu_D</m>.
+    	</p></task>
+
+    	<task>
+    	<p>
+    		Use <xref ref="remark-linofEandV"/> to find the variance of <m>D</m>: <m>Var_D</m>.
+    	</p></task>
+
+    	<task>
+    	<p>
+    		Find the standard deviation of <m>D</m>: <m>SE_D=\sqrt{Var_D}</m>.
+    	</p></task>
+
+    	<task>
+    	<p>
+    		Run the following code to simulate 1000 trials of sampling 500 babies from mothers who smoke, 1000 babies from mothers who do not smoke, taking the difference in proportions of babies who are underweight, and plotting a histogram of the results.
+    		<sage language="r">
+                      <input>
+                      smoke_n=500
+                      nosmoke_n=1000
+                      smoke_p=0.078
+                      nosmoke_p=0.029
+                      trials=1000
+
+                      diff_underweight=rep(NA, trials)
+
+                      for(i in 1:trials){
+                      	smoke_samp=sample(c("UNDERWEIGHT", "NO"), smoke_n, replace=TRUE, prob=c(smoke_p, 1-smoke_p))
+                      	nosmoke_samp=sample(c("UNDERWEIGHT", "NO"), nosmoke_n, replace=TRUE, prob=c(nosmoke_p, 1-nosmoke_p))
+                      	diff_underweight[i]=length(which(smoke_samp=="UNDERWEIGHT"))/smoke_n-length(which(nosmoke_samp=="UNDERWEIGHT"))/nosmoke_n
+                      }
+                      hist(diff_underweight, breaks=25, prob=TRUE)
+
+                      </input>
+                      </sage>
+    	</p></task>
+
+    	<task>
+    	<p>
+    		Fix and run the following code so that <c>mu_D=</c><m>\mu_D</m> and <c>SE_D=</c><m>\sigma_D</m> and plot a normal curve on top of our histogram.
+    		<sage language="r">
+                      <input>
+                      mu_D=FIXME
+                      SE_D=FIXME
+                      
+                      hist(diff_underweight, breaks=25, prob=TRUE)
+                      curve(dnorm(x, mean=mu_D, sd=SE_D), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+                      </input>
+                      </sage>
+                      How well does the normal distribution approximate the histogram?
+    	</p></task>
+
+
+</activity>	
+
+	
+
+
+	<remark xml:id="remark-diffofprop">
+		<title>Difference of Proportions</title>
+		<p>
+			Let there be two random categorical variables, with population proportions <m>, p_1, p_2</m>.  Then let <m>D</m> be the random variable generated by taking random samples of size <m>n_1, n_2</m> of the two variables and taking the difference in their proportions.  Then <m>D</m> is approximated by a normal variable with mean and standard deviation: <me>\mu_D=p_1-p_2, SE_D=\sqrt{\frac{p_1(1-p_1)}{n_1}+\frac{p_2(1-p_2)}{n_2}}.</me> 
+		</p>
+
+
+	</remark>
+
+
+	<activity xml:id="activity-toppings">
+		<title>Toppings on Frozen Desserts</title>
+		<introduction>
+		    <p>Let's suppose that 60% of ice cream eaters and 45% of frozen yogurt eaters put toppings on their frozen dessert of choice.  We sample 80 ice cream eaters and 110 frozen yogurt eaters.</p>
+		    
+		</introduction>
+
+		<task>
+			<p>
+				Run the following code to sample the ice cream eaters, see how many got toppings, and see what proportion of them got toppings.
+
+				<sage language="r">
+                      <input>
+                      icecream_n=80
+                      icecream_p=0.6
+
+                      icecream_samp=sample(c("TOPPINGS", "NO"), icecream_n, replace=TRUE, prob=c(icecream_p, 1-icecream_p))
+                      length(which(icecream_samp=="TOPPINGS"))
+                      icecream_prop=length(which(icecream_samp=="TOPPINGS"))/icecream_n
+                      </input>
+                      </sage>
+                  </p>
+              </task>
+
+         <task>
+			<p>
+				Run the following code to sample the frozen yogurt eaters, see how many got toppings, and see what proportion of them got toppings.
+
+				<sage language="r">
+                      <input>
+                      frozen_n=110
+                      frozen_p=0.45
+
+                      frozen_samp=sample(c("TOPPINGS", "NO"), frozen_n, replace=TRUE, prob=c(frozen_p, 1-frozen_p))
+                      length(which(frozen_samp=="TOPPINGS"))
+                      frozen_prop=length(which(frozen_samp=="TOPPINGS"))/frozen_n
+                      </input>
+                      </sage>
+                  </p>
+              </task>
+
+
+         <task>
+			<p>
+				Run the following code to compute the difference in proportions between the samples.
+
+				<sage language="r">
+                      <input>
+                      icecream_prop-frozen_prop
+                      </input>
+                      </sage>
+                  </p>
+              </task>
+
+
+          <task>
+			<p>
+				Run the following code to simulate 1000 trials of random samplings, and plot a histogram of their differences.
+
+				<sage language="r">
+                      <input>
+                      prop_diff=rep(NA,1000)
+
+                      for(i in 1:1000){
+                      	icecream_samp=sample(c("TOPPINGS", "NO"), icecream_n, replace=TRUE, prob=c(icecream_p, 1-icecream_p))
+                      	icecream_prop=length(which(icecream_samp=="TOPPINGS"))/icecream_n
+                      	frozen_samp=sample(c("TOPPINGS", "NO"), frozen_n, replace=TRUE, prob=c(frozen_p, 1-frozen_p))
+                      	frozen_prop=length(which(frozen_samp=="TOPPINGS"))/frozen_n
+                      	prop_diff[i]=icecream_prop-frozen_prop
+                      }
+                      hist(prop_diff, breaks=25, prob=TRUE)
+                      </input>
+                      </sage>
+                  </p>
+              </task>    
+
+         <task>
+			<p>
+				Given that <m>p_1=0.6, n_1=80, p_2=0.45, n_2=110</m>, use <xref ref="remark-diffofprop"/> to compute <m>\mu_D</m> the mean of the distribution of differences, and <m>SE_D</m>, the standard deviation of the distribution of differences.
+
+				
+                  </p>
+              </task>
+
+              <task>
+			<p>
+				Fix and run the following code to overlay a normal curve with mean <c>mu_D=</c><m>\mu_D</m> and standard deviation <c>SE_D=</c><m>SE_D</m> over the histogram you found.
+
+				<sage language="r">
+                      <input>
+                      mu_D=FIXME
+                      SE_D=FIXME
+
+                      
+                      hist(prop_diff, breaks=25, prob=TRUE)
+                      curve(dnorm(x, mean=mu_D, sd=SE_D), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+                      </input>
+                      </sage>
+                      How well does this normal curve approximate the distribution of differences?
+                  </p>
+              </task>           
+
+
+
+	</activity>
+
+</subsection>
+
+
+<subsection>
+	<title>Confidence Intervals for Differences of Proportions</title>
+
+	<remark xml:id="remark-CIfordiffprop">
+		<p>
+			Following the same reasoning as in <xref ref="Sec_ConfidenceInterval"/> we can compute a confidence interval for the differences of true proportions.  Suppose you had two categorical variables from whom you collect samples of size <m>n_1, n_2</m> and obtain sample proportions <m>\hat{p}_1, \hat{p}_2</m>.  Then a C% confidence interval for the difference between the true proportions <m>D=p_1-p_2</m> is an interval centered at <m>d=\hat{p}_1-\hat{p}_2</m> which has a C% chance of containing D.
+		</p>
+
+		<p>
+			We can compute this interval to be <me>[(p_1-p_2)-z^*SE_D, (p_1-p_2)+z^*SE_D]</me> where <m>SE_D=\sqrt{\frac{p_1(1-p_1)}{n_1}+\frac{p_2(1-p_2)}{n_2}}</m> as in <xref ref="remark-diffofprop"/> and <m>z^*</m> is found as in <xref ref="remark-otherCI"/>:
+
+			<me>
+              \begin{array}{|c|c|}
+              \hline
+              C\% \amp z^*\\
+              \hline
+              90\% \amp 1.645\\
+              95\% \amp 1.96\\
+              99\% \amp 2.576 \\
+              \hline
+              \end{array}
+            </me>
+        </p>
+	</remark>
+
+	
+
+	<example xml:id="example-genderdisc">
+	    <title>Gender and Raises revisted again</title>
+	    <p>
+	    	We recall from <xref ref="exploration-genderdisc"/> that we had <m>n_1=312</m> men whose sample raise rate was <m>\hat{p_1}=\frac{72}{312}</m> and there were <m>n_2=216</m> women whose sample raise rate was <m>\hat{p_2}=\frac{30}{216}</m>.  In this Activity, we also found that <me>SE_D=\sqrt{\frac{\frac{72}{312}\left(1-\frac{72}{312}\right)}{312}+\frac{\frac{30}{216}\left(1-\frac{30}{216}\right)}{216}}\approx 0.033506. </me>
+	    </p>
+	    <p>
+	    The differences between the sample proportions is <me>d=\frac{72}{312}-\frac{30}{216}\approx 0.09188.</me>
+	</p>
+	<p>
+		So we could compute a 95% confidence interval for the differences of proportions by 
+		<md>
+		<mrow>\amp[(p_1-p_2)-z^*SE_D, (p_1-p_2)+z^*SE_D]</mrow>
+		<mrow>\amp \approx [0.09188-1.96\cdot 0.033506, 0.09188+1.96\cdot 0.033506]</mrow>
+		<mrow>\amp \approx[0.0262, 0.1576].</mrow>
+		</md>
+
+		That is, there is a 95% chance that the difference in raise rates between men and women is between 2.62% and 15.76%.  Note that the companies claim was that raise rates were the same, that is, <em>the difference in raise rates was zero</em> which seems unlikely, given this evidence.
+	</p>
+	</example>
+
+
+
+
+
+
+
+
+
+	<activity xml:id="activity-spicywings">
+	    <title>Spicy Wings</title>
+	    <introduction>
+	        <p>A restaurateur owns two seperate restaraunts, and East and West location.  Before contacting her vendors, she want's to know if there is any difference in the rate at which customers at these locations order Spicy Wings.  Her plan is to poll 100 customers from each location, and compute a 90% confidence interval for the difference in ordering rates of Spicy Wings.</p>
+	        
+	    </introduction>
+
+
+	    <task>
+	    	<p>
+	    		Run the following code to poll 100 customers in the East location and see how many order spicy wings.
+	    		<sage language="r">
+                      <input>
+                      eastpoll=100
+                      east_p=sample(c(0.3, 0.4, 0.5), 1, prob=c(0.25, 0.5, 0.25))
+
+                      east_samp=sample(c("SPICYWINGS", "NO"), eastpoll, replace=TRUE, prob=c(east_p, 1-east_p))
+                      east_x=length(which(east_samp=="SPICYWINGS"))
+                      </input>
+                      </sage>
+                We know that <m>n_1=100</m>, compute <m>\hat{p_1}</m>, the proportion of the East location sample who orders Spicy Wings.      
+
+	    	</p>
+	    </task>
+
+	    <task>
+	    	<p>
+	    		Run the following code to poll 100 customers in the West location and see how many order spicy wings.
+	    		<sage language="r">
+                      <input>
+                      westpoll=100
+                      west_p=sample(c(0.3, 0.4, 0.5), 1, prob=c(0.25, 0.5, 0.25))
+
+                      west_samp=sample(c("SPICYWINGS", "NO"), westpoll, replace=TRUE, prob=c(west_p, 1-west_p))
+                      west_x=length(which(west_samp=="SPICYWINGS"))
+                      </input>
+                      </sage>
+                We know that <m>n_2=100</m>, compute <m>\hat{p_2}</m>, the proportion of the West location sample who orders Spicy Wings.      
+
+	    	</p>
+	    </task>
+	    <task>
+	    	<p>
+	    		Following <xref ref="remark-CIfordiffprop"/>, find <m>d, SE_D</m>.
+	    	</p>
+	    </task>
+	    <task>
+	    	<p>
+	    		Use <xref ref="remark-CIfordiffprop"/> and <m>d, SE_D</m> to find a 90% confidence interval for the difference in East location ordering rates of Spicy Wings and West location ordering rates of Spicy Wings.  Is 0 in this interval?
+	    	</p>
+	    </task>
+
+	    <task>
+	    	<p>
+	    		Do you have good evidence that the ordering rates between the locations are different?  If so, who orders more wings?
+	    	</p>
+	    </task>
+
+
+	    <task>
+	    	<p>
+	    		Run the following code to print the lower and upperbound of the confidence interval to check your answer.
+	    		<sage language="r">
+                      <input>
+                      east_phat=east_x/eastpoll
+                      west_phat=west_x/westpoll
+
+                      d=east_phat-west_phat
+
+                      SE_D=sqrt(east_phat*(1-east_phat)/eastpoll + west_phat*(1-west_phat)/westpoll)
+                      LB=d-1.645*SE_D
+                      UB=d+1.645*SE_D
+                      print(paste0("Lower Bound: ", LB , ", Upper Bound:", UB))
+
+                      </input>
+                      </sage>
+
+	    	</p>
+	    </task>
+
+	    <task>
+	    	<p>
+	    		Run the following code to print the actual differnce between the ordering rates.  Is it in your interval? (10% of the time it won't be!).
+	    		<sage language="r">
+                      <input>
+                      east_p-west_p
+                      </input>
+                      </sage>
+                We know that <m>n_2=100</m>, compute <m>\hat{p_2}</m>, the proportion of the West location sample who orders Spicy Wings.      
+
+	    	</p>
+	    </task>
+
+	</activity>
+
+
+
+
+
+
+
+</subsection>
+
+
+
+
+<subsection>
+	<title>Hypothesis Testing with two Categorical Variables</title>
+
+	<remark xml:id="remark-hypothesistestdiffofprop">
+		<p>
+			We approach Hypothesis Testing of the difference of proportion variables in a similar spirit to <xref ref="remark-stepsofHT"/>.  From <xref ref="remark-diffofprop"/>, we let <m>D</m> be the difference in sample proportions generated by samples of size <m>n_1, n_2</m> from variables with true proportions <m>p_1, p_2</m>.  Then our alternative hypothesis take the form of:
+
+			<ol>
+				<li><m>H_A:p_1-p_2\lt p_0</m></li>
+				<li><m>H_A:p_1-p_2> p_0</m></li>
+				<li><m>H_A:p_1-p_2\neq p_0</m></li>
+			</ol>
+
+			We note here <m>p_1-p_2=\mu_D</m>.  The null hypothesis for all of these is <m>H_0: p_1-p_2=p_0</m>.  
+		</p>
+
+		<p>Then, given an observed differnce in proportions: <m>d=\hat{p_1}-\hat{p_2}</m> we compute the <m>p</m>-values by <em>assuming the null hypothesis <m>p_1-p_2=p_0</m></em> and then computing:
+
+		<ol>
+				<li><m>P(D\lt d)</m></li>
+				<li><m>P(D> d)</m></li>
+				<li><m>P(|D-p_0|> |d-p_0|)</m></li>
+			</ol>
+			Note that we compute these by finding the areas of a right, left or both tails as in <xref ref="definition-pvalue"/>.
+		</p>
+	</remark>
+
+
+	<remark xml:id="remark-diffiszero">
+		<p>
+			If the null hypothesis is that <m>p_1-p_2=0</m>, which is to say <m>p_1=p_2</m>, then this is what is assumed when we assume the null hypothesis.  If both populations have the same proportion, then we may as well treat it as one big population.  So if we take samples of size <m>n_1, n_2</m> and have <q>successes</q> <m>x_1, x_2</m>, then e then compute a <q>pooled</q> sample proportion: <me>\hat{p}_{pool}=\frac{x_1+x_2}{n_1+n_2}.</me>
+			We then use this pooled proportion as both <m>\hat{p_1}</m> and <m>\hat{p_2}</m> for the purpose of computing the standard error.
+
+		</p>
+		<p>
+			So we would use <me>SE_D=\sqrt{\frac{\hat{p}_{pool}(1-\hat{p}_{pool})}{n_1}+\frac{\hat{p}_{pool}(1-\hat{p}_{pool})}{n_2}}.</me>
+		</p>
+	</remark>
+
+
+	<activity xml:id="activity-revisitinggenderdisc">
+	    <title>Gender and Raises: Hypothesis Test</title>
+	    <introduction>
+	        <p>Recall that from <xref ref="exploration-genderdisc"/> that we have <m>n_1=312</m>  men and <m>n_2=216</m>  women, of whom <m>x_1=72</m> men and <m>x_2=30</m> women got raises. The company claims that men and women have equal raise rates.  The watchdog group claims that men get more raises than women.  Suppose we use a <m>\alpha=0.05</m> level of significance.</p>
+
+	        <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+              </p>
+	        
+	    </introduction>
+	    <task>
+	    <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p_1-p_2\lt 0</m>.</li>
+                            <li><m>p_1-p_2> 0</m>.</li>
+                            <li><m>p_1-p_2\neq 0</m>.</li>
+                            <li><m>p_1-p_2= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p_1-p_2\lt 0</m>.</li>
+                            <li><m>p_1-p_2> 0</m>.</li>
+                            <li><m>p_1-p_2\neq 0</m>.</li>
+                            <li><m>p_1-p_2= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>Compute <m>p_{pool}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Assuming the null hypothesis, follow <xref ref="remark-diffiszero"/> to compute <m>\mu_D, SE_D</m>.</p>
+                      </task>
+
+                      <task>
+                      	<p>
+                      		Compute <m>d=\hat{p_1}-\hat{p_2}</m> the difference in proportions of men and women who got raises.
+                      	</p>
+                      	</task>	
+
+                      
+
+                      <task>
+                        <p>Let <m>X</m> be the normal variable mean <m>\mu_{D}</m> and standard deviation <m>SE_{D}</m>. Compute <m>P(D> p_0+|p_0-d|)</m>.
+                      </p></task>
+
+                       <task>
+                        <p>Use the above value to compute the <m>p</m>-value.  (This is an area of one tail.)
+                      </p></task>
+
+                      <task>
+                        <p>Compute the <m>z</m>-score for <m>\hat{p}</m>, call this <m>z_{\hat{p}}</m>.
+                      </p></task>
+
+                      <task>
+                        <p>Let <m>Z</m> denote the standard normal variable.  Compute <m>P(Z>|z_{\hat{p}}|)</m> and <m>P(Z\lt -|z_{\hat{p}}|)</m>.  How does these values compare to what you found in (f) and (g)?
+                      </p></task>
+
+
+
+                      <task>
+                        <p>Compute the <m>p</m>-value.</p>
+                      </task>
+
+                       <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                      <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                      <task>
+                      	<p>
+                      		Run the following code to sample <c>num_men=312</c> men where <m>men_{raise}=72</m> get raises, then samples <c>num_women=216</c> men where <m>women_{raise}=30</m> get raises.  It does this <c>trials=1000</c> times and plots a histogram of the differences.
+
+                      <sage language="r">
+                      <input>
+                      trials=1000
+                      num_men=312
+                      num_women=216
+                      m_raise=72
+                      w_raise=30
+
+                      raise_rate=(m_raise+w_raise)/(num_men+num_women)
+                      diffraise=rep(NA, trials)
+
+                      for(i in 1:trials){
+                      	menraise=sample(c("RAISE", "NO"), num_men, replace=TRUE, prob=c(raise_rate, 1-raise_rate))
+                      	womenraise=sample(c("RAISE", "NO"), num_women, replace=TRUE, prob=c(raise_rate, 1-raise_rate))
+                      	diffraise[i]=length(which(menraise=="RAISE"))/num_men-length(which(womenraise=="RAISE"))/num_women
+                      }
+                      hist(diffraise, breaks=25, prob=TRUE)
+                      </input>
+                      </sage>
+                  </p>
+              </task>
+
+              		<task>
+                      	<p>
+                      		Fix and run the following code to plot a normal curve with mean <c>mu_D=</c><m>p_0</m> and standard deviation <c>SE_D=</c><m>SE_D</m>, and plot a line for the observed difference <c>observed_diff=</c><m>d</m>
+
+                      <sage language="r">
+                      <input>
+                      mu_D=FIXME
+                      SE_D=FIXME
+                      observed_diff=FIXME
+
+                      hist(diffraise, breaks=25, prob=TRUE)
+                      curve(dnorm(x, mean=mu_D, sd=SE_D), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+                      abline(v = observed_diff, col="red", lwd=3, lty=2)
+                      </input>
+                      </sage>
+                      How well does this curve match the histogram?
+                  </p>
+              </task>
+
+              <task>
+                      	<p>
+                      		Run the following code to see what proportion of these differences are greater than or equal to the <c>observed_diff</c>.  How does this compare to the <m>p</m>-value?
+
+                      <sage language="r">
+                      <input>
+                      length(which(diffraise>=observed_diff))/trials
+                      </input>
+                      </sage>
+                      
+                  </p>
+              </task>
+
+	</activity>
+
+
+
+              <remark xml:id="remark-diffisnotzero">
+		<p>
+			In contrast to <xref ref="remark-diffiszero"/>, if the null hypothesis is that <m>p_1-p_2=p_0</m>, where <m>p_0\neq 0</m>, then we're not actually claiming that the population proportions are equal.
+
+		</p>
+		<p>
+			So when we assume the null, we would use <me>\mu_D=p_0, SE_D=\sqrt{\frac{\hat{p}_{1}(1-\hat{p}_{1})}{n_1}+\frac{\hat{p}_{2}(1-\hat{p}_{2})}{n_2}}.</me>
+		</p>
+	</remark>
+
+
+
+			
+			<activity xml:id="activity-studyguide">
+	    <title>Study Guide and Exam Pass Rates</title>
+	    <introduction>
+	        <p>Suppose that a group of student's are studying for the notoriousluy difficult probability Actuarial exam. A publishing company claim's it's materials raises the average pass rate by more than 10%.  A Math professor is skeptical of this claim.  Suppose that out of  out of 30 people who used the material, 15 passed and 40 people who didn't use the material, 14 passed.</p>
+
+	        <p>
+	        	Let <m>p_1</m> denote the population proportion of people who used the material and passed, and <m>p_2</m> denote the population proportion of people who did not use the material and passed.</p>
+
+	       <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+                  </p> 	
+
+	        
+	    </introduction>
+	    <task>
+	    <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p_1-p_2\lt 0.1</m>.</li>
+                            <li><m>p_1-p_2> 0.1</m>.</li>
+                            <li><m>p_1-p_2\neq 0.1</m>.</li>
+                            <li><m>p_1-p_2= 0.1</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p_1-p_2\lt 0.1</m>.</li>
+                            <li><m>p_1-p_2> 0.1</m>.</li>
+                            <li><m>p_1-p_2\neq 0.1</m>.</li>
+                            <li><m>p_1-p_2= 0.1</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                    <task>
+                        <p>Find or compute <m>n_1, n_2, \hat{p_1}, \hat{p_2}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Assuming the null hypothesis, follow <xref ref="remark-diffisnotzero"/> compute <m>\mu_D, SE_D</m>.</p>
+                      </task>
+
+                      <task>
+                      	<p>
+                      		Compute <m>d=\hat{p_1}-\hat{p_2}</m> the difference in proportions of men and women who got raises.
+                      	</p>
+                      	</task>	
+
+                      
+
+                      <task>
+                        <p>Let <m>X</m> be the normal variable mean <m>\mu_{D}</m> and standard deviation <m>SE_{D}</m>. Compute the <m>p</m>-value <m>P(X> d)</m>.
+                      </p></task>
+
+                      <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+               <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                      <task>
+                      	<p>
+                      		Is a 10% increase in scores plausible?
+                      	</p>
+                      </task>
+	</activity>
+
+
+
+	<activity xml:id="activity-dogcancer">
+	    <title>Cancer in Dogs</title>
+	    <introduction>
+	        <p>A study in 1994 examined 491 dogs that had developed cancer and 945 dogs as a control group to determine whether there is an <em>increased</em> risk of cancer in dogs that are exposed to the herbicide 2,4-Dichlorophenoxyacetic acid (2,4-D).  We analyze their data and see what their conclusion would be.</p>
+
+	        <p>
+	        	Run the following code to download <c>cancer_in_dogs.csv</c> and display it's variables.
+	        	 <sage language="r">
+                      <input>
+                      cancer = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/cancer_in_dogs.csv")
+                      names(cancer)
+                      </input>
+                      </sage>
+                  <c>order</c> records whther or not they were exposed to <c>2,4-D</c>, and <c>response</c> records whether or not they got <c>cancer</c> or <c>no cancer</c>.  To see a brief breakdown of the data, run the following code:
+                   <sage language="r">
+                      <input>
+                      summary(cancer)
+                      </input>
+                      </sage>
+	        </p>
+
+	        <p>
+	        	Let <m>p_1</m> denote the probability that a dog exposed to 2,4-D get's cancer and let <m>p_2</m> denote the proportion of dogs who aren'e exposed to 2,4-D get cancer.
+	        </p>
+	        
+	    </introduction>
+
+	    <task>
+	    <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p_1-p_2\lt 0</m>.</li>
+                            <li><m>p_1-p_2> 0</m>.</li>
+                            <li><m>p_1-p_2\neq 0</m>.</li>
+                            <li><m>p_1-p_2= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p_1-p_2\lt 0</m>.</li>
+                            <li><m>p_1-p_2> 0</m>.</li>
+                            <li><m>p_1-p_2\neq 0</m>.</li>
+                            <li><m>p_1-p_2= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+
+
+
+	    <task>
+	    	<p>
+	    		Run the following to show a two-way table of how many dogs were/weren't expose to 2,4-D and who got/didn't get cancer:
+	    		<sage language="r">
+                      <input>
+                      table(cancer$order, cancer$response)
+                      </input>
+                      </sage>
+                  </p>
+              </task>
+
+              <task>
+              	<p>
+              	How many dogs from the sample were exposed to 2,4-D?  Out of those dogs, how many got cancer?  Let these be <m>n_1, x_1</m> respectively.
+              </p>
+          </task>
+
+          <task>
+              	<p>
+              	How many dogs from the sample were <em>not</em> exposed to 2,4-D?  Out of those dogs, how many got cancer?  Let these be <m>n_2, x_2</m> respectively.
+              </p>
+          </task>
+
+          
+
+
+           <task>
+	    	<p>
+	    		Fix and run the following to perform the appropriate proportion hypothesis test.  Enter in how many dogs were exposed to 2,4-D and got Cancer, were not exposed to 2,4-D and got Cancer, were exposed to 2,4-D, and wern't exposed to 2,4-D respectively.
+	    		<sage language="r">
+                      <input>
+                      prop.test(c(FIXMEx1, FIXMEx2), c(FIXMEn1, FIXMEn2), 
+                      		p=NULL, alternative="greater", correct=FALSE)
+                      </input>
+                      </sage>
+                  </p>
+              </task>   
+
+               <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+               <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                       <task>
+                        <p>Is it plausible to say that being exposed to 2,4-D do <em>not</em> have an increased risk of cancer?</p>
+                      </task>
+
+	</activity>
+
+
+
+
+
+
+
+
+
+
+</subsection>
+
+
+
+</section>

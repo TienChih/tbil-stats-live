@@ -1,0 +1,282 @@
+<section xml:id="Sec_SizeofSampleCat">
+    <title>Size of Samples (C1)</title>
+
+   <introduction>
+        <p> We saw in <xref ref="remark-otherCI"/> that we can increase the likelihood the true proportion falls within our intervals, so long as we sacrifice precision and widen our intervals.  But what if we demand both dependability <em>and</em> precision?</p>
+
+        <p>
+          In this section, we identify the sample sizes neccesary to achieve confidence intervals with a given margin of error.
+        </p>
+    </introduction>
+
+
+       <subsection>
+          <title>Finding the Size of a Sample</title>
+
+          <exploration xml:id="exploration-modality">
+              <title>Course Modality</title>
+              <introduction>
+                  <p>A professor is deciding whether to offer a course face-to-face, or online, and wishes to find a 99% confidence interval for the proportion of students who would prefer it to be online.
+
+                </p>
+
+                <p>
+                  Recall that the pieces neccesary to compute a 99% confidence interval are: <m>\hat{p}</m> the sample proportion, <m>n</m> the sample size, <m>SE_{\hat{p}}</m> the standard error, and <m>z^*</m> the <m>z</m>-score associated with the 99% interval.
+                </p>
+                  
+              </introduction>
+
+             <task>
+                <p>
+                  Which one of the follwing factors is <em>directly</em> under the professors control?
+                  <ol>
+                    <li><m>\hat{p}</m>.</li>
+                    <li><m>n</m>.</li> 
+                    <li><m>SE_{\hat{p}}</m>.</li> 
+                    <li><m>z^*</m>.</li> 
+                  </ol>
+                </p>
+
+              </task>
+
+            <task>
+                <p>
+                  Suppose they let <m>n=40</m> and found 16 students who preffered it be on line.  Compute:
+                  <ul>
+                    <li><m>\hat{p}</m>.</li>
+                    <li><m>SE_{\hat{p}}</m>.</li> 
+                    <li><m>z^*</m>.</li> 
+                    <li>The 99% Confidence Interval.</li>
+                  </ul>
+                </p>
+              </task>
+
+
+
+
+          </exploration>
+
+          <remark>
+            <p>
+              We note that the interval we found <xref ref="exploration-modality"/> is quite wide!  If the professor wanted to narrow it down, the only thing under their control is how many students they survey.
+            </p>
+            </remark>
+
+            <definition xml:id="definition-MoEprop">
+              <p>
+                Given a confidence interval <m>[LB, UB]</m>  the point estimate (in this chapter <m>\hat{p}</m>) is halfway between the lower bound and upper bound <m>\frac{UB-LB}{2}</m>.  The <em>margin of error</em> is the difference between the bounds and the point estimate: <me>ME=UB-\hat{p}=\hat{p}-LB.</me>
+
+                <figure>
+<caption>Margin of Error.</caption>      
+      <image>
+ <description>Margin of Error.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=red!20, draw=none, domain=-1.96:1.96] {gauss(0,1)} \closedcycle;
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,0.02) --node[above]{$\hat{p}$} (axis cs:0,0.02);
+
+  \draw (axis cs:1.96,-0.02) -- (axis cs:1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) -- (axis cs:-1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) --node[below]{\tiny$LB$} (axis cs:-1.96,-0.02);
+  \draw (axis cs:1.96,-0.02) --node[below]{\tiny$UB$} (axis cs:1.96,-0.02);
+
+  \draw [yshift=-0.6cm, latex-latex](axis cs:-1.96,0) -- node [fill=white] {$ME$} (axis cs:0,0);
+  \draw [yshift=-0.6cm, latex-latex](axis cs:0,0) -- node [fill=white] {$ME$} (axis cs:1.96,0);
+
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+              </p>
+
+                <p>
+                  For proportion intervals, this can be computed: <me>ME=z^*SE_{\hat{p}}=z^*\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}.</me>
+                </p>
+              </definition>
+
+              <activity xml:id="activity-modality">
+                  <title>Course Modality revisted</title>
+                  <introduction>
+                      <p>Suppose the Professor from <xref ref="exploration-modality"/> wanted to conduct a new survey and this time, he wants the margin of error to be less than 5%.</p>
+                      
+                  </introduction>
+
+                  <task>
+                    <p>
+                      Find the margin of error for the interval found in <xref ref="exploration-modality"/>.
+                    </p>
+                  </task>
+
+                  <task>
+                    <p>
+                      The Professor is still reasonably sure that <m>\hat{p}=\frac{16}{40}</m> is a reasonable estimate for the proportion of students who want to take an online class.
+                    </p>
+
+                     <p>
+                      Use this value for <m>\hat{p}</m> and <m>z^*</m> for a 99% interval to solve the inequality: <me>z^*\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}\lt 0.05.</me>
+                      </p>
+                    
+                  </task>
+
+
+
+                  <task>
+                    <p>
+                      Whats the minimum number of students the professor needs to survey to get a 99% confidence interval with margin of error less than 5%?  (This needs to be a whole number.)
+                    </p>
+                  </task>
+
+              </activity>
+
+
+              <activity xml:id="activity-noinfo">
+                  <title>Minimum <m>n</m> with no Info</title>
+                   <introduction>
+                      <p>In <xref ref="activity-modality"/> we were able to find the minimum number of students needed to be surveyed to find a 99% confidence interval with 5% margin of error.  We did this using an existing estimate for <m>\hat{p}</m>.  But suppose we are conducting a stufy, and we want to know the size of our sample <em>before</em> we have any information, so that we can properly plan the data collection process.  What should we use for <m>\hat{p}</m> if we have no data?</p>
+                      
+                  </introduction>
+
+                  <task>
+                    <p>
+                      Note that the margin of error <m>ME=z^*\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}</m> is maximized when <m>\hat{p}(1-\hat{p})</m> is maximized.
+                    </p>
+
+                    <p>
+                      Consider this graph of <m>y=\hat{p}(1-\hat{p})</m>.  When is <m>y</m> maximized?
+
+
+                      <figure>
+<caption><m>y=\hat{p}(1-\hat{p})</m>.</caption>      
+      <image>
+ <description><m>y=\hat{p}(1-\hat{p})</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[domain=-0.2:2.2]
+\draw[->] (-.2,0) -- (2.2,0) node[right] {\tiny\(\hat{p}\)};
+\draw[->] (0,-.2) -- (0,1.2) node[above] {\tiny\(y\)};
+\draw[scale=1,domain=-.2:2.2,smooth,variable=\x,blue] plot ({\x},{\x*(2-\x)});
+
+\draw (0,0.2) -- (0,-0.2);
+\draw (0,-0.2) -- node[below]{$0$} (0,-0.2);
+
+\draw (1,0.2) -- (1,-0.2);
+\draw (1,-0.2) -- node[below]{$\frac{1}{2}$} (1,-0.2);
+
+\draw (2,0.2) -- (2,-0.2);
+\draw (2,-0.2) -- node[below]{$1$} (2,-0.2);
+
+
+\end{tikzpicture}]]>
+
+
+
+</latex-image>
+      </image>
+      </figure>
+
+
+                    </p>
+                  </task>
+              </activity>
+
+              <statement>
+                <p>
+                  From this we can conclude that no matter what <m>\hat{p}</m> is: <me>z^*\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}\leq z^*\sqrt{\frac{\frac{1}{2}(1-\frac{1}{2})}{n}}.</me>  Thus, if we have no information on <m>\hat{p}</m> we should use <m>\hat{p}=0.5</m> to find our sample size.
+                </p>
+              </statement>
+
+
+
+
+
+
+        <activity xml:id="activity-zombiecure">
+            <title>Curing Zombification</title>
+            <introduction>
+                <p>In the zombie apocalypse, a geneticist belives she has found a prototype cure for zombification.  However, she knows the effectiveness rate is not 100%, otherwise, she's really not sure what it is.  She wants to find <m>p</m>: the proportions of zombies it cures.</p>
+
+                <p>Suppose she wanted to find a 95% confidence interval for her cure with margin of error at most 2%.  Naturally securing zombies safely is a dangerous endeavor, so she would like to find the smallest possible number of zombies she would need to do this.</p>
+                
+            </introduction>
+
+            <task>
+              <p>
+                Find the <m>z^*</m> associated with 95%.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Following <xref ref="activity-noinfo"/> let <m>\hat{p}=0.5</m> and solve the inequality for <m>n</m>: <me>z^*\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}\lt 0.02.</me>
+              </p>
+            </task>
+
+            <task>
+              <p>
+                What is the smallest number of zombies which must be captured and tested to achieve a 95% confidence interval with 2% margin of error?  (A whole number)
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Fix and run the following code to see how many of the <c>n</c> you captured are cured:
+                <sage language="r">
+                      <input>
+                      n=FIXME
+                      p=runif(1,0.6,0.99)
+                      samp_zombie=sample(c("CURED", "nope"), n, replace=TRUE, prob=c(p, 1-p))
+                      length(which(samp_zombie=="CURED"))
+                      </input>
+                      </sage>
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Using this sample, compute a 95% confidence interval for the proportion of zombies cured by this prototype.  Is the margin of error less than 2%?
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Repeat this activity, but for a 99% confidence interval instead.
+              </p>
+            </task>
+
+
+
+        </activity>
+
+
+
+        </subsection>
+
+
+
+
+
+
+</section>

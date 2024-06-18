@@ -1,0 +1,637 @@
+<section xml:id="Sec_Bayes">
+
+    <title>Bayes Theorem (P3)</title>
+<introduction>
+    <statement>
+      <p>
+        In <xref ref="Sec_Conditionalprob"/> we saw that some events can change the likelihood of other events.  If we consider something like smoking and lung cancer, it's well understood that whether or not one smokes differentiates the probability that one contracts lung cancer.  Thus, we should be able to predict lung cancer rates from smoking rates, and vice versa.  We will make that formal here.
+      </p>
+
+      <p>
+  Run the following code to download the <c>smallpox</c> data set, and display the variables it records:
+
+  <sage language="r">
+          <input>
+            smallpox = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/smallpox.csv")
+            
+            names(smallpox)
+          </input>
+        </sage>
+
+</p>
+    </statement>
+
+  </introduction>
+
+
+
+<subsection>
+  <title>Using Conditional Probability</title>
+
+  <remark xml:id="remarkprod">
+  <statement>
+    <p>
+      Reworking <xref ref="DefinitionConditional"/> we get:
+      <md>
+        <mrow>P(A|B)\amp=\frac{P(A\ \text{and} \ B)}{P(B)}</mrow>
+        <mrow>P(A\ \text{and} \ B)\amp=P(A|B)P(B)</mrow>
+      </md>
+    </p>
+   </statement>
+ </remark>
+
+
+
+    <activity xml:id="activity-conditional-on-coffee">
+        <title>Conditional Probability and Coffee</title>
+        <introduction> <p>Consider a group of coffee drinkers and select one at random.  Let <m>C</m> denote <q>selected person uses cream</q> and let <m>S</m> denote <q> selected person uses sugar</q>.  Suppose that 70% of coffee drinkers use cream (<m>P(C)</m>), out of coffee drinkers who use cream, 80% use sugar (<m>P(S|C)</m>), and out of those who do not use cream, 40% use sugar (<m>P(S|C^c)</m>).</p>
+        <p>
+          Consider this was about a group of 100 coffee drinkers.
+        </p>
+    </introduction>
+    <task>
+            <p>
+              How many coffee drinkers in this group use cream?
+            </p>
+        </task>
+         <task>
+            <p>
+              How many of the cream users use sugar?
+            </p>
+        </task>
+
+         <task>
+            <p>
+    How many of the cream users do not use sugar?
+            </p>
+        </task>
+        <task>
+         <p>
+              How many coffee drinkers in this group do not use use cream?
+            </p>
+        </task>
+         <task>
+            <p>
+              How many of the non-cream users use sugar?
+            </p>
+        </task>
+
+         <task>
+            <p>
+    How many of the non-cream users do not use sugar?
+            </p>
+        </task>
+
+
+         <task>
+            <p>
+              Fill out the  Venn Diagram of coffee drinkers:
+
+              <figure>
+<caption> <m>C</m> cream, <m>S</m> sugar.  </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}[labelA={$C$}, labelB={$S$}]
+
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>   
+
+            </p>
+        </task>
+
+        <task>
+            <p>
+    How many people used sugar?
+            </p>
+        </task>
+
+        <task>
+            <p>
+    What is <m>P(S)</m>?
+            </p>
+        </task>
+
+<task>
+            <p>
+    What is <m>P(C|S)</m>?
+            </p>
+        </task>
+<task>
+            <p>
+    What is <m>P(C^c|S^c)</m>?
+            </p>
+        </task>
+    </activity>
+
+
+
+
+ <activity xml:id="activity-coffee-simulate">
+        <title>Simulating Coffee Drinkers</title>
+        <introduction> <p>Suppose that  a coffee drinkers has a 70% chance to use cream (<m>P(C)</m>), out of coffee drinkers who use cream, they have an 80% chance to use sugar (<m>P(S|C)</m>), and out of those who do not use cream, they have a 40% chance to use sugar (<m>P(S|C^c)</m>).
+      </p>
+      
+    </introduction>
+
+
+    <task>
+            <p>
+Run the following code to simulate 100 random coffee drinkers and whether or not they use cream.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          cream = sample(c("cream", "no cream"), 100, replace = TRUE, prob = c(0.7, 0.3))
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to simulate the coffee drinker's sugar preference, based on if they use cream.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          sugar = rep(NA, 100)
+          
+          for(i in 1:100){
+            if(cream[i]=="cream"){
+              sugar[i]=sample(c("sugar", "no sugar"), 1, replace = TRUE, prob = c(0.8, 0.2))
+            }
+            else{
+              sugar[i]=sample(c("sugar", "no sugar"), 1, replace = TRUE, prob = c(0.4, 0.6))
+            }
+          }
+
+          sugar
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to show coffee drinkers preferences for cream and sugar.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          table(cream,sugar)
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+    <task>
+        <p>How do these values compare to what you found in <xref ref="activity-conditional-on-coffee"/>?</p>
+    </task>
+
+    </activity>
+
+    <remark xml:id="remarksum">
+      <p>
+        Given events <m>X</m> and <m>Y</m>, note that each event in <m>X</m> either satisfies <m>Y</m>, or doesn't.  Thus we have: <me>P(X)= P(X\ \text{and}\ Y)+P(X\ \text{and}\ Y^c)</me>
+        <figure>
+<caption> Every event in <m>X</m> is either in <m>Y</m> or isn't.  </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}[labelA={$X$}, labelB={$Y$}]
+\fillA
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure> 
+</p>
+</remark>
+
+
+
+</subsection>
+
+<subsection>
+  <title>Bayes Theorem</title>
+
+<remark xml:id="remark-preBayes">
+  <p>
+    Consider that given events <m>A</m> and <m>B</m>.  From <xref ref="remarksum" /> we have that: <me>P(A) = P(A\ \text{and}\ B) + P(A\ \text{and}\ B^c).</me>  Then from <xref ref="remarkprod"/> we get  <me>P(A)=P(A|B)P(B) + P(A|B^c)P(B^c).</me>  Then via <xref ref="remarkIE"/> <me>P(A)=P(A|B)P(B) + P(A|B^c)(1-P(B)).</me>
+
+
+  </p>
+  
+
+
+</remark>
+
+
+ <activity xml:id="activity-conditional-on-coffee2">
+        <title>Conditional Probability and Coffee revisited</title>
+        <introduction> <p>Recall <xref ref="activity-conditional-on-coffee"/>  Let <m>C</m> denote <q>selected person uses cream</q> and let <m>S</m> denote <q> selected person uses sugar</q>.  Recall that out of coffee drinkers who use cream, 80% use sugar (<m>P(S|C)</m>), and out of those who do not use cream, 40% use sugar (<m>P(S|C^c)</m>).</p>
+        
+    </introduction>
+    <task>
+            <p>
+              If 70% of coffee drinkers use cream (<m>P(C)=0.7</m>), use <xref ref="remark-preBayes"/> to show how what proportion of people use sugar (<m>P(S)</m>).  How does this solution compare to what you found in <xref ref="activity-conditional-on-coffee"/>?
+            </p>
+        </task>
+
+    <task>
+            <p>
+              If 20% of coffee drinkers use cream (<m>P(C)=0.2</m>), use <xref ref="remark-preBayes"/> to show how what proportion of people use sugar (<m>P(S)</m>).
+            </p>
+        </task>    
+
+     <task>
+            <p>
+              If 50% of coffee drinkers use cream (<m>P(C)=0.5</m>), use <xref ref="remark-preBayes"/> to show how what proportion of people use sugar (<m>P(S)</m>).
+            </p>
+        </task>        
+
+       <task>
+            <p>
+              If 0% of coffee drinkers use cream (<m>P(C)=0</m>), use <xref ref="remark-preBayes"/> to show how what proportion of people use sugar (<m>P(S)</m>).
+            </p>
+        </task>      
+
+         <task>
+            <p>
+              If 100% of coffee drinkers use cream (<m>P(C)=1</m>), use <xref ref="remark-preBayes"/> to show how what proportion of people use sugar (<m>P(S)</m>).
+            </p>
+        </task>    
+
+
+        <task>
+            <p>
+              In the <c>Desmos</c> interative below, let <c>X</c> denote <m>P(S)</m> and <m>Y</m> denote <m>P(C)</m>.  Note that <c>X_GivenY</c><m>=P(S|C)=0.8)</m> and <c>X_GivenNotY</c><m>=P(S|C^c)=0.4)</m> are already set.  Set <c>Y</c> to be equal to <c>0, 0.2, 0.5, 0.7, 1</c>.  What do the visuals tell you for each setting?  How do the <c>X</c> values compare to what you found above?
+            </p>
+            <p>
+              <interactive desmos="hjllhcppyl"/>
+
+            </p>
+        </task>   
+
+
+
+
+
+
+    </activity>
+
+
+
+<activity xml:id="activity-Zombie">
+    <title>Zombie Apocalypse</title>
+    <introduction>
+        <p>Suppose that during the zombie apocalypse, an anti-zombification serum is developed.  People who take the serum have a 10% chance of becoming zombies, but those who don't have an 85% chance of becoming zombies. Suppose that in a town, 60% of the residents had become zombies.</p>
+
+        <p>
+          Let <m>S</m> denote the event <q>took the serum</q> and <m>Z</m> denote the event <q>became a zombie</q>.
+
+        </p>
+        
+    </introduction>
+ 
+
+     <task>
+            <p>
+              <q>People who take the serum have a 10% chance of becoming zombies</q> corresponds to which of the following?
+              <ul>
+                <li><m>P(Z)</m></li>
+                <li><m>P(S)</m></li>
+                <li><m>P(Z|S)</m></li>
+                <li><m>P(Z\ \text{and}\ S)</m></li>
+              </ul>
+            </p>
+        </task>   
+
+
+        <task>
+            <p>
+              <q>Those who don't have an 85% chance of becoming zombies</q> corresponds to which of the following?
+              <ul>
+                <li><m>P(Z|S^c)</m></li>
+                <li><m>P(S^c)</m></li>
+                <li><m>P(Z\ \text{and}\ S^c)</m></li>
+                <li><m>P(S|Z)</m></li>
+              </ul>
+            </p>
+        </task>   
+
+
+        <task>
+            <p>
+              <q>60% of the residents had become zombies</q> corresponds to which of the following?
+              <ul>
+                <li><m>P(Z|S)</m></li>
+                <li><m>P(Z|S^c)</m></li>
+                <li><m>P(Z\ \text{or}\ S)</m></li>
+                <li><m>P(Z)</m></li>
+              </ul>
+            </p>
+        </task>   
+
+        <task>
+            <p>
+              Use what you found above and <xref ref="remark-preBayes"/> to find <m>P(S)</m>.
+            </p>
+        </task>  
+
+         <task>
+            <p>
+              Using the <c>Desmos</c> interative below, letting <c>X</c> denote <m>P(Z)</m> and <m>Y</m> denote <m>P(S)</m>, set <c>Y</c> to the appropriate value to verify that <c>X</c> is 0.6.
+            </p>
+            <p>
+              <interactive desmos="vzgydct9ac"/>
+
+            </p>
+        </task>   
+
+
+</activity>
+
+<theorem xml:id="TheoremBayes"> <title>Bayes Theorem</title>
+<statement>
+  <p>
+Given events, <m>A, B</m>, we have <me>P(B|A)=\frac{P(A|B)P(B)}{P(A|B)P(B)+P(A|B^c)(1-P(B))}</me>
+  </p>
+</statement>
+
+  <proof>
+    Via <xref ref="remarkprod"/> amd <xref ref="remark-preBayes"/>:
+    <p>
+
+      <md>
+      <mrow>P(B|A)\amp=\frac{P(A\ \text{and}\ B)}{P(A)}</mrow>
+      <mrow>\amp=\frac{P(A|B)P(B)}{P(A)}</mrow>
+      <mrow>\amp=\frac{P(A|B)P(B)}{P(A|B)P(B) + P(A|B^c)(1-P(B))}</mrow>
+    </md>
+  
+  </p>
+  </proof>
+
+  </theorem>
+  
+
+
+
+<activity xml:id="activity-smallpox-bayes">
+        <title>Bayes Theorem and Smallpox</title>
+        <introduction> <p>We show how Bayes Theorem is applied.
+      </p>
+      <p>
+        Recall that there are 6224 patients in the <c>smallpox</c> data set.
+      </p>
+    </introduction>
+
+    
+    
+
+         <task>
+            <p>
+Run the following code to show how many patients were <q>inoculated</q>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(smallpox$inoculated=="yes"))
+          </input>
+          </sage>
+        </p>
+        <p>
+          What is <c>P(inoculated)</c>?
+        </p>
+        </task>
+
+
+        <task>
+            <p>
+Run the following code to subset the patients who were <q>inoculated</q>, the patients who were <q>not inoculated</q> and show how many patients were not inoculated.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          inocpatients=subset(smallpox, smallpox$inoculated=="yes")
+          notinocpatients=subset(smallpox, smallpox$inoculated=="no")
+          nrow(notinocpatients)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to see how many incoulated patients died.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(inocpatients$result=="died"))
+          </input>
+          </sage>
+        </p>
+        <p>
+          What is <c>P(died|inoculated)</c>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to see how many not incoulated patients died.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(notinocpatients$result=="died"))
+          </input>
+          </sage>
+        </p>
+        <p>
+          What is <c>P(died|not inoculated)</c>
+        </p>
+        </task>
+
+        <task>
+          <p>
+            Use <xref ref="TheoremBayes"/> to find <c>P(inoculated|died)</c>
+          </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to subset the patients who  <q>died</q> and show how many patients this was.
+</p>
+            <p>
+              <sage language="r">
+          <input>
+          diedpatients=subset(smallpox, smallpox$result=="died")
+          nrow(diedpatients)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to show how many of the patients who died were inoculated.
+</p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(diedpatients$inoculated=="yes"))
+
+          </input>
+        </sage>
+        </p>
+        <p>
+          Compute <c>P(inoculated|died)</c> directly.  How does this compare to what you found in (e)?  To <c>P(inoculated)</c>?
+        </p>
+        </task>
+
+    </activity>
+
+
+<activity xml:id="activity-breastcancer">
+    <title>Breast Cancer Simulation</title>
+
+<introduction>
+    <p>In Canada, 0.35% of women develop breast cancer <c>P(BC)=0.0035</c>.  Of the women who have breast cancer and get tested, 89% will test positive <c>P(positive|BC)=0.89</c>, and of those who do not have breast cancer, 7% will (falsely) test positive regardless. <c>P(positive| not BC)=0.07</c>.
+    </p>
+</introduction>
+
+<task>
+          <p>
+            Use <xref ref="TheoremBayes"/> to find the probability a woman has breast cancer if she tests positive for breast cancer (<c>P(BC|positive)</c>).
+          </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to simulate 10,000 random women receiving a breast cancer test <c>BC</c> and whether or not they have breast cancer.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          cancer = sample(c("BC", "noBC"), 10000, replace = TRUE, prob = c(0.0035, 0.9965))
+          summary(cancer)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+         <task>
+            <p>
+Run the following code to determine if each woman tests <c>positive</c> or <c>negative</c>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          testresult = rep(NA, 10000)
+          
+          for(i in 1:10000){
+            if(cancer[i]=="BC"){
+              testresult[i]=sample(c("positive", "negative"), 1, replace = TRUE, prob = c(0.89, 0.11))
+            }
+            else{
+              testresult[i]=sample(c("positive", "negative"), 1, replace = TRUE, prob = c(0.07, 0.93))
+            }
+          }
+
+          summary(testresult)
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to combine <c>cancer</c> and <c>testresult</c> into a single dataframe <c>testsubject</c>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          testsubject=data.frame(cancer, testresult)
+
+          names(testsubject)
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to subset <c>testsubject</c> who tested positive and see how many that is.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          testpositive=subset(testsubject, testsubject$testresult=="positive")
+
+          length(testpositive$testresult)
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to see how many women who tested positive for breast cancer had breast cancer.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          testpositive=subset(testsubject, testsubject$testresult=="positive")
+
+          length(which(testpositive$cancer=="BC"))
+
+          </input>
+          </sage>
+        </p>
+
+        </task>
+
+        <task>
+          <p>
+            Find the proportion of women who had breast cancer <em>out of</em> those who tested positive.  How does this value compare to what you found in (a)?
+          </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to show a contingency table for testing positive and breast cancer.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          counts = table(testsubject$cancer, testsubject$testresult)
+          counts
+
+          </input>
+          </sage>
+        </p>
+
+        </task>
+
+
+
+</activity>
+
+
+
+</subsection>
+
+
+
+
+
+</section>

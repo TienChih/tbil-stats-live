@@ -1,0 +1,1248 @@
+<section xml:id="Sec_HypothesisTesing">
+
+    <title>Introduction to Hypothesis Testing (F3)</title>
+
+   <introduction>
+        <p> In this section, we lay the groundwork for <em>Hypothesis Testing</em>, where we make claims, and applying our statistical knowledge to collected data to support or cast doubt on these claims.
+        </p>
+        
+    </introduction>
+
+
+
+
+
+
+       <subsection xml:id="subsection-philosophy">
+          <title>The Philosophy of Hypothesis Testing</title>
+
+          <introduction xml:id="introduction-BadCoin">
+              <title>A (maybe) Biased Coin</title>
+              <p>
+                    You and a friend each day flip a coin to see which one of you buys lunch.  You always choose heads, and your friend chooses tails.  After 25 coin flips, it has come up heads 16 times.  Your friend claims that this coin you use is biased and untrustworthy.  You disagree.
+
+                  </p>
+              
+          </introduction>
+
+
+           
+
+          <exploration xml:id="exploration-BadCoin">
+              <title>Are we sure it is (isn't) Biased?</title>
+              <introduction>
+                  <p>
+                    Your friend has a point in this case: heads has come up quite a few times, more than half for sure, and they may be right to suspect that the coin may favor heads.  On the other hand, it's possible to get 16 coin flips out of 25 just by chance.  But is this a common event, or an event so rare that it's more likely the coin is biased?
+
+                  </p>
+
+                  <p>
+                    In essence, your friends is claiming that the proportion of coin flips which come up heads isn't a half, or <m>p\neq 0.5</m>.  Your assertion is that this result could come from a fair coin and it's possible <m>p=0.5</m> despite this outcome.
+                  </p>
+
+                 
+                  
+              </introduction>
+
+              <task>
+                <p>
+                  Find <m>\hat{p}, SE_{\hat{p}}</m> for the proportion of the sample that comes up heads.
+                </p>
+
+              </task>
+
+
+              <task>
+                <p>
+                  Find a 95% confidence interval for the proportion of coin flips that comes up heads.
+                </p>
+
+              </task>
+
+              <task>
+                <p>
+                  Verify that 0.5 falls in this interval, what does this mean?
+                </p>
+              </task>
+
+
+
+
+          </exploration>
+
+          <remark>
+            <p>
+              The 95% confidence interval is a range of values, so that the actual proportion of heads has a 95% chance of being in the interval.  Since 0.5 is in this interval, we can't rule out the probability that the coin really is fair.
+            </p>
+
+            <p>
+              Note that we <em>have not proven the coin is fair</em>.  After all, there are many values in this interval other than 0.5  There's also the 5% chance that the proportion of heads this coin will show is outside of this interval, which is small, but not 0.  
+            </p>
+
+            <p>
+              But the evidence certainly isn't strong enough to rule out that the coin is fair.  So we accept the coin may be fair, since we fail to show strong enough evidence that it isn't.
+            </p>
+          </remark>
+
+
+
+          <exploration xml:id="exploration-NewCoin">
+              <title>A New Coin</title>
+              <introduction>
+                  <p>
+                    Your friend insists on flipping their own coin.  So you switch to their coin, and over the next 50 days, it only shows a heads 7 times.  Now <em>you</em> start to question the fairness of this coin, and your friends defends it.
+
+                  </p>
+
+                  <p>
+                    The situation has now reversed, you claim that the proportion of coin flips which come up heads isn't a half, or <m>p\neq 0.5</m>.  Your friend asserts that this result could come from a fair coin and it's possible <m>p=0.5</m> despite this outcome.
+                  </p>
+
+                 
+                  
+              </introduction>
+
+              <task>
+                <p>
+                  Find <m>\hat{p}, SE_{\hat{p}}</m> for the proportion of the sample that comes up heads.
+                </p>
+
+              </task>
+
+
+              <task>
+                <p>
+                  Find a 95% confidence interval for the proportion of coin flips that comes up heads.
+                </p>
+
+              </task>
+
+              <task>
+                <p>
+                  Verify that 0.5 does not fall in this interval, what does this mean?
+                </p>
+              </task>
+
+
+              <task>
+                <p>
+                  Your friend insists the coin is fair.  We test their claim through a simulation.  Run the following code to simulate flipping  <c>n=50</c> fair coins <c>numsamp=1000</c> times, and plot a distribution of the proportion of heads from each flip of 50 coins.  How likely is it to get 14% (or fewer) heads when flipping 50 coins?  How plausible are your friends claims?
+
+                  <sage language="r">
+                      <input>
+                      numsamp=1000
+                      n=50
+                      p=0.5
+
+                      samp_phat = rep(NA, numsamp)
+
+                      for(i in 1:numsamp){
+                      samp = rbinom(1,n,p) # obtain a sample of size n  from the population
+                      samp_phat[i] = samp/n    # Find the proportion for this sample
+                    }
+                    
+                    hist(samp_phat, xlim = c(0,1))
+                    abline(v = 0.14, lwd = 2, lty = 2, col = "red")
+                     </input>
+                   </sage>
+
+
+                </p>
+
+               </task> 
+
+
+
+
+          </exploration>
+
+
+
+          <remark>
+            <p>
+              With the new confidence interval, since 0.5 is not in this interval, we can say that it's extremely unlikely that the coin is fair, and you are right in your suspicions.
+            </p>
+
+            <p>
+              Note that we technically <em>have not proven the coin is biased</em>.  There's still the 5% chance that the proportion of heads this coin will show is outside of this interval.
+            </p>
+
+            <p>
+              But this is a highly unlikely event, given the evidence, we reject the idea that the coin could be fair, and accept that coin is likely biased.
+            </p>
+          </remark>
+ 
+
+          <definition xml:id="definition-hypothesis">
+          <p>
+            When presented with a possible claim, the <em>Null Hypothesis</em> is the skeptical perspective, and presents a claim to be tested.  The <em>Alternative Hypothesis</em> is the presented claim which we give credence to if the Null is rejected.
+          </p>
+        </definition>
+
+        <remark xml:id="remark-jury">
+          <p>
+            In a jury trial, we always presume that the defendant is innocent until proven guilty.  The default state is not guilty unless the evidence is sufficient to change this verdict.</p>
+
+            <p>Similarly, in a hypothesis test, the <em>Null Hypothesis</em> (<m>H_0</m>)is analagous to the default claim of not guilty.  It is the claim that any presented evidence is just the product of random chance.  The <em>Alternative Hypothesis</em> (<m>H_A</m>) is analagous to the guilty verdict, in which case the evidence provided is sufficiently strong to reject the <em>Null</em>.
+          </p>
+
+          <p>
+            Note that in a jury trial, the veridcts are <q>guilty</q> and <q>not guilty</q>.  Innocence is not the goal of the defense, since it is the burden of the state to present evidence sufficiently strong to invalidate a not-guilty claim.  It is <em>not</em> their responsibility to prove innocence.</p>
+
+            <p>Similarly, accepting the Null Hypothesis in a hypothesis test <em>is not the same as saying the Null Hypothesis is true</em>.  It merely means that the evidence provided is not strong enough to convincingly say otherwise.  The Null Hypothesis could very well be false, but your evidence is too weak to say so.  As a Statistics practioner, your job is to analyze the evidence and see if it is strong enough to invalidate the Null.
+          </p>
+
+
+          </remark>
+
+      <example xml:id="example-biasedcoin">
+            <title>Biased Coins</title>
+            <p>
+              In <xref ref="exploration-BadCoin"/> the claim is that the coin is not fair, and the default state is that the coin <em>is</em> fair.  If we let <m>p</m> denote the proportion of coin flips which will come up heads, we have:
+
+              <md>
+              <mrow>H_0:p\amp= 0.5</mrow>
+              <mrow>H_A:p\amp\neq 0.5</mrow>
+              
+              </md> 
+              In the case of <xref ref="exploration-BadCoin"/>, the evidence was not sufficiently strong to reject <m>H_0</m> so we accept that the coin may be fair.  (Again, the coin may not be fair, but our evidence isn't strong enough to say so.)
+            </p>
+
+            <p>
+              In <xref ref="exploration-NewCoin"/> the claim is again that the coin is not fair, and the default state is that the coin <em>is</em> fair.  If we let <m>p</m> denote the proportion of coin flips which will come up heads, we have:
+
+              <md>
+              <mrow>H_0:p\amp= 0.5</mrow>
+              <mrow>H_A:p\amp\neq 0.5</mrow>
+              
+              </md> 
+              In the case of <xref ref="exploration-NewCoin"/>, the evidence was strong  enough to reject <m>H_0</m>.  Thus we can say that the coin is not fair.  Since the 95% confidence interval falls <em>below</em> 0.5, we can say <m>p\lt 0.5</m> and the coin favors tails.
+            </p>
+        </example>
+
+
+        <definition xml:id="definition-errors">
+          <p>
+            It is of course possible that in rejecting or accepting the Null Hypothesis that we make an error, either because the evidence was insufficiently strong or was just skewed by random chance.  We can quantify those errors:
+
+            <ul>
+              <li>If the Null Hypothesis is true and we reject it, this is a <em>Type 1 error</em>.</li>
+              <li>If the Null Hypothesis is false and we do not reject it, this is a <em>Type 2 error</em>.</li>
+            </ul>
+
+            This can be summarized:
+
+            <me>
+              \begin{array}{|c|c|c|}
+              \hline
+              \amp H_0\ \text{is true} \amp H_0\  \text{is not true} \\
+              \hline
+              \text{We do not reject } H_0\amp \text{Good} \amp \text{Type 2 Error} \\
+              \hline
+              \text{We reject } H_0\amp \text{Type 1 Error} \amp \text{Good} \\
+              \hline
+              \end{array}
+            </me>
+
+          </p>
+        </definition>
+
+
+
+
+        </subsection>
+
+        <subsection>
+          <title>Formal Hypothesis Testing and <m>p</m>-values.</title>
+
+          <remark>
+            <p>
+              When doing proportional hypothesis testing, there are three types of Alternative Hypothesis:
+              <ul>
+                <li><m>H_A: p\neq p_0</m></li>
+                <li><m>H_A: p>p_0</m></li>
+                <li><m>H_A: p\lt p_0</m></li>
+              </ul>
+              Corresponding to <q>the population proportion is (not equal to/greater than/less than) <m>p_0</m></q> for some value <m>p_0</m>.
+            </p>
+
+            <p>
+              In all of these cases, the Null Hypothesis will be: <m>H_0: p=p_0</m>, that is, the population proportion could be <m>p_0</m>.
+            </p>
+          </remark>
+
+
+          <exploration xml:id="exploration-CityCouncil">
+              <title>Running for City Council</title>
+              <introduction>
+                  <p>A candidiate running for city council believes that she is in the lead.  She surveys 212 potential voters, and she is the favored candidiate for 122 of them.</p>
+
+                  <p>
+                    Note that in this case the Alternative Hypothesis is that her share of support is over 50%, the Null Hypothesis is that it could be 50%. That is:
+                    <ul>
+                <li><m>H_0: p= 0.5</m></li>
+                <li><m>H_A: p>0.5</m></li>
+              </ul>
+              where <m>p</m> is her proportion of support among potential voters.
+                  </p>
+
+                  <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+
+                  </p>
+                  
+              </introduction>
+
+              <task>
+                <p>
+                  Suppose that her support <em>was</em> only 50%, that is assume <m>p=0.5</m>.  Note that the size of the sample is <m>n=212</m>.  Use <xref ref="theorem-CLTprop"/> to find <m>\mu_{\hat{p}}, SE_{\hat{p}}</m>.
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Let <m>X</m> be the normal random variable with mean <m>\mu_{\hat{p}}</m> and standard deviation <m>SE_{\hat{p}}</m> that approximates <m>\hat{p}</m>.  What is the probability  <m>P(X>\frac{122}{212})</m>?
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  How likely is it to achieve values like we found in (b) if she were not in the lead?
+                </p>
+              </task>
+
+
+          </exploration>
+
+
+          <definition xml:id="definition-pvalue">
+            <p>
+              When conducting a hypothesis test, the <em><m>p</m>-value</em> measures <q>the probability that a data point as extreme or more is encountered, IF we assume the null hypothesis.</q>
+            </p>
+            <p>
+              The way <m>p</m>-values are computed depends on the form of the alternative hypothesis:
+
+              <ul>
+                <li><alert>If <m>H_A</m> is of the form <m>p>p_0</m></alert> then allowing <m>X</m> to be the normal variable with mean <m>\mu_{\hat{p}}</m> and standard deviation <m>SE_{\hat{p}}</m>, the <m>p</m>-value is <me>p\text{-value}=P(X>p_0).</me>
+
+                   <figure>
+<caption><m>p</m>-value for <m>H_A:p>p_0</m>.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:p>p_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$p_0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:2,-0.02) --node[below]{$\hat{p}$} (axis cs:2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+      Equivalently, we can find the corresponding <m>z</m>-score of <m>\hat{p}</m> and find the probability that <m>P(Z>z_{\hat{p}})</m> for the standard normal variable <m>Z</m>:
+
+      <figure>
+<caption><m>p</m>-value for <m>H_A:p>p_0</m> using <m>z</m>-scores.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:p>p_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:2,-0.02) --node[below]{$z_{\hat{p}}$} (axis cs:2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+
+    </li>
+
+
+        <li><alert>If <m>H_A</m> is of the form <m>p\lt p_0</m></alert> then allowing <m>X</m> to be the normal variable with mean <m>\mu_{\hat{p}}</m> and standard deviation <m>SE_{\hat{p}}</m>, the <m>p</m>-value is <me>p\text{-value}=P(X\lt p_0).</me>
+
+                   <figure>
+<caption><m>p</m>-value for <m>H_A:p\lt p_0</m>.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:p\lt p_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$p_0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$\hat{p}$} (axis cs:-2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+            Equivalently, we can find the corresponding <m>z</m>-score of <m>\hat{p}</m> and find the probability that <m>P(Z\lt z_{\hat{p}})</m> for the standard normal variable <m>Z</m>:
+
+            <figure>
+<caption><m>p</m>-value for <m>H_A:p\lt p_0</m> using <m>z</m>-scores.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:p\lt p_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$z_{\hat{p}}$} (axis cs:-2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+
+    </li>
+
+
+
+    <li><alert>If <m>H_A</m> is of the form <m>p\neq p_0</m></alert> then things are more complicated.  We still let <m>X</m>  be the normal variable with mean <m>\mu_{\hat{p}}</m> and standard deviation <m>SE_{\hat{p}}</m>.   But in this case, extremal means at least as far to the left <em>or</em> the right of <m>p</m>. So we can compute the <m>p</m>-value via <me>p\text{-value}=P(|X-p_0|> |\hat{p}-p_0|)=P(X>p_0+|p_0-\hat{p}|)+P(X\lt p_0-|p_0-\hat{p}|). </me>
+
+                   <figure>
+<caption><m>p</m>-value for <m>H_A:p\neq p_0</m>.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:p\neq p_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,0.02) -- (axis cs:0,-0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$p_0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$p_0-|p_0-\hat{p}|$} (axis cs:-2,-0.02);
+  \draw (axis cs:+2,-0.02) --node[below]{$p_0+|p_0-\hat{p}|$} (axis cs:+2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+            Equivalently, we can find the corresponding <m>z</m>-score of <m>\hat{p}</m> and find the probability that <m>P(|Z|> |z_{\hat{p}}|)=P(Z> |z_{\hat{p}}|)+P(Z\lt -|z_{\hat{p}}|)</m> for the standard normal variable <m>Z</m>:
+
+            <figure>
+<caption><m>p</m>-value for <m>H_A:p\neq p_0</m> using <m>z</m>-scores.</caption>      
+      <image>
+ <description><m>p</m>-value for <m>H_A:p\neq p_0</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-4:-2] {gauss(0,1)} \closedcycle;
+  \addplot [fill=cyan!20, draw=none, domain=2:4] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,-0.02) --node[below]{$0$} (axis cs:0,-0.02);
+
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:-2,-0.02) --node[below]{$-|z_{\hat{p}}|$} (axis cs:-2,-0.02);
+  \draw (axis cs:+2,-0.02) --node[below]{$|z_{\hat{p}}|$} (axis cs:+2,-0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+      It's also worth noting that for either of these tails, <m>P(X>p_0+|\hat{p}-p_0|)=P(X\lt p_0-|\hat{p}-p_0|)</m>   and <m>P(Z> |z_{\hat{p}}|)=P(Z\lt -|z_{\hat{p}}|)</m>.  So if you find one of these tails, you can double it to find the sum of both tails.
+
+    </li>
+
+
+
+  </ul>
+
+
+            </p>
+          </definition>
+
+
+          <remark xml:id="remark-stepsofHT">
+            <title>The Steps of Hypothesis Testing</title>
+            <p>
+              When doing hypothesis testing, you should be given:
+              <ul>
+                <li>A parameter of interest.</li>
+                <li>A sample to determine a point estimate and a size for the sample.</li>
+                <li>A question to be asked about the parameter of interest.</li>
+                <li>A <em>level of significance</em> often denoted <m>\alpha</m>, which reflects how willing you are to risk accepting an alternative hypothesis if you are wrong.  Typically this level of significance is <m>\alpha=0.05</m> or 5%.  The higher the significance, the more willing you are willing to risk being wrong when claiming <m>H_A</m>, the lower the significance, the less likely we are to reject the Null.  So lower levels of significance corresponds to stronger demand for evidence.</li>.
+              </ul>
+
+              Then the steps are:
+              <ol>
+                <li>Determine specifically both <m>H_A</m>, and <m>H_0</m>.</li>
+                <li>Compute the point estimate.  (<m>\hat{p}</m>)</li>
+                <li> Assume <m>H_0</m> and compute the sampling distribution  (mean  <m>\mu_{\hat{p}}</m> and standard deviation <m>SE_{\hat{p}}</m>).</li>
+                <li>Compute the <m>p</m>-value via <xref ref="definition-pvalue"/> based on your <m>H_A</m>.</li>
+                <li><p>Compare the <m>p</m>-value to the level of significance <m>\alpha</m>:
+                  <ul>
+                    <li>If <m>\alpha\leq </m> <m>p</m>-value, then we <em>fail to reject</em> the Null Hypothesis (and must accept that it <em>could</em> be true.)</li>
+                    <li>If <m>\alpha > </m> <m>p</m>-value, then we <em>reject</em> the Null Hypothesis.</li>
+                  </ul>
+                </p>
+              </li>
+              </ol>
+            </p>
+          </remark>
+
+           <activity xml:id="activity-CityCouncil">
+               <title>Revisiting the City Council run</title>
+               <introduction>
+                   <p>Recall that from <xref ref="exploration-CityCouncil"/> that we a sample of size <m>n=212</m> and that <m>\hat{p}=\frac{122}{212}</m> is our point estimate.  We also have hypothesis:
+                   <ul>
+                <li><m>H_0: p= 0.5</m></li>
+                <li><m>H_A: p>0.5</m></li>
+              </ul>
+              Then finally note that in <xref ref="exploration-CityCouncil"/> (b), we have already computed the <m>p</m>-value.  Suppose we have a level of significance of <m>\alpha=0.05</m>.
+                 </p>
+                 </introduction>
+                <task>
+                  <p>
+                    Compare the <m>p</m>-value to <m>\alpha=0.05</m>.  Which is greater?
+                    </p>
+                </task>
+
+                
+                <task>
+                  <p>
+                    Do we  reject the null, based on <xref ref="remark-stepsofHT"/>?
+                    </p>
+                </task>
+
+               
+           </activity>     
+
+           <remark>
+            <p>
+              To summarize what we just did:</p>
+              <p>We believe that more than 50% of voters support our candidiate.  <em>If</em> only 50% of supporters support our candidiate, then the probability that we could sample <m>n=212</m> candidiates and have <m>\hat{p}=\frac{122}{212}</m> or more support her is less than 5%, which is not very likely.  Thus we reject the Null and claim that more than 50% of the voters support her.
+              </p>
+              </remark> 
+
+
+
+
+              <activity xml:id="activity-undergradresearch">
+                  <title>Undergraduate Research</title>
+
+                  <introduction>
+                      <p>A professor believes that 20% of students at their institution conduct undergraduate research.  A colleague disagrees.  They survey 63 students and 9 of them have done undergraduate research.</p>
+
+                      <p>
+                        Let <m>p</m> denote the proportion of students at this university that have done undergraduate research.  Suppose the level of significance is <m>\alpha=0.05</m></p>
+
+                       
+                      
+                  </introduction>
+
+
+                  <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p\lt 0.2</m>.</li>
+                            <li><m>p> 0.2</m>.</li>
+                            <li><m>p\neq 0.2</m>.</li>
+                            <li><m>p= 0.2</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p\lt 0.2</m>.</li>
+                            <li><m>p> 0.2</m>.</li>
+                            <li><m>p\neq 0.2</m>.</li>
+                            <li><m>p= 0.2</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>Compute <m>\hat{p}</m>.</p>
+                        
+                      </task>
+
+                      
+
+                      <task>
+                        <p>Assuming the null hypothesis, compute <m>\mu_{\hat{p}}, SE_{\hat{p}}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Compute <m>|p-\hat{p}|</m>.
+                      </p></task>
+
+                      <task>
+                        <p>Let <m>X</m> be the normal variable mean <m>\mu_{\hat{p}}</m> and standard deviation <m>SE_{\hat{p}}</m>. Compute <m>P(X> p_0+|p_0-\hat{p}|)</m>.
+                      </p>
+
+                      <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+              </p>
+
+
+                    </task>
+
+                       <task>
+                        <p>Compute <m>P(X\lt p_0-|p_0-\hat{p}|)</m>.  How does this compare to what you found in (f)?
+                      </p>
+
+                      <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+              </p>
+
+                    </task>
+
+                      <task>
+                        <p>Compute the <m>z</m>-score for <m>\hat{p}</m>, call this <m>z_{\hat{p}}</m>.
+                      </p></task>
+
+                      <task>
+                        <p>Let <m>Z</m> denote the standard normal variable.  Compute <m>P(Z>|z_{\hat{p}}|)</m> and <m>P(Z\lt -|z_{\hat{p}}|)</m>.  How does these values compare to what you found in (f) and (g)?
+                      </p></task>
+
+
+
+                      <task>
+                        <p>Compute the <m>p</m>-value.</p>
+                      </task>
+
+                       <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                      <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+
+              </activity>
+
+
+              <activity xml:id="activity-resturaunt">
+                  <title>Restaurant Closure Rate </title>
+                  <introduction>
+                      <p>Our newly elected city councilperson is spearheading an initiative to attract more restaurant to open in her city.  She hopes to convince potential investors that the 1 year closure rate in this town is less than the national average of 60%.  She randomly samples 50 restaurant that were  opened at least a year ago and 25 of them closed in the first year.</p>
+                      <p>
+                        Let <m>p</m> denote the proportion of restaurant in her town which close within a year.  Suppose her level of significance is <m>\alpha=0.05</m></p>
+
+                      
+                         </introduction>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p\lt 0.6</m>.</li>
+                            <li><m>p> 0.6</m>.</li>
+                            <li><m>p\neq 0.6</m>.</li>
+                            <li><m>p= 0.6</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p\lt 0.6</m>.</li>
+                            <li><m>p> 0.6</m>.</li>
+                            <li><m>p\neq 0.6</m>.</li>
+                            <li><m>p= 0.6</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>Compute <m>\hat{p}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Assuming the null hypothesis, compute <m>\mu_{\hat{p}}, SE_{\hat{p}}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Compute the <m>p</m>-value.</p>
+                          <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+
+                  </p>
+                      </task>
+
+                       <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                      <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+
+
+
+                      
+                 
+              </activity>
+
+
+
+              <activity xml:id="activity-repair">
+                  <title>Machine Repair </title>
+                  <introduction>
+                      <p>A manager in a manufacturing plant believes that less than 25% of the machines need repair in a month.  The chief repairmen believes it is higher.  In a random sample of 200 machines, 67 required repairs in a month.</p>
+                      <p>
+                        Let <m>p</m> denote the proportion machines that need repair in a month.  Suppose the level of significance is <m>\alpha=0.05</m></p>
+
+                      
+                         </introduction>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p\lt 0.25</m>.</li>
+                            <li><m>p> 0.25</m>.</li>
+                            <li><m>p\neq 0.25</m>.</li>
+                            <li><m>p= 0.25</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p\lt 0.25</m>.</li>
+                            <li><m>p> 0.25</m>.</li>
+                            <li><m>p\neq 0.25</m>.</li>
+                            <li><m>p= 0.25</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>Compute <m>\hat{p}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Assuming the null hypothesis, compute <m>\mu_{\hat{p}}, SE_{\hat{p}}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Compute the <m>p</m>-value.</p>
+                          <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+
+                  </p>
+                      </task>
+
+                       <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                      <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+
+
+
+                      
+                 
+              </activity>
+
+
+
+              <activity xml:id="activity-band">
+                  <title>Local Band </title>
+                  <introduction>
+                      <p>A guitarist in a local band thinks 35% of people in their town have heard of them.  The drummer disagrees.  They survey 40 random people and 18 have heard of them.</p>
+                      <p>
+                        Let <m>p</m> denote the proportion of people in their town who have heard of them.  Suppose the level of significance is <m>\alpha=0.05</m></p>
+
+                       
+                         </introduction>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p\lt 0.35</m>.</li>
+                            <li><m>p> 0.35</m>.</li>
+                            <li><m>p\neq 0.35</m>.</li>
+                            <li><m>p= 0.35</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p\lt 0.35</m>.</li>
+                            <li><m>p> 0.35</m>.</li>
+                            <li><m>p\neq 0.35</m>.</li>
+                            <li><m>p= 0.35</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>Compute <m>\hat{p}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Assuming the null hypothesis, compute <m>\mu_{\hat{p}}, SE_{\hat{p}}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Compute the <m>p</m>-value.</p>
+                          <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+
+                  </p>
+                      </task>
+
+                       <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                      <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+
+
+
+                      
+                 
+              </activity>
+
+
+              <activity xml:id="activity-burger">
+                  <title>Extra Large Combo </title>
+                  <introduction>
+                      <p>An owner of a burger shop believes that the 40% of customers get an Extra Large Combo, the alternative of course is that they don't.</p>
+                      <p>
+                        Let <m>p</m> denote the proportion of customers who order the Extra Large Combo.  Suppose the level of significance is <m>\alpha=0.05</m></p>
+
+                        
+                         </introduction>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>p\lt 0.4</m>.</li>
+                            <li><m>p> 0.4</m>.</li>
+                            <li><m>p\neq 0.4</m>.</li>
+                            <li><m>p= 0.4</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>p\lt 0.4</m>.</li>
+                            <li><m>p> 0.4</m>.</li>
+                            <li><m>p\neq 0.4</m>.</li>
+                            <li><m>p= 0.4</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                        <p>
+                          Let's survey some customers!  Run the following to randomly determine a <c>p</c> the proportion of customers who order an Extra Large Combo,  a random sample of <c>n=50</c> customers, and display how many customers in this sample ordered Extra Large Combos.
+
+                          <sage language="r">
+                      <input>
+                      n=50
+                      p=sample(c(0.38,0.4,0.43), 1, prob=c(0.25,.5,.25))
+                      samp_customer=sample(c("EXTRALARGECOMBO", "NO"), n, replace=TRUE, prob=c(p, 1-p))
+                      length(which(samp_customer=="EXTRALARGECOMBO"))
+                      </input>
+                      </sage>
+
+                      Note that while there is a population proportion <m>p</m>, we don't yet know what it is.  Is it different from 0.4?  Let's see if we can make a case for that or not!
+
+                    </p>
+                  </task>
+
+                      <task>
+                        <p>Compute <m>\hat{p}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Assuming the null hypothesis, compute <m>\mu_{\hat{p}}, SE_{\hat{p}}</m>.</p>
+                      </task>
+
+                      <task>
+                        <p>Compute the <m>p</m>-value.</p>
+                        <p>
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+
+                  </p>
+                      </task>
+
+                       <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                      <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+
+                       <task>
+                        <p>
+                          Run the following to display what <c>p</c> was.  Did we mape an error?  If so what type?
+
+                          <sage language="r">
+                      <input>
+                      p
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+
+
+
+                      
+                 
+              </activity>
+
+
+
+
+
+
+            <activity xml:id="activity-proptestR">
+                <title>Using <c>R</c> to Hypothesis Test</title>
+                <introduction>
+                    <p>We can use <c>R</c> to Hypothesis Test Directly.  The structure of the command is <c>prop.test(numberof successes, sample size, p=p_0, alternative="greater, less, two.sided" depending on H_A, correct=FALSE)</c></p>
+                    
+                </introduction>
+
+                <task>
+                  <p>
+                    Suppose we wanted to know if more than 30% of donuts sold in a shop had filling  <m>(H_A:p>0.3)</m>.  We sample 40 donuts and found 16 of them had filling.  Run the following code to obtain the <m>p</m>-value:
+                    <sage language="r">
+                      <input>
+                      prop.test(16, 40, 
+                          p=0.3, alternative="greater", correct=FALSE)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+
+                  <task>
+                  <p>
+                    Suppose we wanted to know if less than 45% of donuts sold in a shop had sprinkles <m>(H_A:p\lt 0.45)</m>.  We sample 60 donuts and found 12 of them had filling.  Run the following code to obtain the <m>p</m>-value:
+                    <sage language="r">
+                      <input>
+                      prop.test(12, 60, 
+                          p=0.45, alternative="less", correct=FALSE)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+                  <task>
+                  <p>
+                    Suppose we wanted to know if customer satisfaction was or wasn't 50% <m>(H_A:p\neq0.5)</m>.  We sample 100 customers and and found 88 were satisfied.  Run the following code to obtain the <m>p</m>-value:
+                    <sage language="r">
+                      <input>
+                      prop.test(88, 100, 
+                          p=0.5, alternative="two.sided", correct=FALSE)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+            </activity>
+
+
+
+
+
+
+
+
+
+
+
+        </subsection>
+
+
+
+</section>

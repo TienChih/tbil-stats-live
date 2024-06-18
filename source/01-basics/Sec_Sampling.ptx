@@ -1,0 +1,261 @@
+<section xml:id="Sec_Sampling">
+  <title>Sampling Techniques (B2)</title>
+  <introduction>
+  <p>
+    It's rare that we ever have the oppurtunity to observe all possible instances of a random variable.  In practice we're generally not able to do so.  Thus, we take a <em>sample</em>  and attempt to infer properties of the <em>population</em>.
+  </p>
+
+  <p>
+    In this section, we discuss different methods of sampling data from a population.
+  </p>
+
+<definition>
+  <p>
+    A <em>population</em> is a target of statistical inquiry, a <em>sample</em> represents a subset of the population, and is often a very small fraction of the population.
+
+
+  </p>
+  </definition>  
+
+<activity xml:id="activity-StealClass">
+    <title>Stealing and Class</title>
+    <introduction>
+    <p>
+      In a study of the relationship between socio-economic class and unethical
+behavior, 129 University of California undergraduates at Berkeley were asked to identify themselves as
+having low or high social-class by comparing themselves to others with the most (least) money, most (least)
+education, and most (least) respected jobs. They were also presented with a jar of individually wrapped
+candies and informed that the candies were for children in a nearby laboratory, but that they could take
+some if they wanted. After completing some unrelated tasks, participants reported the number of candies
+they had taken.
+</p>
+</introduction>
+
+    <task>
+        <p>  
+          Identify the population in this study.
+        </p>
+      </task>
+      <task>
+        <p>  
+           Identify the sample in this study.
+         </p>
+       </task>
+</activity>
+
+
+<activity xml:id="activity-PolPreTerm">
+    <title>Pollution and Pre-Term Births</title>
+    <introduction>
+    <p>
+      Researchers collected data to examine the
+relationship between air pollutants and preterm births in Southern California. During the study air pollution
+levels were measured by air quality monitoring stations. Specifically, levels of carbon monoxide were recorded
+in parts per million, nitrogen dioxide and ozone in parts per hundred million, and coarse particulate matter
+(PM10) <m>\mu g/m^3</m>. Length of gestation data were collected on 143,196 births between the years 1989 and
+1993, and air pollution exposure during gestation was calculated for each birth. The analysis suggested that
+increased ambient PM10 and, to a lesser degree, CO concentrations may be associated with the occurrence
+of preterm births
+</p>
+</introduction>
+
+    <task>
+        <p>  
+           Identify the population in this study.
+         </p>
+       </task>
+       <task>
+        <p>  
+           Identify the sample in this study.
+         </p>
+       </task>
+</activity>
+
+
+
+</introduction>
+
+
+<subsection>
+  <title>Observational Studies and Sampling</title>
+
+
+
+<definition>
+<p>
+An <em>observational study</em>  is one where no treatment is explicitly given or withheld.  Correlations observed in observtional studies <em>cannot</em> be used to infer causal relationships.  Data gained here can be used to form hypothesis which then is tested through <em>experiments</em>.
+
+
+
+
+</p>
+
+</definition>
+
+
+
+
+<activity xml:id="activity-cancer">
+    <title>Suncreen Causes Cancer</title>
+<p>
+    Suppose an observational study tracked sunscreen use and skin cancer, and it was found that the
+more sunscreen someone used, the more likely the person was to have skin cancer. Does this mean
+sunscreen causes skin cancer?</p>
+</activity>
+
+
+<p>
+To collect observational data for a study, we must then <em>sample </em> the <em>population</em>.
+
+</p>
+
+
+
+<activity xml:id="activity-HowtoSample">
+    <title>How to Sample</title>
+    <p>
+      Suppose that a group of students wanted to investigate anxiety levels of their fellow students regarding academic success.  They decide to interview their colleagues, but because of the size of the school, interviewing every student is not feasible.  Consider the following ways in which they could find a sample of students to interview.  Which would be good ways to select a sample?  What are some advantages or disadvantages of each method.
+
+      <ol>
+        <li>Randomly select a group of students from the school roster to interview.</li>
+        <li>Interview students coming to the tutoring center.</li>
+        <li>Interview students in Math classes.</li>
+        <li>Select a random group of seniors to interview.</li>
+        <li>Randomly select a a random group of Freshman, a random group of Sophmores, a random group of Juniors and a random group of Seniors to interview.</li>
+        <li>Select a class at random and interview the students in the class.</li>
+      </ol>
+
+
+    </p>  
+</activity>
+
+
+<definition>
+
+<p>
+
+We discuss four <em>sampling techniques</em>.
+
+<ul>
+<li> 
+  <p>
+  <em>Simple Random Sampling</em> takes the population and completely randomly selects a random subset.
+  <p>
+    <figure>
+<caption>A Simple Random Sample </caption>      
+ 
+<image source="images/image-5.svg" width="75%" ></image>
+      
+      </figure>
+
+
+
+
+
+  </p>
+</p>
+</li>
+
+
+<li> 
+  <p>
+  <em>Stratified Random Sampling</em> takes the population breaks into into groups called <em>strata</em>.  We choose the cases within each strata to be very similar to each other.  We then randomly sample from each strata.
+  </p>
+  <p>
+    <figure>
+<caption>A Stratified Random Sample </caption>      
+
+<image source="images/image-6.svg" width="75%" ></image>
+      
+      </figure>
+
+
+
+
+
+  
+</p>
+</li>
+
+
+
+<li> 
+  <p>
+  <em>Cluster Sampling</em> takes the population breaks into into groups called <em>clusters</em>.  We then randomly select some number of clusters and sample everone within them.
+   </p>
+  <p>
+    <figure>
+<caption>A Cluster Sample </caption>      
+ 
+<image source="images/image-7.svg" width="75%" > </image>
+      
+      </figure>
+
+
+
+
+
+ 
+</p>
+</li>
+
+
+
+<li> 
+  <p>
+  <em>Multi-stage Sampling</em> takes the population breaks into into groups called <em>clusters</em>.  We randomly select some clusters.  We then randomly sample within each of the selected clusters.
+  </p>
+  <p>
+    
+
+
+
+
+
+  
+</p>
+</li>
+
+
+
+</ul>
+
+  </p>
+
+
+</definition>
+
+
+<activity xml:id="activity-SamplingType">
+    <title>Types of Sampling</title>
+    <p>
+      For each of the following, decide which type of four sampling types, if any, were used:
+
+      <ol>
+
+
+<li>A soccer coach selects 6 players from a group of boys aged 8 to 10, 7 players from a group of boys aged 11 to 12, and 3 players from a group of boys aged 13 to 14 to form a recreational soccer team.</li>
+<li>A pollster interviews all human resource personnel in five different high tech companies.</li>
+<li>A high school educational researcher interviews 50 high school female teachers and 50 high school male teachers.</li>
+<li>A medical researcher selects divides the list of cancer patients by starting letter of their last name, randomly selects 10 letters,  then randomly selects 10 patients for each letter.</li>
+<li>A high school counselor uses a computer to generate 50 random numbers and then picks students whose names correspond to the numbers.</li>
+<li>A student interviews classmates in his algebra class to determine how many pairs of jeans a student owns, on the average.</li>
+
+
+      </ol>
+
+    </p>
+</activity>
+
+
+
+
+
+
+
+</subsection>  
+
+
+
+
+</section>

@@ -1,0 +1,355 @@
+<section xml:id="Sec_LinearCombofVariables">
+
+     <title>Linear Combinations of Random Variables (P5)</title>
+<introduction>
+    <statement>
+      <p>
+        When we sample data, we're picking a value from the probability distribution of a random variable.  But it's not usually the case that we do this one at a time.  When we take a sample of size <m>n</m>, this is <m>n</m> values of the random variable.  So we're naturally interested in dealing with multiple random variables at once.  In this section we address sums, differences and scaling of random variables.
+      </p>
+
+   </statement>
+
+  </introduction>
+
+<!--
+
+
+  <exploration xml:id="exploration-sumdie">
+      <title>Sum of Dice</title>
+      <introduction>
+        <p>
+          We saw in <xref ref="exploration-dice"/> the distribution, mean and variance of the outcome of a die roll, <m>X</m>.  Consider rolling a pair of die, a blue and green one as in <xref ref="activity-doubledie"/>.  Consider the possible pairs of outcomes. 
+
+           <me>
+          \begin{array}{cccccc}
+          (1,1)\amp(2,1)\amp(3,1)\amp(4,1)\amp(5,1)\amp(6,1)\\
+          (1,2)\amp(2,2)\amp(3,2)\amp(4,2)\amp(5,2)\amp(6,2)\\
+          (1,3)\amp(2,3)\amp(3,3)\amp(4,3)\amp(5,3)\amp(6,3)\\
+          (1,4)\amp(2,4)\amp(3,4)\amp(4,4)\amp(5,4)\amp(6,4)\\
+          (1,5)\amp(2,5)\amp(3,5)\amp(4,5)\amp(5,5)\amp(6,5)\\
+          (1,6)\amp(2,6)\amp(3,6)\amp(4,6)\amp(5,6)\amp(6,6)\\
+          \end{array}
+        </me>
+          </p>
+
+          <p>
+            Let <m>Y</m> denote the sum of both die.
+          </p>
+
+        </introduction>
+
+
+        <task>
+            <p>What are the possible values of <m>Y</m></p>
+        </task>
+
+        <task>
+        <p>
+          For each possible sum (<m>Y_i</m>), find the probability that the sum of the die will give that value (<m>P(Y=Y_i)</m>).
+
+          <me>
+  \begin{array}{|c|c|c|c|c|c|c|c|c|c|}
+  \hline
+  Y_i \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \amp \hspace{0.5in} \\
+  \hline
+  P(Y=Y_i) \amp  \amp  \amp \amp \amp \amp  \amp  \amp \amp \amp \amp  \\
+  \hline
+  \end{array}
+</me>
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Compute <m>E(Y)</m> and <m>Var(Y)</m>.
+        </p>
+
+        <p>
+          How do these values compare to <m>E(X), Var(X)</m> found in <xref ref="activity-dievariance"/>?
+        </p>
+      </task>
+
+      <task>
+            <p>
+Run the following code to simulate 1,000 blue and green die rolls and plot a histogram of their sum.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          bluedierolls = sample(c(1, 2, 3, 4, 5, 6), 1000, replace = TRUE, prob = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))
+          greendierolls = sample(c(1, 2, 3, 4, 5, 6), 1000, replace = TRUE, prob = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))
+          diesum=bluedierolls+greendierolls
+          hist(diesum)
+          </input>
+          </sage>
+        </p>
+        </task>  
+
+        <task>
+        <p>
+Run the following code to find the mean and variance of these dierolls.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(diesum)
+          </input>
+          </sage>
+          <sage language="r">
+          <input>
+          var(diesum)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How do these values compare to the what you found in (c)?
+        </p>
+        </task> 
+
+
+  </exploration>
+
+<remark xml:id="remark-linofEandV">
+  <p>
+    Given random vriables <m>X, Y</m> and a constant <m>c</m>, the random variable <m>X+Y</m> has: <me>E(X+Y)=E(X), +E(Y), Var(X+Y)=Var(X)+Var(Y)</me> and the random variable <m>cX</m> has <me>E(cX)=cE(X), Var(cX)=c^2Var(X).</me>
+  </p>
+</remark>
+
+<p>
+  What was computed in <xref ref="exploration-sumdie"/> is the expectation and variance of <m>Y=X_B+X_G</m> the sum of the blue and green die rolls.  Note that both <m>X_B, X_G</m> have the same expectation and variance as a single die roll <m>X</m> as in <xref ref="activity-dievariance"/>.
+  </p>
+
+
+  
+  <activity xml:id="activity-diffdie">
+      <title>Difference of Dice</title>
+      <introduction>
+        <p>
+          W Consider rolling a pair of die, a blue and green one as in <xref ref="exploration-sumdie"/>.  Consider the possible pairs of outcomes. 
+
+           <me>
+          \begin{array}{cccccc}
+          (1,1)\amp(2,1)\amp(3,1)\amp(4,1)\amp(5,1)\amp(6,1)\\
+          (1,2)\amp(2,2)\amp(3,2)\amp(4,2)\amp(5,2)\amp(6,2)\\
+          (1,3)\amp(2,3)\amp(3,3)\amp(4,3)\amp(5,3)\amp(6,3)\\
+          (1,4)\amp(2,4)\amp(3,4)\amp(4,4)\amp(5,4)\amp(6,4)\\
+          (1,5)\amp(2,5)\amp(3,5)\amp(4,5)\amp(5,5)\amp(6,5)\\
+          (1,6)\amp(2,6)\amp(3,6)\amp(4,6)\amp(5,6)\amp(6,6)\\
+          \end{array}
+        </me>
+          </p>
+
+          <p>
+            Let <m>Z</m> denote the difference of the green die subtracted from the blue die (<m>Z=X_B-X_G</m>).  Note that <m>Z=X_B+(-1)X_G</m>.
+          </p>
+
+        </introduction>
+
+
+        <task>
+          <p>
+            Use <xref ref="remark-linofEandV"/> to rewrite <me>E(X_B+(-1)X_G)=E(X_B)+E((-1)X_G)=E(X_B)+(-1)E(X_G)</me> and compute <m>E(X_B+(-1)X_G).</m>
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Use <xref ref="remark-linofEandV"/> to rewrite <me>Var(X_B+(-1)X_G)=Var(X_B)+Var((-1)X_G)=Var(X_B)+(-1)^2Var(X_G)</me> and compute <m>Var(X_B+(-1)X_G).</m>
+          </p>
+        </task>
+
+      <task>
+            <p>
+Run the following code to simulate 1,000 blue and green die rolls and plot a histogram of their differences.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          bluedierolls = sample(c(1, 2, 3, 4, 5, 6), 1000, replace = TRUE, prob = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))
+          greendierolls = sample(c(1, 2, 3, 4, 5, 6), 1000, replace = TRUE, prob = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))
+          diediff=bluedierolls-greendierolls
+          hist(diediff)
+          </input>
+          </sage>
+        </p>
+        </task>  
+
+        <task>
+        <p>
+Run the following code to find the mean and variance of these dierolls.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(diediff)
+          </input>
+          </sage>
+          <sage language="r">
+          <input>
+          var(diediff)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How do these values compare to the what you found in (a) and (b)?
+        </p>
+        </task> 
+
+
+  </activity>
+
+
+
+<activity xml:id="activity-fastfoodgroup">
+    <title>Fast Food Group Order</title>
+    <introduction>
+        <p>Recall the fast food orders of <xref ref="activity-fastfood"/>. Suppose a group of ten friends order together, and let the cost of their order be <m>G=X_1+\ldots X_{10}</m> where each <m>X_i</m> is the cost of an individual order as in <xref ref="activity-fastfood"/>.</p>
+        
+    </introduction>
+
+    
+    <task>
+      <p>
+        Use <xref ref="remark-linofEandV"/> and the fact that <me>G=X_1+X_2+X_3+X_4+X_5+X_6+X_7+X_8+X_9+X_{10}</me> to find <m>E(G), Var(G)</m>.
+</p>
+</task>
+
+
+    
+
+
+    <task>
+            <p>
+Run the following code to simulate 200 groups of ten and plot a histogram of their purchase amounts.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          groupcost=rep(0, 200)
+          for(i in 1:10){
+           groupcost = groupcost+sample(c(5, 7.5, 12), 200, replace = TRUE, prob = c(0.4, 0.25, 0.35))
+        }
+          hist(groupcost)
+          </input>
+          </sage>
+        </p>
+        </task>  
+
+        <task>
+        <p>
+Run the following code to find the mean and variance of the purchase amounts.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(groupcost)
+          </input>
+          </sage>
+          <sage language="r">
+          <input>
+          var(groupcost)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How do these values compare to the what you found in (a)?
+        </p>
+        </task> 
+
+
+
+</activity>
+
+
+ <activity xml:id="activity-icecream">
+    <title>Ice Cream</title>
+    <introduction>
+        <p>Suppose that a box of Ice Cream comes with on average 60 oz of ice cream, but because theyre not all packed evenly, with a standard deviation of 2 oz.  Suppose a scoop of ice cream is 3oz, but with standard deviation of 0.15oz.</p>
+        
+    </introduction>
+
+    <task>
+      <p>
+        Let <m>B</m> denote the number of oz in a box of ice cream and find <m>E(B), Var(B)</m>.  (Hint: recall <xref ref="remark-varianceRV"/> and the relationship between standard deviation and variance.)
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Let <m>S</m> denote the number of oz in a scoop of ice cream and find <m>E(S), Var(S)</m>.
+      </p>
+    </task>
+
+    <task>
+      <p>
+      Let <m>R</m> denote the amount of ice cream remaining in a box after I take 2 scoops out, note that <m>R=B-S_1-S_2=B+(-1)S_1+(-1)S_2</m>.
+    </p>
+    <p>
+      Find <m>E(R), Var(R)</m>.
+    </p>
+    </task>
+
+    <task>
+            <p>
+Run the following code to simulate 1000 boxes of icecream with 2 scoops removed.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          boxoz=rnorm(1000, mean = 60, sd = 2)
+          scooponeoz=rnorm(1000, mean = 2, sd = .15)
+          scooptwooz=rnorm(1000, mean = 2, sd = .15)
+
+          remainicecream=boxoz-scooponeoz-scooptwooz
+          hist(remainicecream)
+          </input>
+          </sage>
+        </p>
+        </task>  
+
+        <task>
+        <p>
+Run the following code to find the mean and variance of these remains.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(remainicecream)
+          </input>
+          </sage>
+          <sage language="r">
+          <input>
+          var(remainicecream)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How do these values compare to the what you found in (c)?
+        </p>
+        </task> 
+
+</activity>
+
+
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</section>

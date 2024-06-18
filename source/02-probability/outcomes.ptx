@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<li xmlns:xi="http://www.w3.org/2001/XInclude">
+        <p>
+P: Can I compute probabilities and identify properties of probability distributions?
+        </p>
+        <ul>
+            <li>
+                <p>
+P1: I can compute and interpret probabilities of events, including compound events involving operations.
+                </p>
+            </li>
+            <li>
+                <p>
+P2: I can compute and interpret probability of events involving conditional probabilities.
+                </p>
+            </li>
+            <li>
+                <p>
+P3: I can utilize Bayes Theorem in the computation and interpretation of probabilities.
+                </p>
+            </li>
+            <li>
+                <p>
+P4: I can compute and interpret probabilities from the probability distribution of a random variable, as well as compute and interpret the expectation, variance and standard deviation of a random variable.
+                </p>
+            </li>
+            <li>
+                <p>
+P5: I can compute and interpret the expectation, variance and standard deviation of linear combinations of random variables.
+                </p>
+            </li>
+        </ul>
+</li>

@@ -1,0 +1,474 @@
+<section xml:id="Sec_InterpretingRegression">
+    <title>Interpreting Linear Regression (R2)</title>
+
+   <introduction>
+        <p> We've shown how to perform linear regression in <xref ref="Sec_Correlation"/>. In this section, we look at what the regression is telling us, what information we can draw from this analysis, and what we <em>can't</em> draw.
+          
+
+
+        </p>
+
+
+
+
+
+
+       </introduction>
+
+
+       <subsection>
+        <title>Utilizing Regression Results</title>
+
+
+        <remark>
+          <p>
+            When modeling the relationship between two variables with a function (such as a linear function), the input (typically <m>x</m>m values) is called the <em>explanatory variable</em> and the output (typically <m>y</m> values) is called the <em>response variable</em>.  Recall <xref ref="definition-explanatoryresponse"/>.
+          </p>
+
+          <p>
+            The idea is that one can measure the change in <m>y</m> as a <em>response</em> to changes in <m>x</m>.
+          </p>
+        </remark>
+
+
+
+
+        <exploration xml:id="exploration-possum2">
+            <title>Possums Again</title>
+            <introduction>
+              <p>
+            Recall from <xref ref="exploration-possums"/> and <xref ref="activity-possums"/> that the <q>head length of possums in mm</q> (response variable <m>y</m>) as a linear function of the <q>skull width of possums in mm</q> (explanatory variable <m>x</m>) has regression line <me>y\approx 0.8158x+46.1954</me> with correlation coefficient <m>R\approx 0.7108, R^2\approx 0.5053.</m>
+          </p>
+
+          <p>
+            Run the following cell to re-compute these values:
+
+            <sage language="r">
+                <input>
+                possum = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/possum.csv")
+                possummod=lm(head_l~skull_w, data=possum)
+                print(possummod)
+                print(cor(possum$skull_w, possum$head_l))
+                plot(possum$skull_w, possum$head_l,  pch=19)
+                abline(possummod, col="red")
+                </input>
+                </sage>
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=possum"/>
+              </p>
+        </introduction>
+
+        <task>
+          <p>
+            How would you describe the relationship between skull width and head length?  (Strong, Moderate or Weak?  Positive, Negative or None?)
+
+          </p>
+        </task>
+
+        <task>
+          <p>
+            What proportion of the head length is explained by skull width?  (See <xref ref="remark-rsquared"/>)
+          </p>
+        </task>
+        
+
+
+        <task>
+          <p>
+            For a possum with skull width 53mm, what is the <em>predicted</em> head length?  (Is skull width the explanatory or response variable?)
+          </p>
+        </task>
+
+        <task>
+          <p>
+            For a possum with skull width 62mm, what is the <em>predicted</em> head length?  (Is skull width the explanatory or response variable?)
+          </p>
+        </task>
+
+        <task>
+          <p>
+            For a possum with head length 92mm, what skull width <em>predicts</em> this head length?  (Is head length the explanatory or response variable?)
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Given that the slope <m>\beta_1=\frac{\Delta x}{\Delta y}</m>  what are the units of <m>\beta_1</m> in this problem?
+          </p>
+        </task>
+
+        <task>
+          <p>
+            If the skull width of a possum is increased by 1mm, what is the predicted change in head length?
+          </p>
+        </task>
+
+        </exploration>
+
+
+        <remark xml:id="remark-slopemeaning">
+          <p>
+            Since the <em>slope</em> of a line <m>\beta_1</m> is measured by the change in <m>y</m> over change in <m>x</m>, the units of the slope are: <me>\frac{\text{units of}\ y}{\text{units of}\ x}</me> and each increase in <m>x</m> by one unit results in a change of <m>y</m> by <m>\beta_1</m> units.
+          </p>
+        </remark>
+
+
+        <activity xml:id="activity-cardealership">
+            <title>Car Dealership</title>
+            <introduction>
+                <p>A car salesmen analysis the cars he sold in the past year, how much he sold them for, and their age.
+
+                  <me>
+                  \begin{array}{c|c}
+                  \text{Car Age (in years)} \amp \text{Sell Price (in dollars)}\\
+                  \hline
+                  4 \amp 6300\\
+                  4 \amp 5800\\
+                  5 \amp 5700\\
+                  7 \amp 4500\\
+                  7 \amp 4200\\
+                  8 \amp 4100\\
+                  9 \amp 3100\\
+                  10 \amp 6300\\
+                  11 \amp 2500\\
+                  12 \amp 2200\\
+                  \end{array}
+                </me>
+
+
+
+                </p>
+                
+            </introduction>
+            <task>
+              <p>
+            Letting <q>Car Age</q> be the explanatory variable and <q>Sell Price</q> the response variable, enter the data into the  columns <c>x_1</c>, <c>y_1</c>:
+                    <interactive desmos="fteh98brsf"/>
+                  </p>
+                  <p>
+                    (You may have to rescale the window to see the data clearly)
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                    What is <m>R</m>?  What does it tell you about the relationship between the variables?   (Strong, Moderate or Weak?  Positive, Negative or None?)
+                  </p>
+                </task>
+
+
+                <task>
+          <p>
+            What proportion of the weight is explained by height?  (See <xref ref="remark-rsquared"/>)
+          </p>
+        </task>
+
+
+
+              <task>
+              <p>
+              State what the regression line is, and what it measures in the context of this problem.
+              </p>
+              </task>
+
+              <task>
+              <p>
+                Explain the meaning of the slope of the regression line in the context of this problem.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                What is the predicted price of a 6 year old car?
+              </p>
+            </task>
+
+            <task>
+              <p>
+                What is the predicted age of a car that sells fpr $5000?
+              </p>
+            </task>
+
+
+        </activity>
+
+
+
+        <activity xml:id="activity-MTL">
+            <title>Medial Temporal Lobe</title>
+            <introduction>
+                <p>
+                  In 2018, a study was done to show a relationship between sedentary behavior and thickness of the medial temporal lobe.
+                </p>
+
+                 <p>
+                Run the following code to download  the <c>mtl.csv</c>  data set which contains information about 35 participants, demographic and psychological information, physical activity and measurements of the MTL:
+
+                <sage language="r">
+                <input>
+                mtl = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/mtl.csv")
+                
+                names(mtl)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=mtl"/>
+
+              </p>
+                
+            </introduction>
+
+
+            
+
+            
+
+            <task>
+          <p>
+            Run the following code to plot the total thickness of the MTL (in mm), versus their self reported daily time sitting (in hours).
+            <sage language="r">
+                <input>
+                plot(mtl$sitting, mtl$total, pch=19)
+                </input>
+                </sage>
+          </p>
+        </task>
+        
+
+        <task>
+                  <p>
+                    Run the following code to create a linear model for <c>total</c>, as a function of <c>sitting</c> and save it as <c>mtlmod</c>.
+            <sage language="r">
+                <input>
+                mtlmod=lm(total~sitting, data=mtl)
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+            <task>
+                  <p>
+                    Run the following code to show the correlation for this model.
+            <sage language="r">
+                <input>
+                cor(mtl$sitting, mtl$total)
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+
+            <task>
+                  <p>
+                    Run the following code to plot the scatterplot and the least squares line.
+            <sage language="r">
+                <input>
+                plot(mtl$sitting, mtl$total,  pch=19)
+                abline(mtlmod, col="red")
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+            <task>
+                  <p>
+                    Run the following code to show a summary of <c>mtlmod</c>.
+            <sage language="r">
+                <input>
+                summary(mtlmod)
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+              <task>
+                  <p>
+                    What is <m>R</m>?  What does it tell you about the relationship between the variables?   (Strong, Moderate or Weak?  Positive, Negative or None?)
+                  </p>
+                </task>
+
+                <task>
+          <p>
+            What proportion of the MLT thickness is explained by hours sitting?  (See <xref ref="remark-rsquared"/>)
+          </p>
+        </task>
+
+
+
+              <task>
+              <p>
+              State what the regression line is, and what it measures in the context of this problem.
+              </p>
+              </task>
+
+              <task>
+              <p>
+                Explain the meaning of the slope of the regression line in the context of this problem.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                What is the predicted total MTL thickness of a someone sitting 12 hours a day?
+              </p>
+            </task>
+
+            <task>
+              <p>
+                What is the predicted time sitting a day for someone whose total MTL thickness is 2.5 mm?
+              </p>
+           
+            </task>
+
+            
+
+
+</activity>
+
+
+
+
+
+
+      </subsection>
+
+
+
+      <subsection>
+        <title>Pitfalls</title>
+
+
+        <remark>
+          <p>
+            As mentioned in <xref ref="remark-corrcause"/>, Correlation is <em>Not</em> Causation!  Sometimes what one thinks is the explanatory and response variables are reversed.  Then sometimes two things can have strong correlation without <em>either</em> causing the other. </p>
+          </remark>
+
+          <activity xml:id="activity-icecreamsunglasses">
+              <title>Icecream and Sunglasses</title>
+
+              <introduction>
+                  <p>
+                    A store owner notices thst when her sunglasses sales go up, so does her icecream sales:
+                    <interactive desmos="ixaxxknpcy"/>
+                  </p>
+                  <p>
+                    Depicted above is a plot of different months, the number of sunglasses she sold, and her sales of icecream in dollars in the same month, as well as the regression analysis.
+                  </p>
+                  
+              </introduction>
+
+              <task>
+                <p>
+                  If she has surplus of icecream she needs to sell, would it make sense to put a sale on sunglasses to boost sunglasses sales?  What about reversing the roles?
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Why <em>are</em> these variables correlated?
+                </p>
+              </task>
+
+          </activity>
+            
+
+            <remark xml:id="remark-extrapolation">
+              <p>
+                A linear function is generally defined for all possible values of <m>x</m>, but in the context of some problem, this may not be sensible
+
+                <image source="https://imgs.xkcd.com/comics/extrapolating.png" width="80%" >
+      <description>An XKCD Comic.</description>
+    </image>
+
+
+              </p>
+
+              <p>
+                It's important to know for what values it's sensible to apply the linear model, and for what values it is not.
+
+              </p>
+            </remark>
+
+
+            <activity xml:id="activity-heightandage">
+                <title>Height and Age</title>
+                <introduction>
+                    <p>
+                      The height of a female child (in inches) of a given age (in years) is as follows:
+                      <interactive desmos="mingwqtohu"/>
+
+                    </p>
+                    
+                </introduction>
+                <task>
+                  <p>
+                    According this the regression analysis, how tall will she be when she is 35?
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                    Why isn't this sensible?
+                  </p>
+                </task>
+            </activity>
+
+
+            <remark xml:id="remark-fooledregression">
+              <p>
+                As is a theme in other chapters, sometimes random chance delivers data that's correlated, while the underlying variables are not, particularly if the samples are small.
+              </p>
+            </remark>
+
+            <activity xml:id="activity-randomcorrelation">
+                <title>Random Correlation</title>
+                <introduction>
+                    <p>
+                      In this activity, we'll generate totally random data and try to find correlations between them.
+                    </p>
+                    
+                </introduction>
+
+                <task>
+                  <p>
+                    Run the following code to generate <c>n=10</c> random  <c>X</c> and <c>Y</c> values, plot them, find a regression line and print a correlation:
+
+                    <sage language="r">
+                <input>
+                n=10
+                X=runif(n, 0, 10)
+                Y=runif(n, 0, 10)
+                mod=lm(Y~X)
+                print(cor(X, Y))
+                plot(X, Y, pch=19)
+                abline(mod)
+
+                </input>
+                </sage>
+                Run it a few times, what sort of values can you get, what's the highest you achieved?
+
+                  </p>
+                </task>
+
+                <task>
+
+                  <p>
+                    Chance <c>n=2</c> and run it again, what do you notice?
+                  </p>
+                </task>
+            </activity>
+
+
+
+
+
+
+      </subsection>
+
+
+
+
+</section>

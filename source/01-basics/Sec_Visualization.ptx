@@ -1,0 +1,442 @@
+<section xml:id="Sec_Visualization">
+  <title>Visualizing Data (B3)</title>
+  <introduction>
+  <p>
+    Visualizing data appropriately can let us apply visual intuition to our understanding, extending beyond computational prowess.
+  </p>
+  <p>
+    In this section, we cover several types of data visualizations and how to generate them.
+  </p>
+
+<p>
+  Run the following code to download the <c>hsb2.csv</c> data set:
+
+  <sage language="r">
+          <input>
+            hsb2 = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/hsb2.csv")
+            names(hsb2)
+          </input>
+        </sage>
+
+</p>
+
+<p>
+  This data set represents two hundred observations who  were randomly sampled from the High School and Beyond survey, a survey conducted on high school seniors by the National Center of Education Statistics.
+
+
+</p>
+
+</introduction>
+
+<subsection>
+  <title>Numerical Data</title>
+
+  <definition>
+    <p>
+      A <em>scatterplot</em> compares two numerical variables.  For each case in the sample, the values of two variables are plotted respectively on the cartesian plane.
+
+
+    </p>
+  </definition>  
+
+
+  <activity xml:id="activity-schoolscatter">
+      <title>School Scatter Plot</title>
+     
+      <introduction>
+      <p>Run the following code to plot a scatter plot comparing student reading scores to their math scores.
+
+        <sage language="r">
+          <input>
+            plot(hsb2$read, hsb2$math, 
+   xlab="Reading Score ", ylab="Math Score ", pch=19)
+
+
+          </input>
+        </sage>
+
+      </p>
+    </introduction>
+
+      <task>
+        <p>  
+           What does each dot represent?  What do it's coordinates represent?
+         </p>
+       </task>
+       <task>
+        <p>  
+           What sort of relationship between these variables do you notice?
+         </p>
+       </task>
+       <task>
+        <p>  
+          Follow this link and identify two numerical variables you would like to compare. <url href="https://www.openintro.org/data/index.php?data=hsb2"/>. 
+        </p>
+      </task>
+
+          <task>
+        <p>  
+          Fix the following code and run it to plot a scatter plot comparing your two choices.
+
+        <sage language="r">
+          <input>
+            plot(hsb2$FIXME, hsb2$FIXME, 
+   xlab="FIXME ", ylab="FIXME ", pch=19)
+
+
+          </input>
+        </sage>
+      </p>
+    </task>
+    <task>
+        <p>  
+           What does each dot represent?  What do it's coordinates represent?
+         </p>
+       </task>
+       <task>
+        <p>  
+           What sort of relationship between these variables do you notice?
+         </p>
+       </task>
+
+
+  </activity>
+
+
+
+
+
+  <definition>
+    <p>
+      A <em>histogram</em>   consists of contiguous boxes. It has both a horizontal axis and a vertical axis. The horizontal axis is labeled with what the data represents. The vertical axis is labeled either <em>frequency</em> (the number of time a value(s) occurs) or relative frequency  (the percentage or proportion of time(s) a value occurs).
+    </p>
+  </definition>
+
+
+<activity xml:id="activity-schoolhistogram">
+      <title>School Histogram</title>
+
+      <introduction>
+
+      <p>Run the following code to plot a histogram for student's science scores.
+                <sage language="r">
+          <input>
+            hist(hsb2$science, xlab="Science Scores", main="Distribution of Science Scores" )
+
+
+
+          </input>
+        </sage>
+      </p>
+    </introduction>
+
+        <task>
+        <p>  
+          What do the <m>x</m> values represent?  What do the heights represent?
+        </p>
+        </task>
+        <task>
+        <p>  
+           What do you notice about this graph?
+         </p>
+       </task>
+       <task>
+        <p>  
+          Add the following to plot a density distribution instead of a frequency distribution:
+            <sage language="r">
+          <input>
+            hist(hsb2$science, xlab="Science Scores", main="Distribution of Science Scores",freq=FALSE )
+
+
+
+          </input>
+        </sage>
+          </p>
+          </task>
+          <task>
+        <p>  
+          Follow this link and identify a numerical variable you would like to plot a histogram for. <url href="https://www.openintro.org/data/index.php?data=hsb2"/>. 
+        </p>
+      </task>
+      <task>
+        <p>  
+          Fix the following code and run it to plot the histogram of your choice.
+
+             <sage language="r">
+          <input>
+            hist(hsb2$FIXME, xlab="FIXME", main="FIXME" )
+
+
+
+          </input>
+        </sage>
+      </p>
+    </task>
+    <task>
+        <p>  
+           What do the <m>x</m> values represent?  What do the heights represent?
+         </p>
+       </task>
+       <task>
+        <p>  
+            What do you notice about this graph?
+          </p>
+        </task>
+        <task>
+        <p>  
+          Modify the code to turn it into a desnity distribution.
+        </p>
+      </task>
+      
+
+
+  </activity>
+
+  <p>
+
+    Note that for smaller data sets, it can be more convenient to use <c>Desmos</c> to produce a histogram. 
+
+    <interactive desmos="zrwccrpoan"/>
+
+     The data is placed within the list <c>L</c>.
+  </p>
+
+
+
+
+
+
+
+
+
+</subsection>  
+
+
+
+<subsection>
+  <title>Categorical Data</title>
+<p>  Since Categorical variables have no numerical values, the ways we choose to display them revolve around frequency.</p>
+
+  <definition>
+    <p>
+      A <em>bar chart</em> similar to a histogram, plots the frequency of density of categorical variables.
+
+    </p>
+   </definition> 
+
+
+
+    <activity xml:id="activity-schoolbarchart">
+      <title>School Bar Chart</title>
+
+      <introduction>
+
+      <p>Run the following code to plot a bar chart for the racial demographics of students.
+                <sage language="r">
+          <input>
+            counts = table(hsb2$race)
+barplot(counts, main="Racial Demographics",xlab="Race")
+ 
+
+
+
+          </input>
+        </sage>
+      </p>
+    </introduction>
+    <task>
+        <p>  
+           What does each bar represent?  What do the heights represent?
+         </p>
+       </task>
+       <task>
+        <p>  
+          Follow this link and identify a categorical variable you would like to plot a bar chart for. <url href="https://www.openintro.org/data/index.php?data=hsb2"/>. 
+        </p>
+      </task>
+          <task>
+        <p>  
+          Fix the following code and run it to plot the bar chart of your choice.
+
+             <sage language="r">
+          <input>
+                        counts = table(hsb2$FIXME)
+barplot(counts, main="FIXME",xlab="FIXME")
+
+
+
+
+          </input>
+        </sage>
+          </p>
+        </task>
+        <task>
+        <p>  
+           What do you notice about this graph?
+         </p>
+       </task>
+       <task>
+        <p>  
+          What do the bars and heights represent?
+        </p>
+      </task>
+          
+
+
+  </activity>
+
+
+<p>
+  If we want to compare different groups to each other, it may make sense to utilize a <em>grouped bar chart</em>.
+</p>
+
+
+<activity xml:id="activity-schoolgroupedbarchart">
+      <title>School Grouped Bar Chart</title>
+
+      <introduction>
+
+      <p>Run the following code to plot a grouped bar chart for the program type of schools, broken down by public vs private.
+                <sage language="r">
+          <input>
+            counts = table(hsb2$prog, hsb2$schtyp)
+barplot(counts, main="Program Type vs",xlab="School Type", 
+  legend = rownames(counts), beside=TRUE)
+ 
+
+
+
+          </input>
+        </sage>
+      </p>
+    </introduction>
+    <task>
+        <p>  
+          What does each bar represent?  What do the heights represent?
+        </p>
+      </task>
+      <task>
+        <p>  
+          How do public and private schools differ?
+        </p>
+      </task>
+      <task>
+        <p>  
+          Follow this link and identify two categorical variables you would like to plot a group bar chart for. <url href="https://www.openintro.org/data/index.php?data=hsb2"/>. 
+        </p>
+      </task>
+      <task>
+        <p>  
+          Fix the following code and run it to plot the bar chart of your choice.
+
+             <sage language="r">
+          <input>
+            counts = table(hsb2$FIXME, hsb2$FIXME)
+barplot(counts, main="FIXME",xlab="FIXME", 
+  legend = rownames(counts), beside=TRUE)
+ 
+
+
+
+          </input>
+        </sage>
+      </p>
+    </task>
+    <task>
+        <p>  
+           What do you notice about this graph?
+         </p>
+       </task>
+       <task>
+        <p>  
+           What do the bars and heights represent?
+         </p>
+       </task>
+
+
+  </activity>
+
+
+<definition>
+<p>
+  A <em>Mosaic</em> plot counts the relative frequency of cases with respect to two categorical variables and displays their relative frequency as areas.
+</p>
+</definition>
+
+
+
+
+<activity xml:id="activity-schoolmosaic">
+      <title>School Mosaic Plot</title>
+
+      <introduction>
+
+      <p>Run the following code to plot a mosaic plot for the program type of schools, broken down by public vs private.
+                <sage language="r">
+          <input>
+            counts = table(hsb2$prog, hsb2$schtyp)
+            mosaicplot(counts)
+ 
+
+
+
+          </input>
+        </sage>
+      </p>
+    </introduction>
+
+    <task>
+      <p>
+        What does each rectangle represent?  What do the areas represent?
+      </p>
+    </task>
+    <task>
+      <p>
+        How does this plot highlight the difference between academic, general and vocational schools?
+      </p>
+    </task>
+    <task>
+      <p>
+         Follow this link and identify two categorical variables you would like to plot a mosaic plot for. <url href="https://www.openintro.org/data/index.php?data=hsb2"/>. 
+       </p>
+     </task>
+     <task>
+      <p>
+        Fix the following code and run it to plot the bar chart of your choice.
+
+             <sage language="r">
+          <input>
+            counts = table(hsb2$FIXME, hsb2$FIXME)
+            mosaicplot(counts)
+ 
+
+
+
+          </input>
+        </sage>
+          </p>
+        </task>
+        <task>
+      <p>
+        What do you notice about this graph?
+      </p>
+    </task>
+    <task>
+      <p>
+         What do the rectangles and areas represent?
+       </p>
+     </task>
+
+
+  </activity>
+
+
+
+
+
+  </subsection>
+
+
+
+
+</section>

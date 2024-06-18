@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<li xmlns:xi="http://www.w3.org/2001/XInclude">
+        <p>
+N: Can I perform inference for numerical variables?
+        </p>
+        <ul>
+            <li>
+                <p>
+N1: I can compute and interpret probabilities given bounds, and bounds given probabilities for  standard <m>t</m>-variables.
+                </p>
+            </li>
+            <li>
+                <p>
+N2: I can perform hypothesis tests and compute confidence intervals for the means of numerical variables, and explain the results.
+                </p>
+            </li>
+            <li>
+                <p>
+N3: I can perform hypothesis tests and compute confidence intervals for the means of differences of paired numerical variables, and explain the results.
+                </p>
+            </li>
+            <li>
+                <p>
+N4: I can perform hypothesis tests and compute confidence intervals for the differences of means of  numerical variables, and explain the results.
+                </p>
+            </li>
+            <li>
+                <p>
+N5: I can find the sample size of a numerical variables needed to find confidence intervals with given margin of errors, and detect differences in means given a power.
+                </p>
+            </li>
+            <li>
+                <p>
+N6: I can use ANOVA to test if variation between groups can be explained solely through the variation within groups and explain the results.
+                </p>
+            </li>
+        </ul>
+</li>

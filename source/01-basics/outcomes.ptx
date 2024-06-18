@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<li xmlns:xi="http://www.w3.org/2001/XInclude">
+        <p>
+B: Can I work with the basic building blocks of statistics?
+        </p>
+        <ul>
+            <li>
+                <p>
+B1: I can distinguish types and subcategories of variables.
+                </p>
+            </li>
+            <li>
+                <p>
+B2: I can identify different sampling techniques.
+                </p>
+            </li>
+            <li>
+                <p>
+B3: Given a sample of data, I can generate visualizations to represent it's variables.
+                </p>
+            </li>
+            <li>
+                <p>
+B4: Given a sample of data, I can identify or compute different measures of centrality.
+                </p>
+            </li>
+            <li>
+                <p>
+B5: Given a sample of data, I can identify or compute different measures of variation, and identify outliers.
+                </p>
+            </li>
+        </ul>
+</li>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<li xmlns:xi="http://www.w3.org/2001/XInclude">
+        <p>
+C: Can I perform inference for categorical variables?
+        </p>
+        <ul>
+            <li>
+                <p>
+C1: I can identify the sample size neccesary for a confidence interval to have a given margin of error.
+                </p>
+            </li>
+            <li>
+                <p>
+C2: I can perform hypothesis tests and compute confidence intervals for the differences of proportions, and explain the results.
+                </p>
+            </li>
+            <li>
+                <p>
+C3: I can use <m>\chi^2</m> tests to test the goodness of fit of a sample, and explain the results.
+                </p>
+            </li>
+            <li>
+                <p>
+C4: I can use <m>\chi^2</m> tests to test the independence of categorical variables and explain the results.
+                </p>
+            </li>
+        </ul>
+</li>

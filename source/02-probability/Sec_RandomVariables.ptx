@@ -1,0 +1,479 @@
+<section xml:id="Sec_RandomVariables">
+
+    <title>Random Variables (P4)</title>
+<introduction>
+    <statement>
+      <p>
+        In <xref ref="Sec_Center"/>, and <xref ref="Sec_Variation"/> we found how to find the mean, variance and a standard deviation of a finite population.  Then previously in this chapter, we studied the probability of individual events either happening or not happening.  In this section, we look at the collection of outcomes of random process, and measure centrality and spread of these processes.
+      </p>
+
+    </statement>
+
+    <definition>
+        <p>
+          A <em>random variable</em> random process or variable with a numerical outcome.
+        </p>
+      </definition>
+
+      <remark>
+        <p>
+        Given a random variable <m>X</m> with a finite number of outcomes, we denote them <m>X_1,\ldots,X_n</m>, and the probability that <m>X</m> takes on the value <m>X_i</m> is <m>P(X=X_i)</m>..
+      </p>
+      <p>
+        Then since these are all the possible probabilities we have:
+        <ol>
+          <li><m>0\leq P(X=X_i)\leq 1</m></li>
+          <li><m>\sum P(X=X_i)=1</m></li>
+        </ol>
+      </p>
+      </remark>
+
+    <exploration xml:id="exploration-textbooks">
+      <title>Textbooks for a class</title>
+
+      <introduction>
+          <p>Two books are assigned for a statistics class: a textbook and its corresponding study guide. The
+university bookstore determined 20% of enrolled students do not buy either book, 55% buy the
+textbook only, and 25% buy both books, and these percentages are relatively constant from one
+term to another.</p>
+          
+      </introduction>
+
+
+
+      <task>
+        <p>
+          If there are 100 students enrolled, how many books should the bookstore expect
+to sell to this class?
+        </p>
+      </task>
+
+      <task>
+        <p>
+         The textbook costs $137 and the study guide $33. How much revenue should the bookstore expect
+from this class of 100 students?
+        </p>
+      </task>
+
+      <task>
+        <p>
+         What is the average revenue per student for this course?
+        </p>
+      </task>
+
+    </exploration>
+
+  </introduction>
+
+
+<subsection>
+  <title>Expectation</title>
+
+ 
+
+  <definition xml:id="definition-expectedvalue">
+    <p>
+      Given a random variable <m>X</m>, the <em>expected value</em> of <m>X</m> denoted <m>E(X)</m> is the mean outcome of <m>X</m>.
+    </p>
+
+    <p>
+      Note that <m>E(X)</m> need not be an outcome of <m>X</m>.
+    </p>
+
+  </definition>
+
+  <remark xml:id="remark-expectedvalue">
+    <p>
+      For a random variable <m>X</m> with a finite number of ouctomes <m>X_1, \ldots, X_n</m> the expectation of <m>X</m> is computed <me>E(X)=\sum P(X=X_i)\cdot X_i.</me>
+    </p>
+  </remark>
+
+
+ <activity xml:id="activity-simulatetextbook">
+      <title>Simulating Textbook Purchases</title>
+      <introduction>
+          <p>Suppose from <xref ref="exploration-textbooks"/> that each student has a 20% chance of not purchasing either book, a 55% chance of purchasing a textbook for $137, and a 25% chance of purchasing a textbook and study guide for $170.  Let <m>X</m> denote the amount of money a student spends.</p>
+          
+      </introduction>
+
+      <task>
+        <p>
+          What is the probability that a student spends $0 (<m>P(X=0)=?</m>)
+        </p>
+      </task>
+
+      <task>
+        <p>
+          What is the probability that a student spends $137 (<m>P(X=137)=?</m>)
+        </p>
+      </task>
+
+      <task>
+        <p>
+          What is the probability that a student spends $170 (<m>P(X=170)=?</m>)
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Use <xref ref="remark-expectedvalue"/> to compute <m>E(X)</m>.  How does this value compare to what you found in <xref ref="exploration-textbooks"/> (c)?
+        </p>
+      </task>
+
+      <task>
+            <p>
+Run the following code to simulate 100 students and their purchases, and display a histogram of their purchases.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          textbookpurchases = sample(c(0, 137, 170), 100, replace = TRUE, prob = c(0.2, 0.55, 0.25))
+          hist(textbookpurchases)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to show the mean revenue spent by students.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(textbookpurchases)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How does this value compare to what you found in (d)?
+        </p>
+        </task>
+
+        <task>
+            <p>
+Modify the following code to simulate 10,000 students and their purchases, and display a histogram of their purchases, and the mean purchaseprice.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          textbookpurchases = sample(c(0, 137, 170), FIXME, replace = TRUE, prob = c(0.2, 0.55, 0.25))
+          hist(textbookpurchases)
+          mean(textbookpurchases)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How does this value compare to what you found in (d)? In (f)?
+        </p>
+        </task>
+
+  </activity>
+
+
+
+</subsection>
+
+
+<subsection>
+  <title>Variance</title>
+
+
+  <exploration xml:id="exploration-dice">
+      <title>Outcomes of dice</title>
+      <introduction>
+          <p>Consider the equally likely outcomes of a dice roll <c>1, 2, 3, 4, 5, 6</c>.</p>
+          
+      </introduction>
+
+      <task>
+        <p>
+          Find the population mean and variance of this set.
+        </p>
+      </task>
+
+  <task>
+            <p>
+Run the following code to simulate 1,000 die rolls and plot a histogram of their outputs.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          dierolls = sample(c(1, 2, 3, 4, 5, 6), 1000, replace = TRUE, prob = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6))
+          hist(dierolls)
+          </input>
+          </sage>
+        </p>
+        </task>  
+
+        <task>
+        <p>
+Run the following code to find the mean and variance of these dierolls.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(dierolls)
+          </input>
+          </sage>
+          <sage language="r">
+          <input>
+          var(dierolls)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How do these values compare to the what you found in (a)?
+        </p>
+        </task>        
+
+    </exploration>
+
+
+     
+
+  <remark xml:id="remark-varianceRV">
+    <p>
+      For a random variable <m>X</m> with a finite number of ouctomes <m>X_1, \ldots, X_n</m> the <em>variance</em> of <m>X</m>, denoted <m>Var(X)</m>,  is computed <me>Var(X)=\sum P(X=X_i)\cdot (X_i-E(X))^2.</me>
+    </p>
+
+    <p>
+      Then the <em>standard deviation</em> of <m>X</m> is computed <me>\sigma_X=\sqrt{Var(X)}=\sqrt{\sum P(X=X_i)\cdot (X_i-E(X))^2}.</me>
+    </p>
+  </remark>
+
+  <activity xml:id="activity-comparison">
+      <title>Comparing to Data Sets</title>
+
+      <task>
+        <p>
+          Compare how expectation is computed in <xref ref="remark-expectedvalue"/>  and that of the mean in <xref ref="Sec_Center"/>.  What connections can you see?
+        </p>
+      </task>
+      <task>
+        <p>
+          Compare how variance is computed in <xref ref="remark-varianceRV"/>  and that of the population variance in <xref ref="definition-popvariance"/>.  What connections can you see?
+        </p>
+      </task>
+
+  </activity>
+
+  <activity xml:id="activity-dievariance">
+      <title>Die Variance</title>
+      <introduction>
+          <p>Let <m>X</m> denote the outcome of a Die Roll.</p>
+          
+      </introduction>
+
+      <task>
+        <p>
+          For each outcome of a die roll (<m>X_i=1,\ldots,6</m>), find the probability that a die will give that value (<m>P(X=X_i)</m>).
+           <me>
+  \begin{array}{|c|c|c|c|c|c|c|}
+  \hline
+  X_i \amp \hspace{1in} \amp \hspace{1in} \amp \hspace{1in} \amp \hspace{1in} \amp \hspace{1in} \amp \hspace{1in}  \\
+  \hline
+  P(X=X_i) \amp  \amp  \amp \amp \amp \amp \\
+  \hline
+  \end{array}
+</me>
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Compute <m>E(X)</m>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Compute <m>Var(X)</m>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          How do these values compare to what you found in <xref ref="exploration-dice"/> (a) and (c)?
+        </p>
+      </task>
+
+        
+
+  </activity>
+
+
+  <activity xml:id="activity-fastfood">
+    <title>Fast Food Order</title>
+    <introduction>
+        <p>Suppose customers for a fast food chain have a 40% chance of ordering the regular combo for $5, a 25% chance of ordering the large for $7.50 and a 35% chance of ordering the jumbo for $12.  Let <m>X</m> denote the money spent.</p>
+        
+    </introduction>
+
+    
+    <task>
+      <p>
+        Write down a table recording each of the <m>X_i</m> and their associated probability:
+    <me>
+  \begin{array}{|c|c|c|c|}
+  \hline
+  X_i \amp 5 \amp 7.50 \amp 12 \\
+  \hline
+  P(X=X_i) \amp \hspace{1in} \amp \hspace{1in} \amp \hspace{1in}   \\
+  \hline
+  \end{array}
+</me>
+</p>
+</task>
+
+<task>
+      <p>
+      Compute <m>E(X), Var(X)</m>.
+    </p>
+    </task>
+
+    
+
+
+    <task>
+            <p>
+Run the following code to simulate 200 customers and plot a histogram of their purchase amounts.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          ordercost = sample(c(5, 7.5, 12), 200, replace = TRUE, prob = c(0.4, 0.25, 0.35))
+          hist(ordercost)
+          </input>
+          </sage>
+        </p>
+        </task>  
+
+        <task>
+        <p>
+Run the following code to find the mean and variance of the purchase amounts.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(ordercost)
+          </input>
+          </sage>
+          <sage language="r">
+          <input>
+          var(ordercost)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How do these values compare to the what you found in (b)?
+        </p>
+        </task>    
+
+</activity>
+
+
+
+<activity xml:id="activity-lottery">
+    <title>Lottery Winnings</title>
+    <introduction>
+        <p>Suppose a lottery ticket that costs $2 has a 20% chance of winning $5, a 0.1% chance of winning $100 and a 0.001% chance of winning $10000.  Let <m>X</m> denote the winnings of a ticket.</p>
+        
+    </introduction>
+
+    <task>
+      <p>
+      What are the possible <em>net</em> winnings (<m>X_i</m>) of a ticket?  (Remember to account for the $2 purchasing cost, and that there is a scenario where you do not win).
+    </p>
+    </task>
+    <task>
+      <p>
+        Write down a table recording each of the <m>X_i</m> and their associated probability:
+    <me>
+  \begin{array}{|c|c|c|c|c|}
+  \hline
+  X_i \amp \hspace{1in} \amp \hspace{1in} \amp \hspace{1in} \amp \hspace{1in} \\
+  \hline
+  P(X=X_i) \amp  \amp  \amp \amp \\
+  \hline
+  \end{array}
+</me>
+</p>
+</task>
+
+<task>
+      <p>
+      Compute <m>E(X), Var(X)</m>.
+    </p>
+    </task>
+
+    <task>
+      <p>
+      Do you think overall, do you think the lottery ticket sellers make or lose money?
+    </p>
+    </task>
+
+
+    <task>
+            <p>
+Run the following code to simulate 1,000,000 lottery ticket winnings and plot a histogram of their outputs.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          ticketwinnings = sample(c(-2, 3, 98, 998), 1000000, replace = TRUE, prob = c(0.6989, 0.3, 0.001, 0.0001))
+          hist(ticketwinnings)
+          </input>
+          </sage>
+        </p>
+        </task>  
+
+        <task>
+        <p>
+Run the following code to find the mean and variance of these winnings.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          mean(ticketwinnings)
+          </input>
+          </sage>
+          <sage language="r">
+          <input>
+          var(ticketwinnings)
+          </input>
+          </sage>
+        </p>
+        <p>
+          How do these values compare to the what you found in (c)?
+        </p>
+        </task>    
+
+</activity>
+
+
+
+
+
+
+
+
+
+
+
+</subsection>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</section>

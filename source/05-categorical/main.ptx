@@ -1,0 +1,15 @@
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude"  xml:id="Chap_Categorical">
+  <title>Inference for Categorical Variables (C)</title>
+  <objectives>
+        <ul>
+            <xi:include href="outcomes.ptx"/>
+        </ul>
+    </objectives>
+  <xi:include  href="Sec_SizeofSampleCat.ptx"/> 
+  <xi:include  href="Sec_TwoVarCat.ptx"/>
+  <xi:include  href="Sec_ChiSquare.ptx"/>
+  <xi:include  href="Sec_ChiIndependent.ptx"/> 
+
+
+  
+</chapter>

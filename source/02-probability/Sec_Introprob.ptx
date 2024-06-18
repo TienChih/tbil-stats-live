@@ -1,0 +1,531 @@
+<section xml:id="Sec_Introprob">
+
+    <title>Introduction to Probability (P1)</title>
+<introduction>
+<p>
+  We use probability to build tools to describe and understand apparent randomness. We often
+frame probability in terms of a random process giving rise to an outcome.
+<md>
+<mrow>\text{Roll a die} \amp\to 1, 2, 3, 4, 5, \text{or}\ 6</mrow>
+<mrow>\text{Flip a coin} \amp\to H\ \text{or}\ T</mrow>
+</md>
+Rolling a die or flipping a coin is a seemingly random process and each gives rise to an outcome.
+</p>
+
+<p>
+  In this section, we introduce the language of probability: events, probability of events, and operations of events.
+</p>
+
+
+    <p>
+  Run the following code to download the <c>loans_full_schema</c> data set, and display the variables it records:
+
+  <sage language="r">
+          <input>
+            loans = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/loans_full_schema.csv")
+            
+            names(loans)
+          </input>
+        </sage>
+
+</p>
+
+<p>
+This data set represents thousands of loans made through the Lending Club platform, which is a platform that allows individuals to lend to other individuals.
+
+</p>
+
+</introduction>
+
+
+
+<subsection>
+  <title>Defining Probability</title>
+
+
+<exploration xml:id="basic-die-rolls">
+        <introduction>
+            <p>
+Before getting into more technical details, we work with a situation that is more familiar.  Consider a standard fair six-sided dice.
+            </p>
+        </introduction>
+        <task>
+            <p>
+What is the probability of getting a 1 on a roll?
+            </p>
+        </task>
+        <task>
+            <p>
+What is the probability of getting a 1 or 2 on a roll?
+            </p>
+        </task>
+
+        <task>
+            <p>
+What is the probability of getting a 1,2,3,4,5 or 6 on a roll?
+            </p>
+        </task>
+        
+        <task>
+            <p>
+What is the probability of not rolling a 2?
+            </p>
+        </task>
+
+        
+
+    </exploration>
+
+
+    <definition>
+      <p>
+        The <em>probability</em> of an outcome is the proportion of times the outcome would occur if we
+observed the random process an infinite number of times.
+    </p>
+    </definition>
+
+    <activity xml:id="activity-roll-a-six">
+        <title>Rolling a Six</title>
+
+        <task>
+            <p>
+Run the following code to show a plot of 10 die rolls, and the proportion of die rolls that are 6's after each roll.  The red dashed line represents <m>\frac{1}{6}</m>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          n=10                #number of die rolls
+
+          sixes=0             # of sixes rolled so far
+          Sixvec=rep(NA, n) #proportion of sixes rolled
+
+          for (i in 1:n){
+            roll=sample(1:6,1,replace=TRUE)
+            if (roll==6){
+              sixes=sixes+1   #increment number of sixes
+            }
+            Sixvec[i]=sixes/i #records proportion of sixes so far
+          }
+
+          plot(Sixvec, type="l", ylim=c(0,1)) #plots linegraph of proportion of sixes
+          abline(h=1/6, col="red", lty=2)     #draw y=1/6 line
+
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+              Run it a few times.  What do you notice about the different simulations?
+            </p>
+        </task>
+
+        <task>
+            <p>
+              Change <c>n=100</c> run it a few times.  What do you notice about the different simulations?
+            </p>
+        </task>
+
+        <task>
+            <p>
+              Change <c>n=1000</c> run it a few times.  What do you notice about the different simulations?
+            </p>
+        </task>
+
+        <task>
+            <p>
+              Change <c>n=10000</c> run it a few times.  What do you notice about the different simulations?
+            </p>
+        </task>
+
+        <task>
+            <p>
+              As <c>n</c> increases, what can you say about the proportion of die rolls that come up a <q>6</q>?
+            </p>
+        </task>
+    </activity>
+
+</subsection>
+<subsection>
+  <title>Events</title>
+
+    <definition>
+      <p>
+        A collection of outcomes is called an <em>event</em>.
+      </p>
+      <p>
+        Given events <m>A</m>, <m>B</m>, we let <m>A\ \text{or}\ B</m> denote the event <q>either <m>A</m> occurs or <m>B</m> occurs or both.</q>
+        <figure>
+<caption><m>A\ \text{or}\  B</m> </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}
+\fillA
+\fillB
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>
+
+
+      </p>
+       <p>
+        We let <m>A\ \text{and}\ B</m> denote the event <q>both <m>A</m> and <m>B</m> occur at the same time.</q>
+        <figure>
+<caption><m>A\ \text{and} B</m> </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}
+\fillACapB
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>
+      </p>
+
+      <p>
+        We let <m>A^c</m> pronounced <q><m>A</m> complement</q> denote the event <q><m>A</m> does <em>not</em> occur.</q>
+        <figure>
+<caption><m>A^c</m> </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}
+\fillNotA
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>
+      </p>
+
+
+    </definition>
+
+
+
+<activity xml:id="activity-events">
+    <title>Example Events</title>
+    <introduction>
+    <p>
+      Consider the set of numbers <m>\{1,2,3,4,5,6,7,8,9,10\}</m>.  Suppose one picks one of these numbers.
+    </p>
+  </introduction>
+
+    <task>
+      <p>
+        Let <m>A</m> denote the event <q>the chose number is greater than 5</q>.  What outcomes belong to <m>A</m>?
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Let <m>B</m> denote the event <q>the chose number is prime</q>.  What outcomes belong to <m>B</m>?
+      </p>
+    </task>
+
+    <task>
+      <p>
+        Consider the event  <m>A\ \text{and} B</m>. Give a verbal description of this event.
+      </p>
+    </task>
+
+    <task>
+      <p>
+         What outcomes belong to <m>A\ \text{and} B</m>?
+      </p>
+    </task>
+
+     <task>
+      <p>
+        Consider the event  <m>A\ \text{or}\  B</m>. Give a verbal description of this event.
+      </p>
+    </task>
+
+    <task>
+      <p>
+         What outcomes belong to <m>A\ \text{or}\  B</m>?
+      </p>
+    </task>
+
+
+    <task>
+      <p>
+        Consider the event  <m>B^c</m>. Give a verbal description of this event.
+      </p>
+    </task>
+
+    <task>
+      <p>
+         What outcomes belong to <m>B^c</m>?
+      </p>
+    </task>
+
+
+    <task>
+      <p>
+        Consider the event  <m>A^c\ \text{and} B</m>. Give a verbal description of this event.
+      </p>
+    </task>
+
+    <task>
+      <p>
+         What outcomes belong to <m>A^c\ \text{and} B</m>?
+      </p>
+    </task>
+
+
+
+</activity>
+
+
+
+<remark>
+  <p>
+    Given an experiment, the set of all possible outcomes is denoted the <em>sample space</em>.  For a finite sample space <m>S</m> where all outcomes are equally likely, the probability of an event <m>A</m> is the size of the event divided by the size of the sample space: <me>P(A)=\frac{|A|}{|S|}</me>
+  </p>
+</remark>
+
+<activity xml:id="activity-trivialprob">
+    <title>Extreme Scenarios</title>
+    <task>
+      <p>If an event <m>X</m> has probability <m>P(X)=0</m>, what does that mean? </p>
+    </task>
+
+    <task>
+      <p>If an event <m>Y</m> has probability <m>P(Y)=1</m>, what does that mean? </p>
+    </task>
+
+    <task>
+      <p>Could an event <m>Z</m> have probability <m>P(Z)\lt0</m> or <m>P(Z)>1</m>?  If it can, give an example, if it can't, explain why not. </p>
+    </task>
+</activity>
+
+
+<activity xml:id="activity-prob">
+    <title>Example Probability</title>
+    <introduction>
+        <p>Recall from <xref ref="activity-events"/> the sample space <m>S=\{1,2,3,4,5,6,7,8,9,10\}</m>, the events <m>A</m>=<q>the chosen number is greater than 5</q> and <m>B</m>=<q>the chosen number is prime</q>. </p>
+        
+    </introduction>
+
+    <task>
+      <p>
+         What is <m>P(A)</m>?
+      </p>
+    </task>
+
+    <task>
+      <p>
+         What is <m>P(B)</m>?
+      </p>
+    </task>
+
+    <task>
+      <p>
+         What is <m>P(A\ \text{and} B)</m>?
+      </p>
+    </task>
+
+    <task>
+      <p>
+         What is <m>P(A\ \text{or}\  B)</m>?
+      </p>
+    </task>
+
+    <task>
+      <p>
+         Look at the probabilities you computed.  What is the relationship between them?
+      </p>
+    </task>
+
+    <task>
+      <p>
+         In the following Venn Diagram take thw numbers 1-10, and place them in a Venn Diagram, depending on whether or not they belong to both <m>A</m> and <m>B</m>, just <m>A</m>, just <m>B</m> or neither.
+      </p>
+      <p>
+        <figure>
+<caption>Fill in the Venn Diagram with the numbers 1-10. </caption>      
+      <image>
+ <description>Empty Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}[scale=0.4]
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>
+      </p>
+    </task><task>
+      <p>
+         Is <m>P(A\ \text{or}\  B)=P(A)+P(B)</m>?  If they're not equal, how might we adjust the sum so that they are?
+      </p>
+    </task>
+
+
+<task>
+      <p>
+         Compare <m>P(A)</m> to <m>P(A^c)</m> and <m>P(B)</m> to <m>P(B^c)</m>.  What is the relationship there?
+      </p>
+    </task>
+
+
+</activity>
+
+
+
+<remark xml:id="remarkIE">
+  <statement>
+    <p>  Given events <m>A, B</m>, we have that: <me>P(A\ \text{or}\  B)=P(A)+P(B)-P(A\ \text{and} B).</me>
+      This  corresponds to the outcomes of <m>A</m> plus the outcomes of <m>B</m>, then removing the  overlap.
+    </p>
+    <p>Given event <m>A</m>, we have that <m>P(A^c)=1-P(A)</m>.  This corresponds to all outcomes, removing the ones belonging to <m>A</m>.</p>
+  </statement>
+</remark> 
+
+
+<activity xml:id="activity-loansprob">
+    <title>Application Type and Homeownership</title>
+    <task>
+      <p>
+      Run the following code to display the number of loans out of 10,000 that were for joint applications:
+      <sage language="r">
+          <input>
+          length(which(loans$application_type=="joint"))
+
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+      <p>
+      Run the following code to display the number of loans out of 10,000 that were for applicants with mortages:
+      <sage language="r">
+          <input>
+          length(which(loans$homeownership=="MORTGAGE"))
+
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+      <p>
+      Run the following code to display the number of loans out of 10,000 that were for joint applicants with mortages:
+      <sage language="r">
+          <input>
+          length(which(loans$application_type=="joint" &amp; loans$homeownership=="MORTGAGE"))
+
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+         <p>Suppose we pick a loan at random.  Let <m>J</m> denote the event <q>joint application</q> and <m>M</m> denote <q>applicant(s) with a mortage</q>.  Find <m>P(J), P(M), P(M\ \text{and} J), P(M\ \text{or}\  J)</m> </p>
+     </task>
+
+    <task>
+      <p>
+      Run the following code to sample 1000 random loans from this list:
+      <sage language="r">
+          <input>
+          index = sample(1:nrow(loans), 1000)
+          samp=loans[index,]
+
+          names(samp)
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+      <p>
+      Run the following code to plot a contingency table for the above sample, comparing application type to homeownership:
+      <sage language="r">
+          <input>
+          table(samp$application_type,samp$homeownership)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     
+     <task>
+         <p>What proportion of your sample were joint applications?  From homeowners?  From both? From either one or the other?  How does this compare to what you computed in (d)?</p>
+     </task>
+
+
+
+</activity>
+
+
+<activity xml:id="activity-loansprob2">
+    <title>Probability of your chosen variables</title>
+    <task><p>
+      Follow this link and identify two categorical vairables and a value for each whose probability you wish to find.  <url href="https://www.openintro.org/data/index.php?data=loans_full_schema"/>.
+    </p></task>
+    <task>
+      <p>
+      Modify the following code to display the number of loans out of 10,000 where the variable of your choice takes on the value of your choice:
+      <sage language="r">
+          <input>
+          length(which(loans$FIXME=="FIXME"))
+
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     
+
+     <task>
+      <p>
+      Modify the following code to display the number of loans out of 10,000 where both variables of your choice takes on the values of your choice:
+      <sage language="r">
+          <input>
+          length(which(loans$FIXME=="FIXME" &amp; loans$FIXME=="FIXME"))
+
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+
+    <task>
+      <p>
+      Modify the following code to sample 1000 random loans from this list and display a contingency table for your two variables:
+      <sage language="r">
+          <input>
+          index = sample(1:nrow(loans), 1000)
+          samp=loans[index,]
+
+          table(samp$FIXME,samp$FIXME)
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     
+     <task>
+         <p>How do the results from your sample compare to the counts you computed earlier?</p>
+     </task>
+
+
+
+</activity>
+
+</subsection>
+
+
+
+
+</section>

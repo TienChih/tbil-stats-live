@@ -1,0 +1,3 @@
+INFO    : PreTeXt project found in `/Users/tienchih/Documents/GitHub/tbil-stats/source`.
+WARNING : Project's CLI version could not be detected from `requirements.txt`.
+WARNING : Try `pretext init --refresh` to produce a compatible file.

@@ -1,0 +1,17 @@
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude"  xml:id="Chap_DataBasics">
+  <title>Data Basics (B)</title>
+  <objectives>
+        <ul>
+            <xi:include href="outcomes.ptx"/>
+        </ul>
+    </objectives>
+  <xi:include  href="Sec_Variables.ptx"/> 
+  <xi:include  href="Sec_Sampling.ptx"/> 
+  <xi:include  href="Sec_Visualization.ptx"/> 
+  <xi:include  href="Sec_Center.ptx"/> 
+  <xi:include  href="Sec_Variation.ptx"/> 
+
+
+
+  
+</chapter>

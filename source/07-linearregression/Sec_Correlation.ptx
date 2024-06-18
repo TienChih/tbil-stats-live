@@ -1,0 +1,673 @@
+<section xml:id="Sec_Correlation">
+    <title>Linear Correlation of Variables (R1)</title>
+
+   <introduction>
+        <p> In other math courses, we likely have seen  relationships between variables where one can directly compute the value of one variable based on another.  For example if we knew the length of a side of a square, we can exactly compute the area of the square.
+        </p>
+
+        <p>
+          Things in statistics are rarely so exact.  Nevertheless, we can often identify relationships between variables, and make <em>predictions</em> of one variable based on the values of the other.  In this section, we introduce the notion of correlation of variables.
+          
+
+
+        </p>
+
+
+
+  
+    <exploration xml:id="exploration-possums">
+        <title>Dimensions of Possums</title>
+        <introduction>
+            
+
+
+            <p>
+                Run the following code to download  the <c>possum.csv</c>  data set which contains information about 104 possums, and various attributes of the possums:
+
+                <sage language="r">
+                <input>
+                possum = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/possum.csv")
+                
+                names(possum)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=possum"/>.
+
+              </p>
+            
+        </introduction>
+
+
+        <task>
+          <p>
+            Run the following code to plot the head lengths of the possum (in mm), versus their skull width (in mm).
+            <sage language="r">
+                <input>
+                plot(possum$skull_w, possum$head_l, pch=19)
+                </input>
+                </sage>
+          </p>
+        </task>
+
+        <task>
+          <p>
+            If one were to catch two possums, one with a 53mm skull width and one with a 62mm skull width, which one would you predict had a longer head (without measuring)?  How confident would you be in your prediction?
+          </p>
+        </task>
+
+        <task>
+          <p>
+            If you had to guess what the head lengths were for possums with a 53mm and 62mm skull widths, what would they be?  How confident would you be in your guesses?
+          </p>
+        </task>
+
+        <task>
+          <p>
+            If you had to guess what which skull width would give you a head length of 92mm, what would you guess?  How confident would you be in your guess?
+          </p>
+        </task>
+    </exploration>
+
+
+
+       </introduction>
+
+
+
+       <subsection>
+        <title>Linear Fit of Data</title>
+
+        <remark>
+
+        <p>
+          The central theme of this chapter is finding a <alert>linear</alert> relationship between variables.  In other words, we wish to find a linear equation <m>y=b_1x+b_0</m> that best describes the relationship between the variables.
+
+
+          <figure>
+            <caption>Given a set of data, our goal is to identify a <q>best</q> linear relationship between them.</caption>
+            <sidebyside widths="50% 50%" margins="auto" valign="middle">
+
+          <image source="images/examplescatter.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+    <image source="images/examplescatterandlr.png" width="40%" >
+      <description>An Example Scatterplot with a <q>best-fit</q> line.</description>
+    </image>
+  </sidebyside>
+  </figure>
+
+
+        </p>
+
+        <p>
+          In order for this to be a sensible task to embark on, the underlying variables <em>should actually have a linear relationship</em>, or we should have good reason to think that they have a linear relationship.
+          <ul>
+            <li>It's sensible for the monthly profit of a company (with one product) to coincide with how many units they sold, since there is a fixed price per unit.</li>
+            <li>It is <em>not</em> sensible for the areas of squares to have a linear relationship with the length of sides, since areas are the squares of sides, which gives a quadratic relationship.
+          </li>
+        </ul>
+        </p>
+        </remark>
+
+
+        <activity xml:id="activity-whichlinear">
+            <title>Which are Linear?</title>
+            <introduction>
+                <p>
+                  Of course, when we don't yet understand what the relationship between variables are, or we are dealing with new variables, it may not be clear if they have linear relationships.  In this case, our best approach is to look at samples, and try to eyeball which have linear, or linear-ish relationships.
+                </p>
+                
+            </introduction>
+            <task>
+              <p>
+
+                Determine which of the following appear to have linear relationships.
+
+            <sidebyside widths="33% 33% 33%" margins="auto" valign="middle">
+              <figure>
+                <caption>(a)</caption>
+                <image source="images/splot1.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+            <figure>
+                <caption>(b)</caption>
+                <image source="images/splot2.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+          <figure>
+                <caption>(c)</caption>
+                <image source="images/splot3.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+
+            </sidebyside>
+
+
+            <sidebyside widths="33% 33% 33%" margins="auto" valign="middle">
+              <figure>
+                <caption>(d)</caption>
+                <image source="images/splot4.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+            <figure>
+                <caption>(e)</caption>
+                <image source="images/splot5.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+          <figure>
+                <caption>(f)</caption>
+                <image source="images/splot6.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+
+            </sidebyside>
+
+
+          </p>
+        </task>
+            
+        </activity>
+
+        <p>
+          Of course, none of these are <em>perfectly</em> linear.  That's usually not the case when dealing with real data.
+        </p>
+
+
+        <definition xml:id="definition-corr">
+          <title>Correlation Coefficient</title>
+          <p>
+            Given a set of data points <m>(x_1, y_1), \ldots, (x_n, y_n)</m> the <em>correlation coefficient</em> is a statistic <m>R, -1\leq R\leq 1</m> which measures the strength of the linear relationship between <m>x</m> and <m>y</m>.
+          </p>
+
+          <p>
+            <m>R=1</m> or <m>-1</m> denotes data that is perfectly aligned with a positive or negative sloping line respectively.  The <em>sign</em> of <m>R</m> gives you the <em>direction</em> of the relationship: positive or negative.  The <em>magnitude</em> or distance from 0 determnines the <em>strength</em> of the relationship: weak if close to 0, strong if close to -1 or 1.</p>
+
+           
+          </definition>
+
+
+          <activity xml:id="activity-corr">
+              <title>Match the Plot to <m>R</m></title>
+              <p>
+                For each of the following, match the scatterplot to the correlation coefficient:
+                <sidebyside widths="33% 33% 33%" margins="auto" valign="middle">
+              <figure>
+                <caption>(d)</caption>
+                <image source="images/corr35.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+            <figure>
+                <caption>(e)</caption>
+                <image source="images/corrn97.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+          <figure>
+                <caption>(f)</caption>
+                <image source="images/corr0.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+
+            </sidebyside>
+
+
+            <sidebyside widths="33% 33% 33%" margins="auto" valign="middle">
+              <figure>
+                <caption>(d)</caption>
+                <image source="images/corr65.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+            <figure>
+                <caption>(e)</caption>
+                <image source="images/corrn28.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+          <figure>
+                <caption>(f)</caption>
+                <image source="images/corrn75.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+
+
+            </sidebyside>
+
+            <sidebyside widths="33% 33% 33%" margins="auto" valign="middle">
+              <figure>
+                <caption>(g)</caption>
+                <image source="images/corr99.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+            <figure>
+                <caption>(h)</caption>
+                <image source="images/corrn75.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+          <figure>
+                <caption>(i)</caption>
+                <image source="images/corr85.png" width="40%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+  </figure>
+
+
+            </sidebyside>
+
+            <ol>
+              <li><m>R\approx 0.99</m></li>
+              <li><m>R\approx 0.85</m></li>
+              <li><m>R\approx 0.65</m></li>
+              <li><m>R\approx 0.35</m></li>
+              <li><m>R\approx 0</m></li>
+              <li><m>R\approx -0.28</m></li>
+              <li><m>R\approx -0.38</m></li>
+              <li><m>R\approx -0.75</m></li>
+              <li><m>R\approx -0.97</m></li>
+            </ol>
+
+
+
+
+
+
+
+
+
+
+
+          </p>
+          </activity>
+
+
+
+
+
+
+          <remark>
+            <title>Computing the Correlation Coefficient</title>
+             <p>
+              <m>R</m> can be computed <me>R=\frac{1}{n-1}\sum\left(\frac{x_i-\bar{x}}{s_x}\right)\left(\frac{y_i-\bar{y}}{s_y}\right)</me> where <m>\bar{x}, \bar{y}</m> are the mean of the <m>x</m> and <m>y</m> variables, and <m>s_x, s_y</m> are the sample standard deviations.</p>
+              <p>
+                We won't go through the details of this computation or it's derivation.  The main take away is <m>\left(\frac{x_i-\bar{x}}{s_x}\right), \left(\frac{y_i-\bar{y}}{s_y}\right)</m> measures the distance of the data points from their mean, scaled by the deviation.  If <m>x_i</m> is above (or below)<m>\bar{x}</m> whenever <m>y_i</m> is above (or below) <m>\bar{y}</m>, then these terms are positive and the sum is large and positive.  If one is above whenever the other is below, these terms are negative and the sum is large and negative.  If it's a mix, then the positive and negative terms cancel and you are close to 0.
+              </p>
+            
+          </remark>
+
+
+          <remark xml:id="remark-rsquared">
+            <p>
+              We often square <m>R</m>: <m>R^2</m>, to remove the sign and just to measure the strength of the linear relationship.  <m>R^2</m> explains what proportion of the response variable can be explained by the explanatory variable.  This can range from <m>R^2=1</m> or 100% of the explanatory variable is explained by the response variable, to <m>R^2=0</m> the explanatory variable has no impact at all on the response variable.
+            </p>
+          </remark>
+
+
+        </subsection>
+
+
+
+        <subsection>
+          <title>Best Fit Lines</title>
+          
+          <exploration xml:id="exploration-bestfit">
+              <title>Best Fit</title>
+              <p>
+                For the following scatter plot:
+                 <image source="images/linreg0.png" width="80%" >
+      <description>An Example Scatterplot.</description>
+    </image>
+    Which of the following would you say is the best fit?
+
+
+     <sidebyside widths="33% 33% 33%" margins="auto" valign="middle">
+              <figure>
+                <caption>(a)</caption>
+                <image source="images/linreg1.png" width="40%" >
+      <description>An Example Scatterplot and possible Regression Line.</description>
+    </image>
+  </figure>
+            <figure>
+                <caption>(b)</caption>
+                <image source="images/linreg2.png" width="40%" >
+      <description>An Example Scatterplot and possible Regression Line.</description>
+    </image>
+  </figure>
+
+          <figure>
+                <caption>(c)</caption>
+                <image source="images/linreg3.png" width="40%" >
+      <description>An Example Scatterplot and possible Regression Line.</description>
+    </image>
+  </figure>
+
+
+            </sidebyside>
+          </p>
+          </exploration>
+
+
+
+
+
+          <remark xml:id="remark-residuals">
+            <p>
+              Of course, none of these lines perfectly represent all of these points, no line could.  There will neccesarily be some overshoot and undershoot. We want to find a line that <em>minimizes</em> this.
+            </p>
+
+            <p>
+              Given a point in the scatterplot <m>(x_i, y_i)</m>, and a line <m>y=\beta_1x+\beta_0</m>, let <m>\hat{y}_i:=\beta_1x_i+\beta_0</m>.  This is the value of <m>y</m> that the line predicts.  Call <m>e_i=y_i-\hat{y}_i</m> the <em>residual</em> or <em>error</em> of the line.  This is the difference between what the model predicts and the actual value.
+              </p>
+
+              <p>
+                Our goal is to minimize <me>\sum e_i^2</me> the squared some of errors (to remove sign).
+              </p>
+
+              </remark>
+
+
+
+              <activity xml:id="activity-leastsquaresline">
+                  <title>Least Squares Line</title>
+                  <introduction>
+                      <p>
+                        The <em>least squares line </em> is the line which minimizes the sum of squared errors (hence the name).
+                      </p>
+                      
+                  </introduction>
+                  <task>
+                    <p>
+                      Consider the following scatterplot and a proposed regression line.  Note that the squared errors are on display, as is <c>S</c> the sum of the squared errors.
+
+                      <interactive desmos="syiwpiravl"/>
+
+                    </p>
+                    <p>
+                      Adjust the line to get <c>S</c> as small as possible.
+                    </p>
+                  </task>
+
+                  <task>
+                    <p>
+                      How well does this line now approximate the scatterplot?
+                    </p>
+                  </task>
+              </activity>
+
+
+
+
+              <remark xml:id="remark-findingregressionline">
+              <title>Finding the regression line</title>
+              <p>
+                The parameters for a least square line can be computed as follows:
+                <ul>
+                  <li>
+                    Recall that the slope of a line is change in <m>y</m> over change in <m>x</m>.  How much a variable changes (ignoring direction) can roughly be thought of as it's variation.  So we have <me>\beta_1=\frac{s_y}{s_x}R.</me>  The <q>change</q> in <m>y</m> over the <q>change</q> in <m>x</m>, modified for sign and strength of the relationship.
+                  </li>
+
+                  <li>
+                    <p>
+                    While we can't expect every data point to lie on this line, we should expect that <q>on average</q> that we can predict <m>y</m> with <m>x</m>.  Thus:
+                    <md>
+                      <mrow>(y-\bar{y})\amp=\beta_1(x-\bar{x})</mrow>
+                      <mrow>y\amp=\beta_1x-\beta_1\bar{x}+\bar{y}</mrow>
+                      <mrow>y\amp=\beta_1x+(\bar{y}-\beta_1\bar{x}).</mrow>
+                      
+                    </md>
+                    Thus: <me>\beta_0=\bar{y}-\beta_1\bar{x}.</me>
+                  </p>
+                  </li>
+                </ul>
+
+
+
+
+
+              </p>
+
+
+
+
+            </remark>
+
+
+
+
+            <activity xml:id="activity-linearregressiontech">
+                <title>Linear Regression and Technology</title>
+                <introduction>
+                    <p>
+                      In practice, we use technology to perform linear regression.  Let's recall the data from <xref ref="activity-leastsquaresline"/>:
+                      <me>
+                      \begin{array}{c|c}
+                      x \amp y\\
+                      \hline
+                      1 \amp 1\\
+                      2 \amp 3\\
+                      3 \amp 2\\
+                      4 \amp 4\\
+                      4 \amp 5\\
+                      5 \amp 4\\
+                      6 \amp 7\\
+                      \end{array}
+                    </me>
+                    </p>
+
+                    
+                </introduction>
+
+                <task>
+                  <p>
+                    Enter this data into the columns <c>x_1</c>, <c>y_1</c>:
+                    <interactive desmos="fteh98brsf"/>
+                  </p>
+                  <p>
+                    How do <c>B_1</c>, <c>B_0</c> compare to the <c>B_1</c>, <c>B_0</c> from <xref ref="activity-leastsquaresline"/>?
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                    What is the correlation coefficient <m>R</m>=<c>r</c>?  What does this tell us about the relationship between <m>y</m> and <m>x</m>.
+                  </p>
+                </task>
+
+               <task>
+                  <p>
+                    What is  <m>R^2</m>?  What does this tell us about the relationship between <m>y</m> and <m>x</m> according to <xref ref="remark-rsquared"/>.
+                  </p>
+                </task>
+
+
+                <task>
+                  <p>
+                    Let's use <c>R</c> to do the same.   Run the following code to produce a dataframe <c>dummydata</c> with variables <c>x1</c> and <c>y1</c>.
+            <sage language="r">
+                <input>
+                x1=c(1,2,3,4,4,5,6)
+                y1=c(1,3,2,4,5,4,7)
+
+                dummydata = data.frame(x1, y1)
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+            <task>
+                  <p>
+                    Run the following code to create a linear model for this data, and save it as <c>dummymod</c>.
+            <sage language="r">
+                <input>
+                dummymod=lm(y1~x1, data=dummydata)
+
+                </input>
+                </sage>
+                How do the intercept and slope displayed here compare to what you found in (a)?
+              </p>
+            </task>
+
+            <task>
+                  <p>
+                    Run the following code to show the correlation for this model.
+            <sage language="r">
+                <input>
+                cor(dummydata$x1, dummydata$y1)
+
+                </input>
+                </sage>
+                How does this value compare to what you found in (a)?
+              </p>
+            </task>
+
+
+            <task>
+                  <p>
+                    Run the following code to plot the scatterplot and the least squares line.
+            <sage language="r">
+                <input>
+                plot(dummydata$x1, dummydata$y1,  pch=19)
+                abline(dummymod, col="red")
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+
+            </activity>
+
+
+            <activity xml:id="activity-possums">
+                <title>Possum Regression</title>
+                <introduction>
+                    <p>
+                      We now return to the question from <xref ref="exploration-possums"/> and see if we can give a more precise answer.
+                    </p>
+                    
+                </introduction>
+
+
+                <task>
+                  <p>
+                    Run the following code to create a linear model for <c>head_l</c>, as a function of <c>skull_w</c> and save it as <c>possummod</c>.
+            <sage language="r">
+                <input>
+                possummod=lm(head_l~skull_w, data=possum)
+
+                </input>
+                </sage>
+                What is the slope and <m>y</m> intercept for the liner model?
+              </p>
+            </task>
+
+            <task>
+                  <p>
+                    Run the following code to show the correlation for this model.
+            <sage language="r">
+                <input>
+                cor(possum$skull_w, possum$head_l)
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+            <task>
+                  <p>
+                    What is  <m>R^2</m>?  What proportion of the head length is determined by the skull width.  (See <xref ref="remark-rsquared"/>.)
+                  </p>
+                </task>
+
+
+
+            <task>
+                  <p>
+                    Run the following code to plot the scatterplot and the least squares line.
+            <sage language="r">
+                <input>
+                plot(possum$skull_w, possum$head_l,  pch=19)
+                abline(possummod, col="red")
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+            <task>
+                  <p>
+                    Run the following code to show a summary of <c>possummod</c>.
+            <sage language="r">
+                <input>
+                summary(possummod)
+
+                </input>
+                </sage>
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Run the following code to show a summary of <c>possum</c>.
+            <sage language="r">
+                <input>
+                summary(possum)
+
+                </input>
+                </sage>
+                Pick two other numerical variables from <c>possum</c> and repeat the above.
+              </p>
+            </task>
+            </activity>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</subsection>
+
+
+</section>

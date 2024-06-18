@@ -1,0 +1,471 @@
+<section xml:id="Sec_InferenceRegression">
+    <title>Inference and Linear Regression (R3)</title>
+
+   <introduction>
+        <p> The slope and vertical intercept, <m>\beta_1, \beta_0</m> we computed in <xref ref="Sec_InterpretingRegression"/> are determined by a sample of (pairs of) random variables, and as such, are merely <em>point estimates</em> of these paramters.  As usual, there is some chance we chose non-representative data from the sample.  
+          
+
+
+        </p>
+
+        <p>
+
+          In this section, we use our sample data to make inferences on the true parameters.
+        </p>
+
+
+
+        <exploration>
+          <title>Estimating Regression</title>
+          <introduction>
+              <p>
+                Let <c>X</c> and <c>Y</c> be variables where <m>Y=0.8X+5+\epsilon</m> is a distributed by a normal variable with mean 0 and standard deviation 3.
+
+              </p>
+                            </introduction>
+
+
+              <task>
+                <p>
+                  What line probably best fits the relationship between <c>X</c> and <c>Y</c>?
+                </p>
+              </task>
+
+
+              <task>
+                  <p>
+                    Run the following code to generate <c>n=10</c> random  <c>X</c> and <c>Y</c> values, plot them, find a regression line and the line in (a):
+
+                    <sage language="r">
+                <input>
+                n=10
+                X=runif(n, 0, 10)
+                Y=0.8*X+5+rnorm(n,0,3)
+                mod=lm(Y~X)
+                plot(X, Y, pch=19)
+                abline(mod)
+                abline(5, 0.8, col="blue", lty=2)
+
+                </input>
+                </sage>
+                Run it a few times, what do you notice?
+
+                  </p>
+                </task>
+                <task>
+                  <p>
+                    Adjust <c>n=100</c> and run it again, now what do you notice?
+                  </p>
+                </task>
+
+</exploration>
+
+
+
+
+       </introduction>
+
+
+
+      <subsection>
+        <title>Hypothesis Testing</title>
+
+        <remark xml:id="remark-HTregression">
+          <p>
+            When it comes to linear regression, we focus on the following pair of hypothesis.  :
+            <ul>
+              <li><m>H_0: \beta_1=0</m> or the slope is zero.  So changes in the explanatory variable do not result in average change in response variable.</li>
+              <li><m>H_0: \beta_1\neq 0</m> or the slope is <em>not</em> zero.  So changes in the explanatory variable do  result in average change in response variable.</li>
+            </ul>
+
+          </p>
+
+          
+
+          <p>
+
+            This is a numerical hypothesis test similar to what we have done before.  However we're not just given a list of slopes to find a sample standard deviation.  The computation here is tedious, so we utilize technology to perform them.  If one wished to compute the standard error for <m>\beta_1</m> by hand, we do so via:  
+
+            <me>SE_1=\sqrt{\frac{1}{n-2}\cdot \frac{\sum (y_i-\hat{y}_i)^2}{\sum(x_i-\bar{x})^2}} </me>
+
+            where <m>\hat{y}_i=\beta_1\cdot x_i+\beta_0</m>, or the value of <m>y</m> predicted by the linear model.
+          </p>
+        </remark>
+
+
+       <exploration xml:id="exploration-summaryoflmpossum">
+        <title>Hypothesis Testing: Slope - Possums</title>
+          <introduction>
+          <p>
+            Run the following code to download <c>possum.csv</c> as seen in <xref ref="exploration-possums"/>, <xref ref="activity-possums"/>, and <xref ref="exploration-possum2"/>, and create a linear model for <c>head_l~skull_w</c> and summarize it.
+
+             <sage language="r">
+                <input>
+                possum = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/possum.csv")
+                possummod=lm(head_l~skull_w, data=possum)
+                summary(possummod)
+                </input>
+                </sage>
+                We're focused on the <c>Coefficients</c>, in particular the second row.
+          </p>
+          <p>
+            The first row starting with <c>(Intercept)</c> gives the point estimate, standard error, test statistic and <m>p</m>-value for the altnerative hypothesis <m>H_A:\beta_0\neq 0</m>.
+          </p>
+
+          <p>
+            The second row  starting with <c>skull_w</c> gives the point estimate, standard error, test statistic and <m>p</m>-value for the altnerative hypothesis <m>H_A:\beta_1\neq 0</m>.  This is the row about slopes.
+          </p>
+        </introduction>
+
+        <task>
+          <p>
+            The first entry of this row gives us the point estimate for the slope.  How does this compare to slope found by running:
+            <sage language="r">
+                <input>
+                possummod
+                </input>
+                </sage>
+                We call this value <m>\beta_1</m>.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            The second entry of this row gives us the standard  error for the slope.  Call this value <m>SE_1</m>.  Find the <m>t</m>-value for <m>\beta_1</m> by computing <me>t_1=\frac{\beta_1-0}{SE_1}.</me>
+            How does this value compare to the third entry?
+          </p>
+        </task>
+
+        <task>
+          <p>
+            According to the summary, how many degrees of freedom are there?
+
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Compute <m>P(t>t_1)</m> on the standard <m>t</m>-distribution with the appropriate degrees of  freedom.  Then double it to obtain the <m>p</m>-value for the alternative hypothesis <m>H_A: \beta_1\neq 0</m>.
+
+            <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="qrru08kps1"/>
+                      <interactive desmos="odp3hiqj8r"/>
+
+                    </p>
+
+                  </hint>
+
+                </p>
+                <p>
+                  How does this value compare to the 4th entry?
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Do we accept or reject the null hypothesis that <m>H_0: \beta_1=0</m>?
+                </p>
+              </task>
+
+
+
+        </exploration>
+
+        
+
+
+        <remark xml:id="remark-regressionpvalue">
+          <p>
+            The fourth entry of the second <c>Coefficients:</c>  row gives the probability that, if the slope was 0, that we would obtain a slope as steep or steeper.
+          </p>
+
+          <p>
+            The fourth entry of the first <c>Coefficients:</c>  row gives the probability that, if the intercept was 0, that we would obtain an as or more extreme.
+          </p>
+        </remark>
+
+
+      </subsection>
+
+      <subsection>
+        <title>Confidence Intervals</title>
+
+        <remark xml:id="remark-CIregression">
+          <p>
+            For either <m>\beta_1</m>, we compute the C% confidence interval  as follows:
+            <me>[\text{point estimate for }\beta_1 - SE_it^*, \text{point estimate for }\beta_1 + SE_it^*]</me> where <m>t^*</m> is the <m>t</m>-value such that <m>P(-t^*\lt t\lt t^*)=C\%</m> for the standard <m>t</m>-variable with the appropriate degrees of freedom.
+          </p>
+         
+        </remark>
+
+
+       <exploration xml:id="exploration-summaryoflmpossum2">
+        <title>Confidence: Intervals:<m>\beta_i</m> - Possums</title>
+          <introduction>
+          <p>
+            We continue from <xref ref="exploration-summaryoflmpossum"/>.
+          </p>
+          
+
+          
+
+        </introduction>
+
+        <task>
+          
+            <p>
+            Find a <m>t^*</m> so that <m>P(-t^*\lt t\lt t^*)=C\%</m> for the appropriate degrees of freedom.
+          </p>
+          
+        </task>
+
+        
+
+         <task>
+           <p>
+            Use the point estimate and standard error for <m>\beta_1</m>, <m>t^*</m> and <xref ref="remark-CIregression"/> to compute a 95% confidence interval for <m>\beta_1</m>.
+          </p>
+        </task>
+
+        <task>
+          <p>            
+            Explain what this confidence interval means within the context of the problem.
+          </p>
+        </task>
+
+
+
+        </exploration>
+
+
+
+
+
+
+
+
+
+
+      </subsection>
+
+
+
+
+      <subsection>
+        <title>Putting it together</title>
+
+
+
+
+
+        <activity xml:id="activity-summaryoflmsp500">
+        <title>Inference for SP500 companies</title>
+          <introduction>
+          <p>
+            Run the following code to download <c>sp500.csv</c> a data set comtaining information on a sample of 50 fortune 500 companies and show it's variable names.
+
+             <sage language="r">
+                <input>
+                sp500 = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/sp500.csv")
+                
+                names(sp500)
+                </input>
+                </sage>
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=sp500"/>.
+          </p>
+          
+        </introduction>
+
+        <task>
+          <p>
+            Run the following to create and summarize a linear model with <c>debt</c> the debt in millions of dollars as the explanatory variable and <c>profit_margin</c> the percent of earnings that is profit as the response variable:
+
+            <sage language="r">
+                <input>
+                sp500mod=lm(profit_margin~debt, data=sp500)
+                summary(sp500mod)
+                </input>
+                </sage>
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Run the following to plot <c>profit_margin</c> of these companies against the <c>debt</c> and draw a regression line:
+
+            <sage language="r">
+                <input>
+                plot(sp500$debt, sp500$profit_margin)
+                abline(sp500mod, col="red")
+                </input>
+                </sage>
+          </p>
+        </task>
+
+        <task>
+          <p>
+            State what the slope <m>\beta_1</m> means in the context of this problem.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Interpret the <m>p</m>-value for the alternative hypothesis <m>H_A:\beta_1\neq 0</m> in the context of this problem.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Do we reject the null hypothesis that <m>H_0:\beta_1=0</m>?  What does that say about the relationship between profit margin and debt?
+
+          </p>
+        </task>
+
+         <task>
+          
+            <p>
+            Find a <m>t^*</m> so that <m>P(-t^*\lt t\lt t^*)=C\%</m> for the appropriate degrees of freedom.
+          </p>
+          
+        </task>
+
+        
+
+         <task>
+           <p>
+            Use the point estimate and standard error for <m>\beta_1</m>, <m>t^*</m> and <xref ref="remark-CIregression"/> to compute a 95% confidence interval for <m>\beta_1</m>.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Explain what this confidence interval means within the context of the problem.
+          </p>
+        </task>
+
+
+
+        </activity>
+
+
+
+        <activity xml:id="activity-summaryoflmstarbucks">
+        <title>Inference for Nutrition and Starbucks</title>
+          <introduction>
+          <p>
+            Run the following code to download <c>starbucks.csv</c> a data set comtaining information about 77 Starbucks menu items their nutritional value and show it's variable names.
+
+             <sage language="r">
+                <input>
+                starbucks = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/starbucks.csv")
+                
+                names(starbucks)
+                </input>
+                </sage>
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=starbucks"/>.
+          </p>
+          
+        </introduction>
+
+        <task>
+          <p>
+            Run the following to create and summarize a linear model with <c>protein</c> the protein content of an item in g as the explanatory variable and <c>calories</c> the calories of each item measure in, well calories, as the response variable:
+
+            <sage language="r">
+                <input>
+                starbucksmod=lm(calories~protein, data=starbucks)
+                summary(starbucksmod)
+                </input>
+                </sage>
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Run the following to plot <c>calories</c> of these items against the <c>protein</c> and draw a regression line:
+
+            <sage language="r">
+                <input>
+                plot(starbucks$protein, starbucks$calories)
+                abline(starbucksmod, col="red")
+                </input>
+                </sage>
+          </p>
+        </task>
+
+        <task>
+          <p>
+            State what the slope <m>\beta_1</m> means in the context of this problem.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Interpret the <m>p</m>-value for the alternative hypothesis <m>H_A:\beta_1\neq 0</m> in the context of this problem.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Do we reject the null hypothesis that <m>H_0:\beta_1=0</m>?  What does that say about the relationship between calories and protein?
+
+          </p>
+        </task>
+
+         <task>
+          
+            <p>
+            Find a <m>t^*</m> so that <m>P(-t^*\lt t\lt t^*)=C\%</m> for the appropriate degrees of freedom.
+          </p>
+          
+        </task>
+
+        
+
+         <task>
+           <p>
+            Use the point estimate and standard error for <m>\beta_1</m>, <m>t^*</m> and <xref ref="remark-CIregression"/> to compute a 95% confidence interval for <m>\beta_1</m>.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Explain what this confidence interval means within the context of the problem.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Repeat this for any other pair of numerical variables.
+          </p>
+        </task>
+
+
+
+        </activity>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</subsection>
+
+</section>

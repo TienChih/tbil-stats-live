@@ -1,0 +1,749 @@
+<section xml:id="Sec_TwoVarNum">
+    <title>Comparing Two Numerical Variables (N4)</title>
+
+   <introduction>
+        <p> In <xref ref="Sec_TwoVarCat"/> we compared two categorical variables to each other. In this section, we compare two numerical variables.
+        </p>
+
+       <exploration xml:id="exploration-ncbirthssmoke">
+           <title>Birth Weight and Smoking</title>
+           <introduction>
+               <p>
+                 We are interested in seeing whether or not there is any difference in the average birth of weight of babies whose mothers smoked versus those that do not.  
+               </p>
+
+               <p>
+                Run the following code to download  the <c>ncbirths.csv</c> data set which contains information about 1000 births recorded in North Carolina, and display the variables:
+
+                <sage language="r">
+                <input>
+                ncbirths = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/ncbirths.csv")
+                
+                names(ncbirths)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=ncbirths"/>.
+
+              </p>
+               
+           </introduction>
+
+           <task>
+            <p>
+              Run the following code to subset out the babies whose mothers smoked and summarize the data:
+              <sage language="r">
+                      <input>
+                      babysmoke=subset(ncbirths, ncbirths$habit=="smoker")
+                      summary(babysmoke)
+                      
+                      </input>
+                      </sage>
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Run the following code to subset out the babies whose mothers did not smoke and summarize the data:
+              <sage language="r">
+                      <input>
+                      babynosmoke=subset(ncbirths, ncbirths$habit=="nonsmoker")
+                      summary(babynosmoke)
+                      
+                      </input>
+                      </sage>
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Run the following code to display overlapping histograms of the birth weights of babies whose mothers smoked and didn't, and the average of each sample:
+              <sage language="r">
+                      <input>
+                      hist(babynosmoke$weight, col=rgb(0,0,1,0.5))
+                      hist(babysmoke$weight, col=rgb(1,0,0,0.5), add=TRUE)
+                      abline(v = mean(babysmoke$weight), col="red", lwd=3, lty=2)
+                      abline(v = mean(babynosmoke$weight), col="blue", lwd=3, lty=2)
+          
+                      </input>
+                      </sage>
+
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Run the following code to display overlapping histograms scaled by the size of the samples:
+              <sage language="r">
+                      <input>
+                      hist(babynosmoke$weight, col=rgb(0,0,1,0.5), prob=TRUE)
+                      hist(babysmoke$weight, col=rgb(1,0,0,0.5), add=TRUE, prob=TRUE)
+                      abline(v = mean(babysmoke$weight), col="red", lwd=3, lty=2)
+                      abline(v = mean(babynosmoke$weight), col="blue", lwd=3, lty=2)
+          
+                      </input>
+                      </sage>
+
+            </p>
+          </task>
+
+       </exploration>
+
+       <exploration xml:id="exploration-fooledbyrandom">
+           <title>Differences in Samples</title>
+           <introduction>
+               <p>
+                 In <xref ref="exploration-ncbirthssmoke"/>, we saw that there was an observable difference in the average baby weights of the samples.  We also saw a wide variety of baby weights and quite a bit of overlap.  The question is are the distributions from which the samples come identical or not?
+               </p>
+               
+           </introduction>
+           <task>
+            <p>
+              If two distributions have different means, we'd expect differences in the observed samples.  Run the following code to generate histograms for two samples of size 30, one from a normal distribution with mean 10, one from a normal distribution with mean 12, and draw lines indicating their means.
+              <sage language="r">
+                      <input>
+                      samp1=rnorm(30, 10, 3)
+                      samp2=rnorm(30, 12, 3)
+
+                      hist(samp1, col=rgb(1,0,0,0.5), prob=TRUE)
+                      hist(samp2, col=rgb(0,0,1,0.5), add=TRUE, prob=TRUE)
+                      abline(v = mean(samp1), col="red", lwd=3, lty=2)
+                      abline(v = mean(samp2), col="blue", lwd=3, lty=2)
+          
+                      </input>
+                      </sage>
+                      Run it a few times to see different samples.
+            </p>
+          </task>
+
+          <task>
+            <p>
+              If two distributions have the same mean, we'd <em>still</em> expect differences in the observed samples!  Run the following code to generate histograms for two samples of size 30, both from a normal distribution with mean 10 and draw lines indicating their means.
+              <sage language="r">
+                      <input>
+                      samp1=rnorm(30, 10, 3)
+                      samp2=rnorm(30, 10, 3)
+
+                      hist(samp1, col=rgb(1,0,0,0.5), prob=TRUE)
+                      hist(samp2, col=rgb(0,0,1,0.5), add=TRUE, prob=TRUE)
+                      abline(v = mean(samp1), col="red", lwd=3, lty=2)
+                      abline(v = mean(samp2), col="blue", lwd=3, lty=2)
+          
+                      </input>
+                      </sage>
+                      Run it a few times to see different samples.
+            </p>
+          </task>
+          
+       </exploration>
+       <p>
+            So, if we're given two samples as in <xref ref="exploration-ncbirthssmoke"/>, how are we to tell if this indicates an actual difference in population means?  <m>p</m>-values of course!
+          </p>
+        
+    </introduction>
+
+
+    <subsection>
+      <title>Differences in Numerical Variables</title>
+
+     <activity xml:id="activity-spending">
+        <title>Shopping and Spending</title>
+        <introduction>
+            <p>
+              Suppose that customers at department store A spend on average <m>\mu_A=\$350</m>  in a trip with standard deviation <m>\sigma_A=\$75</m>.  Customers who shopt at department store B spend on average <m>\mu_B=\$200</m>  in a trip with standard deviation <m>\sigma_B=\$40</m>.
+            </p>
+            <p>
+              Consider the random variable <m>X</m> we get by taking a sample of 50 customers from store A, 30 customers from store B, taking the average spending by the A customers, and from that subtract the average spending from the B customers.
+            </p>
+            
+        </introduction>
+        <task>
+          <p>
+            The average amount spent by 50 A customers is a random variable.  Use <xref ref="theorem-CLTnum"/> to find the mean <m>\mu_{\bar{a}}</m> and standard error <m>SE_{\bar{a}}</m> for this variable.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            The average amount spent by 30 B customers is a random variable.  Use <xref ref="theorem-CLTnum"/> to find the mean <m>\mu_{\bar{b}}</m> and standard error <m>SE_{\bar{b}}</m> for this variable.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Recall that the variance of a random variable is the square of it's standard deviations.  Find the variance for each of the two sampling variables.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Recall that the variance of a random variable is the square of it's standard deviations.  Find the variance for each of the two sampling variables.
+          </p>
+        </task>
+
+        <task>
+      <p>
+        Let <m>D</m> denote the difference between the sampling distributions.  Use <xref ref="remark-linofEandV"/> to find <m>\mu_D</m>.
+      </p></task>
+
+      <task>
+      <p>
+        Use <xref ref="remark-linofEandV"/> to find the variance of <m>D</m>: <m>Var_D</m>.
+      </p></task>
+
+      <task>
+      <p>
+        Find the standard deviation of <m>D</m>: <m>SE_D=\sqrt{Var_D}</m>.
+      </p></task>
+
+      <task>
+      <p>
+        Run the following code to simulate 1000 trials of sampling 50 customers from store A, 30 customers of store B, taking the difference in their average spending, and plotting a histogram of the results.
+        <sage language="r">
+                      <input>
+                      storeA=50
+                      storeB=30
+                      Amean=350
+                      Asd=75
+                      Bmean=200
+                      Bsd=40
+                      trials=1000
+
+                      diff_spending=rep(NA, trials)
+
+                      for(i in 1:trials){
+                        A_samp=rnorm(storeA, Amean, Asd)
+                        B_samp=rnorm(storeB, Bmean, Bsd)
+                        diff_spending[i]=mean(A_samp)-mean(B_samp)
+                      }
+                      hist(diff_spending, breaks=25, prob=TRUE)
+
+                      </input>
+                      </sage>
+      </p></task>
+
+      <task>
+      <p>
+        Fix and run the following code so that <c>mu_D=</c><m>\mu_D</m> and <c>SE_D=</c><m>\sigma_D</m> and plot a normal curve on top of our histogram.
+        <sage language="r">
+                      <input>
+                      mu_D=FIXME
+                      SE_D=FIXME
+                      
+                      hist(diff_spending, breaks=25, prob=TRUE)
+                      curve(dnorm(x, mean=mu_D, sd=SE_D), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+                      </input>
+                      </sage>
+                      How well does the normal distribution approximate the histogram?
+      </p></task>
+      </activity>
+
+
+      <remark xml:id="remark-diffofmeans">
+    <title>Difference of Means</title>
+    <p>
+      Let there be two random numerical variables, with population means <m>, \mu_1, \mu_2</m> and standard deviations <m>\sigma_1. \sigma_2</m>.  Then let <m>D</m> be the random variable generated by taking random samples of size <m>n_1, n_2</m> of the two variables and taking the difference in their proportions.  Then <m>D</m> is approximated by a normal variable with mean and standard deviation: <me>\mu_D=\mu_1-\mu_2, SE_D=\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}.</me> 
+    </p>
+
+    <p>
+      When using sample standard deviations <m>s_1, s_2</m> to estimate <m>\sigma_1, \sigma_2</m> we use a <m>t</m>-distribution with degrees of freedom: <m>\min(n_1, n_2)-1</m>.
+    </p>
+
+
+  </remark>
+
+</subsection>
+
+<subsection>
+<title>Confidence Intervals</title>
+
+  <remark xml:id="remark-numCItwo">
+  <p>
+    As in <xref ref="remark-numCI"/>, given samples of two numerical variables, of sizes <m>n_1, n_2</m> with sample means <m>\bar{x}_1, \bar{x}_2</m> and standard deviations <m>s_1, s_2</m>, we can find a C% confidence interval for the difference of population means <m>\mu_1-\mu_2</m> by <me>[(\bar{x}_1-\bar{x}_2)-t^*SE_D, (\bar{x}_1-\bar{x}_2)+t^*SE_D]</me> where <m>SE_D=\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}</m> as in <xref ref="remark-diffofmeans"/>, and <m>t^*</m> is the <m>t</m> value so that <m>P(-t^*\lt t \lt t^*)=C\%</m> for a <m>t</m>-distribution with <m>\min(n_1, n_2)-1</m> degrees of freedom.
+
+  </p>
+  <p>
+    Note that other techniques to do compute confidence intervals utilize a more complicated method to determine degrees of freedom.  We use this method for hand computations as it's straightforward and still a good approximation.
+  </p>
+</remark>
+
+
+<activity xml:id="activity-brakes">
+    <title>Stopping Distance</title>
+    <introduction>
+        <p>
+          A automotive manufacturer tests two types of brakes for it's mid-sized SUV's.  In a sample of 30 SUV's with type A breaks, the stopping distance  when breaks are applied at 60 mph was found to be 127.43 ft with standard deviation 5.24 feet.  In a seperate sample of 30 SUV's using type B breaks, the average stopping distance was 120.45 feet with standard deviation 4.37 feet.
+        </p>
+
+        <p>
+          We want to find a 95% confidence interval for the difference in stopping distance between the breaks.
+        </p>
+
+        
+    </introduction>
+
+   <task>
+              <p>
+              Compute the  the difference in sample means <m>\bar{x}_1-\bar{x}_2</m>.
+            </p>
+            </task>
+
+      
+
+    <task>
+              <p>
+              Compute the standard error <m>SE_D</m> for the difference in means using <xref ref="remark-diffofmeans"/>.
+            </p>
+            </task>
+
+      <task>
+              <p>
+              Compute the degrees of freedom.
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Find <m>t^*</m> such that for a <m>t</m>-distribution with the appropriate degrees of freedom, <m>P(-t^*\lt t\lt t^*)=0.95</m>.
+
+               <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Use <xref ref="remark-numCItwo"/> to compute a 95% confidence interval for <m>\mu</m>.
+            </p>
+            </task>
+
+            <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences. X</p>
+            </task>      
+</activity>
+
+
+
+
+<activity xml:id="activity-beefsandwich">
+      <title>Beef Sandwiches</title>
+      <introduction>
+          <p>Our reoccuring restaurateur is back and wants to know what the difference is, if any, in the amount of Roast Beef Sandwiches sold each lunch rush in her East and West locations.  She takes a sample of 30 lunch rushes in the East Location and 45 in the West.</p>
+          
+      </introduction>
+
+
+     <task>
+        <p>
+          Run the following code to sample 30 lunch rushes in the east location, display a histogram of the results, and show the mean and standard deviation.
+          <sage language="r">
+                      <input>
+                      eastlunch=30
+                      east_mu=runif(1,30,50)
+
+                      east_samp=round(rnorm(eastlunch, east_mu, 8))
+                      hist(east_samp, col="red")
+                      print(mean(east_samp))
+                      print(sd(east_samp))
+                      </input>
+                      </sage>
+                     
+
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Run the following code to sample 45 lunch rushes in the 34st location, display a histogram of the results, and show the mean and standard deviation.
+          <sage language="r">
+                      <input>
+                      westlunch=45
+                      west_mu=runif(1,30,50)
+
+                      west_samp=round(rnorm(westlunch, west_mu, 8))
+                      hist(west_samp, col="blue")
+                      print(mean(west_samp))
+                      print(sd(west_samp))
+                      </input>
+                      </sage>
+                    
+
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Run the following code to display the two histograms side by side, scaled for sample size, and with the means displayed, as well as side by side boxplots.
+          <sage language="r">
+                      <input>
+                      hist(east_samp, col=rgb(1,0,0,0.5), prob=TRUE)
+                      hist(west_samp, col=rgb(0,0,1,0.5), prob=TRUE, add=TRUE)
+                      abline(v = mean(east_samp), col="red", lwd=3, lty=2)
+                      abline(v = mean(west_samp), col="blue", lwd=3, lty=2)
+
+                      boxplot(east_samp, west_samp)
+                      </input>
+                      </sage>
+                    
+
+        </p>
+      </task>
+
+      <task>
+              <p>
+              Compute the  the difference in sample means <m>\bar{x}_1-\bar{x}_2</m>.
+            </p>
+            </task>
+
+      
+
+    <task>
+              <p>
+              Compute the standard error <m>SE_D</m> for the difference in means using <xref ref="remark-diffofmeans"/>.
+            </p>
+            </task>
+
+      <task>
+              <p>
+              Compute the degrees of freedom.
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Find <m>t^*</m> such that for a <m>t</m>-distribution with the appropriate degrees of freedom, <m>P(-t^*\lt t\lt t^*)=0.95</m>.
+
+               <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+            </task>
+
+            <task>
+              <p>
+              Use <xref ref="remark-numCItwo"/> to compute a 95% confidence interval for <m>\mu</m>.
+            </p>
+            </task>
+
+            <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences. X</p>
+            </task>
+
+            <task>
+        <p>
+          Run the following code to display the actual differences of means.
+          <sage language="r">
+                      <input>
+                      east_mu-west_mu
+                      </input>
+                      </sage>
+                    
+
+        </p>
+      </task> 
+
+      <task>
+        <p>
+          Run the following code to compute a 95% confidence interval through <c>R</c>.  Note this should give you a different interval than what you found in (h) if you did it by hand.
+          <sage language="r">
+                      <input>
+                      t.test(east_samp, west_samp, conf.level=0.95)$conf.int
+                      </input>
+                      </sage>
+                    
+
+        </p>
+      </task>     
+
+      
+  </activity>
+
+</subsection>
+
+<subsection>
+  <title>Hypothesis Testing</title>
+
+
+<remark xml:id="remark-numHTtwo">
+  <p>
+    We can test the <em>difference</em> between means of numerical variables, similar to how we tested difference of proportions in <xref ref="remark-hypothesistestdiffofprop"/>.  Given two numerical variables with population means <m>\mu_1, \mu_2</m> we have alternative Hypothesis  in the forms:
+    <ul>
+      <li><m>H_A: \mu_1-\mu_2>\mu_0.</m></li>
+      <li><m>H_A: \mu_1-\mu_2\lt\mu_0.</m></li>
+      <li><m>H_A: \mu_1-\mu_2\neq\mu_0.</m></li>
+      </ul>
+      The null hypothesis for these is <li><m>H_0: \mu_1-\mu_2=\mu_0.</m></li>
+    </p>
+
+    <p>
+      We find <m>p</m>-values in much the same way as in <xref ref="remark-numericalHT"/>.  We assume the null hypothesis, and let <m>D</m> be the sampling distribution of the differences of the means of two samples, sizes <m>n_1, n_2</m>.  Then <m>D</m> would have mean <m>\mu_1-\mu_2</m> and standard deviation <me>SE_D=\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}</me> as in <xref ref="remark-diffofmeans"/>, and <m>t^*</m> is the <m>t</m> value so that <m>P(-t^*\lt t \lt t^*)=C\%</m> for a <m>t</m>-distribution with <m>\min(n_1, n_2)-1</m> degrees of freedom (again a simplified heurisitic).
+
+  </p>
+  <p>
+    Then based on the alternative hypothesis, we compute the tail area(s) exactly as we would in <xref ref="remark-hypothesistestdiffofprop"/>.
+  </p>
+</remark>
+
+      <activity xml:id="activity-milkyield">
+          <title>Chicken Feed</title>
+          <introduction>
+              <p>
+                Dairy farmers wish to test a new type of diets for dairy cows, with the hope that the new diet will increase milk yields.  20 cows are fed the traiditional diet and 15 the experimental diet.  The cows are observed over a 4 week period, and the average daily milk yield and sample standard deviations for both groups are recorded in Liters.
+                <me>
+                \begin{array}{|c|c|c|c|}
+                \hline
+                \textbf{Diet} \amp n \amp \bar{x} \amp s\\
+                \hline
+                \text{Standard} \amp 20\amp 42.3 \amp 8.73\\
+                \text{Experimental} \amp 15\amp 45.1 \amp 6.24\\
+                \hline
+                \end{array}
+              </me>
+              </p>
+
+              <p>
+                Let <m>\mu_1</m> denote the true mean of milk production for cows on the standard diet, and <m>\mu_2</m> denote the true mean of milk production for cows on the experimental diet.
+              </p>
+              
+          </introduction>
+
+           <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu_1-\mu_2\lt 0</m> liters.</li>
+                            <li><m>\mu_1-\mu_2> 0</m> liters.</li>
+                            <li><m>\mu_1-\mu_2\neq 0</m> liters.</li>
+                            <li><m>\mu_1-\mu_2= 0</m> liters.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu_1-\mu_2\lt 0</m> liters.</li>
+                            <li><m>\mu_1-\mu_2> 0</m> liters.</li>
+                            <li><m>\mu_1-\mu_2\neq 0</m> liters.</li>
+                            <li><m>\mu_1-\mu_2= 0</m> liters.</li>
+                          </ul>
+                        </p>
+                      </task>
+                      
+
+              <task>
+                  <p>      
+                    Find the standard error <m>SE</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Find <m>t</m>-score for <m>\bar{x_1}-\bar{x_2}</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+      </activity>
+
+
+      <activity xml:id="activity-ncbirthssmokeweight">
+          <title>Birth Weight and Smoking revisted</title>
+          <introduction>
+              <p>
+                Recall that in <xref ref="exploration-ncbirthssmoke"/> we seperated the sampling of births in Noth Carolina into <c>babysmoke</c> and <c>babynosmoke</c>.  We were curious as to whether or not there was any difference in average birth weights between babies born to mothers who smoked compared to those who did not.
+              </p>
+              <p>
+                Run the following code to plot side by side boxplots of the birth weights of baies born to mothers who smoked versus didn't smoke:
+                <sage language="r">
+                      <input>
+                      boxplot(ncbirths$weight~ncbirths$habit)
+        
+                      </input>
+                      </sage>
+              </p>
+              
+          </introduction>
+
+          <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu_1-\mu_2\lt 0</m> pounds.</li>
+                            <li><m>\mu_1-\mu_2> 0</m> pounds.</li>
+                            <li><m>\mu_1-\mu_2\neq 0</m> pounds.</li>
+                            <li><m>\mu_1-\mu_2= 0</m> pounds.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu_1-\mu_2\lt 0</m> pounds.</li>
+                            <li><m>\mu_1-\mu_2> 0</m> pounds.</li>
+                            <li><m>\mu_1-\mu_2\neq 0</m> pounds.</li>
+                            <li><m>\mu_1-\mu_2= 0</m> pounds.</li>
+                          </ul>
+                        </p>
+                        </task>
+                
+              <task>        
+              <p>
+                Run the following code to show the sample size, sample mean and sample standard deviation of baby weights of mothers who smoked:
+                <sage language="r">
+                      <input>
+                      print(length(babysmoke$weight))
+                      print(mean(babysmoke$weight))
+                      print(sd(babysmoke$weight))
+                      </input>
+                      </sage>
+              </p>
+              </task>
+
+              <task>        
+              <p>
+                Run the following code to show the sample size, sample mean and sample standard deviation of baby weights of mothers who did not smoke:
+                <sage language="r">
+                      <input>
+                      print(length(babynosmoke$weight))
+                      print(mean(babynosmoke$weight))
+                      print(sd(babynosmoke$weight))
+                      </input>
+                      </sage>
+              </p>
+              </task>  
+
+              <task>
+                  <p>      
+                    Find the standard error <m>SE</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Find <m>t</m>-score for <m>\bar{x_1}-\bar{x_2}</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="yitcqiz5kx"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task> 
+
+           <task>        
+              <p>
+                Run the following code to compute the <m>p</m>-value direcrly with <c>R</c>:
+                <sage language="r">
+                      <input>
+                      t.test(babysmoke, babynosmoke, alternative="two.sided", mu=0)
+                      </input>
+                      </sage>
+                      Note that the computation should produce a slightly different but very close value.
+              </p>
+              </task>                
+      </activity>
+
+
+
+
+
+
+</subsection>
+    
+</section>

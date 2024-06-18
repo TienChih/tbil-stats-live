@@ -1,0 +1,15 @@
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude"  xml:id="Chap_Foundations">
+  <title>Foundations for Inference (F)</title>
+  <objectives>
+        <ul>
+            <xi:include href="outcomes.ptx"/>
+        </ul>
+    </objectives>
+  <xi:include  href="Sec_PointEstimates.ptx"/> 
+  <xi:include  href="Sec_ConfidenceInterval.ptx"/> 
+  <xi:include  href="Sec_HypothesisTesting.ptx"/>
+
+
+
+  
+</chapter>

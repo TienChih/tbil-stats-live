@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<li xmlns:xi="http://www.w3.org/2001/XInclude">
+        <p>
+D: Can I work with the foundational probability distributions of statistics?
+        </p>
+        <ul>
+            <li>
+                <p>
+D1: I can compute and interpret probabilities given bounds, and bounds given probabilities for the standard normal variable.
+                </p>
+            </li>
+            <li>
+                <p>
+D2: I can compute and interpret probabilities given bounds, and bounds given probabilities for general normal variables.
+                </p>
+            </li>
+            <li>
+                <p>
+D3: I can count ordered and unordered selections of objects, with or without repitition.
+                </p>
+            </li>
+            <li>
+                <p>
+D4: I can compute and interpret probabilities for binomial random variables.
+                </p>
+            </li>
+            <li>
+                <p>
+D5: I can use the normal approximation for binomial random variables to compute probabilities and bounds.
+                </p>
+            </li>
+        </ul>
+</li>

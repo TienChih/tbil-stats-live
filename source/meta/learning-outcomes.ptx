@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<preface xml:id="learning-outcomes" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Learning Outcomes and Usage</title>
+    <p>
+The material in this book is designed to answer the following big questions and
+develop the following skills.  
+    </p>
+    <objectives>
+    <ul>
+        <xi:include href="../01-basics/outcomes.ptx"/>
+        <xi:include href="../02-probability/outcomes.ptx"/>
+        <xi:include href="../03-distributions/outcomes.ptx"/>
+        <xi:include href="../04-foundations/outcomes.ptx"/>
+        <xi:include href="../05-categorical/outcomes.ptx"/>
+        <xi:include href="../06-numerical/outcomes.ptx"/>
+        <xi:include href="../07-linearregression/outcomes.ptx"/>
+    </ul>
+    </objectives>
+    <p>
+        This is an active learning text driven by in class activities meant to be worked on in small groups, with guidance from the instructor.  For a more traditional text see the excellent <url href="https://www.openintro.org/"/> on which much of this material is based.
+    </p>
+</preface>

@@ -1,0 +1,644 @@
+<section xml:id="Sec_ChiSquare">
+    <title>Chi-Squared Test and Goodness of Fit (C3)</title>
+
+   <introduction>
+        <p> In previous sections, we discuss the proportion of a categorical variable which takes on a certain value.  In this section, we look at the distribution of a sample of a categorical variable across all it's values.  In particular, we see if a sample can plausibly come from a given distribution for the variable.
+        </p>
+
+        <exploration xml:id="exploration-jurydemo">
+        	<title>Racial Demographics and Jurors</title>
+        	<introduction>
+        	    <p>A small town is 70% White, 15% Black, 10% Hispanic and 5% Asian.  In a random sample of 300 jurors from the town, we say that 237 were White, 26 were Black, 24 were Hispanic and 13 were Asian.</p>
+        	    
+        	</introduction>
+
+        	<task>
+        		<p>
+        			If you randomly selected 300 people from a town that is 70% White, 15% Black, 10% Hispanic and 5% Asian, what are the <em>expected values</em> for the number of White, Black, Hispanic and Asian people to be selected?
+        		</p>
+        	</task>
+
+        	<task>
+        		<p>
+        			How do these numbers compare to the juror sample?
+        		</p>
+        	</task>
+
+	      	<task>
+        		<p>
+        			Run the following code to simulate selecting 300 random people from the town, and plotting a barchart of the racial demographics.
+        			<sage language="r">
+                      <input>
+                      n=300
+
+                      town_samp=sample(c("WHITE", "BLACK", "HISPANIC", "ASIAN"), n, replace=TRUE, prob=c(0.7,0.15, 0.1, 0.05))
+                      barplot(table(town_samp))
+                      </input>
+                      </sage>
+        		</p>
+        	</task>
+
+
+          <task>
+            <p>
+              Run the following code to summarize the racial demographics of your simulated sample.
+              <sage language="r">
+                      <input>
+                      table(town_samp)
+                      </input>
+                      </sage>
+
+                      How does these values compare to what you found in (a)?   To the juror sample?
+            </p>
+          </task>
+
+        	
+
+
+
+        </exploration>
+
+
+        <p>There is a clear follow-up question to be asked here.  <q>Does the jury pool match the demographics of the town?</q> Certainly, a random sample of 300 people need not match the expected demographics exactly.  But the more it deviates from the town demographics, the less likely we are to be inclined to think that these demographics match.</p>
+
+        <p>
+          In the language of Hypothesis Testing, this section is focused on  null and alternative hypothesis of the following form:  Given a proposed distribution for a categorical variable...
+          <ul>
+            <li><m>H_0</m>:<q>The sample comes from the proposed distribution.</q></li>
+            <li><m>H_A</m>:<q>The sample <em>does not</em> come from the proposed distribution.</q></li>
+          </ul>
+
+        </p>
+
+
+        
+    </introduction>
+
+
+    <subsection>
+      <title>The chi-square distribution</title>
+
+      <remark xml:id="remark-chiteststat">
+      <p>
+        So suppose we did assume the null hypothesis that a sample comes from a certain distribution.  We essentially want to develop a measure of how far this sample deviates from the proposed distribution.  If it's a little, it's plausible it may come from the null distribution.  If it's a significant deviation, we reject the idea that this is the distribution from where the sample comes.
+      </p>
+
+      <p>
+        Suppose that we did have a random variable with <m>k</m> possible outcomes: <m>O_1, \ldots O_k</m>, and a sample with <m>n_1, n_2, \ldots, n_k</m> data points corresponding to each outcome.  Note that the total size of the sample is <m>n=n_1+\cdots n_k</m>.  Let <m>E_1, \ldots, E_k</m> denote the <em>expected</em> number of outcomes for each value, if a sample of size <m>n</m> were taken from the proposed distribution.  <me>
+\begin{array}{|r|c|c|c|c|}
+\hline
+ \text{Outcomes:} \amp O_1 \amp O_2 \amp \cdots \amp O_k \\
+\hline
+\text{Sample Frequency:} \amp n_1 \amp n_2 \amp \cdots \amp n_k \\
+\hline
+\text{Expected Frequency:} \amp E_1 \amp E_2 \amp \cdots \amp E_k \\
+\hline
+\end{array}
+</me> We then compute the test statistic for the <m>i</m>th value is <me>Z_i=\frac{n_i-E_i}{\sqrt{E_i}}.</me>  
+      </p>
+
+      <p>
+        Then we compute <me>\chi^2=Z_1^2+\cdots Z_k^2=\frac{(n_1-E_1)^2}{E_1}+\cdots+\frac{(n_k-E_k)^2}{E_k}.</me>  This removes the distinction between over and undershooting the expectations, and sums the adjusted error for all the values, which gives a measure for the <q>total</q> deviation from the theoritical expectation.  (Think <xref ref="activity-derivingvariation"/>, <xref ref="definition-popvariance"/>.)
+      </p>
+    </remark>
+
+
+    <activity xml:id="activity-jurydemostats">
+        <title>Racial Demographics and Jurors: <m>Z</m> and <m>\chi^2</m> Statistics</title>
+        <introduction>
+            <p>Recall from <xref ref="exploration-jurydemo"/> that we have a sample of size <m>n=300</m> where 237 are White, 26 are Black, 24 are Hispanic and 13 are Asian.  We also have a proposed distribution: 70% White, 15% Black, 10% Hispanic and 5% Asian.</p>
+            
+        </introduction>
+
+        <task>
+          <p>
+            Recall that <m>n_1=237</m> White jurors in the sample, let <m>E_1</m> denote the expected number of White jurors found in <xref ref="exploration-jurydemo"/> (a).  Use <xref ref="remark-chiteststat"/> to compute <m>Z_1</m>.
+            </p>
+            </task>
+
+         <task>
+          <p>
+            Recall that <m>n_2=26</m> Black jurors in the sample, let <m>E_2</m> denote the expected number of Black jurors found in <xref ref="exploration-jurydemo"/> (a).  Use <xref ref="remark-chiteststat"/> to compute <m>Z_2</m>.
+            </p>
+            </task>
+
+
+        <task>
+          <p>
+            Recall that <m>n_3=24</m> Hispanic jurors in the sample, let <m>E_3</m> denote the expected number of Hispanic jurors found in <xref ref="exploration-jurydemo"/> (a).  Use <xref ref="remark-chiteststat"/> to compute <m>Z_3</m>.
+            </p>
+            </task>    
+
+            <task>
+          <p>
+            Recall that <m>n_4=13</m> Asian jurors in the sample, let <m>E_4</m> denote the expected number of Asian jurors found in <xref ref="exploration-jurydemo"/> (a).  Use <xref ref="remark-chiteststat"/> to compute <m>Z_4</m>.
+            </p>
+            </task>
+
+          <task>
+          <p>
+             Use <xref ref="remark-chiteststat"/> to compute <m>\chi^2</m>.
+            </p>
+            </task>      
+
+
+    </activity>
+
+
+    <activity xml:id="activity-chisquare">
+      <title>The <m>\chi^2</m> Distribution</title>
+      <introduction>
+          <p>
+            As in other hypothesis tests, we are concerned with computing a <m>p</m>-value: a probability we see results as extremal  as ours or more if we assume the null.  We do this by computing areas under the <em><m>\chi^2</m>-distribution</em>.  The <m>\chi^2</m>-distribution has but one parameter: the <em>degrees of freedom</em>.
+          </p>
+                       </introduction>
+
+          <task>
+            <p>
+              Adjust the degrees of freedom <c>d_f</c> from 1 through 20.  What do we notice about the distribution of the curve as we make these asdjustments?
+              <interactive desmos="uurok5eur4"/>
+            </p>
+          </task>
+
+          <task>
+            <p>
+            The following graph computes the area of a tail where <m>\chi^2=1, d_f=1</m>:
+            <interactive desmos="gtwsvcggpo"/>
+          </p>
+
+          <p>
+            Compute the area of the tail where <m>\chi^2=8, d_f=5</m> by adjusting <c>C_hisquared</c> and <c>d_f</c>.
+          </p>
+        </task>
+
+        <task>
+          <p>
+            Run the following to compute the area of the tail where <m>\chi^2=8, d_f=5</m>.
+        <sage language="r">
+                      <input>
+                      pchisq(8, 5, ncp = 0, lower.tail = FALSE)
+
+        
+                      </input>
+                      </sage>
+                    </p>
+                    </task>
+
+           <task>
+           <p>
+           Use any method   to compute the area of the tail where <m>\chi^2=4, d_f=4</m>     
+           </p></task>  
+
+          </activity>
+     
+
+
+
+
+
+   
+</subsection>
+
+
+        <subsection>
+          <title>Hypothesis Testing and <m>\chi^2</m></title>
+
+
+          <remark xml:id="remark-hypothesistestingchisquare">
+            <title>Steps to <m>\chi^2</m> Hypothesis Testing: Goodness of Fit</title>
+            <p>
+              Given the set of hypothesis:
+              <ul>
+            <li><m>H_0</m>:<q>The sample comes from the proposed distribution.</q></li>
+            <li><m>H_A</m>:<q>The sample <em>does not</em> come from the proposed distribution.</q></li>
+          </ul>
+            We compute the <m>p</m>-value to be the area of the tail on the <m>\chi^2</m> distribution corresponding to the <m>\chi^2</m> value computed via <xref ref="remark-chiteststat"/> and with <m>k-1</m> degrees of freedom (recall that <m>k</m> is the number of possible values of the categorical variable.)
+          </p>
+          <p>
+            As in other hypothesis testing scenarios, the <m>p</m>-value measures the probability that, if we assume the null hypothesis, that we see values as or more extreme than what was observed.
+          </p>
+          <p>
+            We then reject or accept the null based on the level of significance <m>\alpha</m> which is as before usually 0.05 or 5%.  If the <m>p</m>-value is less than <m>\alpha</m>, we reject the null hypothesis, otherwise we accept it.  In this context, accepting the null is to say the sample could plausibly come from the proposed distribution.  If we reject that then we say it is implausible that it does.
+          </p>
+        </remark>
+
+
+
+          <activity xml:id="activity-jurydemotest">
+              <title>Racial Demographics and Jurors</title>
+              <introduction>
+            <p>Recall from <xref ref="activity-jurydemostats"/> that we have a sample of size <m>n=300</m> where 237 are White, 26 are Black, 24 are Hispanic and 13 are Asian.  We also have a proposed distribution: 70% White, 15% Black, 10% Hispanic and 5% Asian.</p>
+
+            <p>We also note that since each juror could be one of 4 races, that <m>k=4</m>.
+          </p>
+
+          <p>
+            <sage language="r">
+                      <input>
+                      pchisq(FIXME, FIXME, ncp = 0, lower.tail = FALSE)
+
+        
+                      </input>
+                      </sage>
+
+            <interactive desmos="gtwsvcggpo"/>
+          </p>
+            
+        </introduction>
+        <task>
+              <p>Compute the number of degrees of freedom.</p>
+              </task>
+
+               <task>
+              <p>Using the <m>\chi^2</m> value found in <xref ref="activity-jurydemostats"/> and the degrees of freedom, compute the <m>p</m>-value.</p>
+              </task>
+
+              <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  If we had a level of significance <m>\alpha=0.05</m>, do we  reject the null hypothesis?
+                </p>
+              </task>
+
+               <task>
+                <p>
+                  Is it plausible that the juror racial demographics is identical to that of the town?
+                </p>
+              </task>
+
+          </activity>
+
+
+          <activity xml:id="activity-techchisquare">
+              <title><m>\chi^2</m>-testing with Technology</title>
+              <introduction>
+                  <p>Your main task as a statistics practioner is to understand and interpret the results of computation.  We prefer to let machines do the actual computations as much as possible.  Here we will use technology to simplify the process of computing <m>p</m>-values.</p>
+
+                  </introduction>
+
+                   <task>
+                <p>
+                  In <c>O_bs=[]</c>, enter in the observed racial demographics from <xref ref="exploration-jurydemo"/>: <c>237, 26, 24, 13</c>.  Then in <c>E_xpectedproportions=[]</c>, enter in the proposed distribution from <xref ref="exploration-jurydemo"/>: <c>0.7, 0.15, 0.1, 0.05</c>.
+                  <interactive desmos="n7im2nvrmb"/>
+                </p>
+                <p>
+                  What is the <m>p</m>-value?  How does it compare to what you found in <xref ref="activity-jurydemotest"/>?
+                </p>
+              </task>
+
+               <task>
+                <p>
+                  Run the following code, noting the first vector is the vector of racial demographics, and the second vector is the proposed distribution, to compute a <m>p</m>-value.
+                 <sage language="r">
+                      <input>
+                      chisq.test(c(237,26,24,13), p = c(0.7, 0.15, 0.1, 0.05), correct=FALSE)
+
+        
+                      </input>
+                      </sage>
+                </p>
+                <p>
+                  What is the <m>p</m>-value?  How does it compare to what you found in <xref ref="activity-jurydemotest"/>?
+                </p>
+              </task>
+                  
+              
+          </activity>
+
+
+          <activity xml:id="activity-skittles">
+              <title>Skittle Color Distributions</title>
+              <introduction>
+                  <p>Skittles come in 5 colors.  Red, Green, Orange, Purple and Yellow.  Are the Skittle colors evenly distributed?  One of your friends says yes, another disagrees.</p>
+
+                   <p>
+                 <sage language="r">
+                      <input>
+                      
+        
+                      </input>
+                      </sage>
+
+                      <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="gtwsvcggpo"/>
+                      <interactive desmos="n7im2nvrmb"/>
+
+                    </p>
+
+                  </hint>
+                </p>
+                  
+              </introduction>
+
+              <task>
+                <p>
+                  State a null hypothesis for this <m>\chi^2</m> test.</p>
+                </task>
+
+              <task>
+                <p>
+                  State an alternative hypothesis for this <m>\chi^2</m> test.</p>
+                </task>  
+
+             <task>
+                <p>
+                  Suppose that you then buy a bag of Skittles, dump it out and count the contents.
+
+                  <figure>
+  <image source="images/skittles.jpeg" width="75%" >
+      <description>A bag of Skittles.</description>
+
+    </image>
+<caption> A content of a bag of Skittles, 18 Red, 13 Green, 9 Yellow, 11 Purple and 9 Orange. </caption>
+</figure>
+
+<me>
+\begin{array}{|c|c|c|c|c|c|}
+\hline
+\text{Color} \amp \text{Red} \amp \text{Green} \amp \text{Yellow} \amp \text{Purple} \amp \text{Orange}\\
+\hline
+\text{Count} \amp 18 \amp 13 \amp 9 \amp 11 \amp 9\\
+\hline
+\end{array}
+</me>
+How many Skittles <m>n</m> are in the bag?  How many colors <m>k</m>?  How many degrees of freedom are there?
+                </p>
+                </task>
+
+                <task>
+                <p>
+                  If the null hypothesis were true, what is the expected number of skittles of each color in a sample of size <m>n</m>?
+                </p>
+              </task>
+
+                <task>
+                <p>
+                  Use any method to compute a <m>\chi^2</m> statistic.</p>
+                </task>     
+
+                <task>
+                <p>
+                  Use any method to compute a <m>p</m>-value.</p>
+                </task>
+
+                <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                <task>
+                <p>
+                  If we had a level of significance <m>\alpha=0.05</m> do we  reject the null hypothesis?</p>
+                </task>
+
+                <task>
+                <p>
+                  Is it plausible for Skittle colors to be evenly distributed?
+                </p>
+              </task>
+
+          </activity>
+
+
+
+          <activity xml:id="activity-maleheight">
+            <title>Male Heights and Normal Distribution</title>
+            <introduction>
+                <p>
+                We examine data from a random selection of adult males to see if their heights are possibly normally distributed.
+
+
+              </p>
+
+              <p>
+                Run the following code to download the <c>male_heights.csv</c> data set and to display it's variables.
+
+                <sage language="r">
+                      <input>
+                      male_heights = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/male_heights.csv")
+                      names(male_heights)
+                      </input>
+                      </sage>
+              </p>
+
+
+
+
+            </introduction>
+
+            <task>
+              <p>
+                We begin by examining the heights of adult males in inches.  Run the following code to see the sample mean and standard deviation for the heights of adult males in inches, and set them to be <c>m</c> and <c>std</c> respectively.
+                <sage language="r">
+                      <input>
+                      m=mean(male_heights$heights)
+                      std=sd(male_heights$heights)
+                      print(m)
+                      print(std)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+
+              <task>
+              <p>
+                <alert>IF</alert> adult male heights were normally distributed, we would expect it to be approximated by a normal random variable <m>X</m> with mean <m>\mu=m</m> and standard deviation <m>\sigma=std</m>.  Confirm that if we subdivide a normal distribution into intervals of length <m>std</m>, we would have:
+                <md>
+                  <mrow>P(X\lt m-3std)\amp \approx 0.0014</mrow>
+                  <mrow>P(m-3std\leq X\lt m-2std)\amp \approx 0.0214</mrow>
+                  <mrow>P(m-2std\leq X\lt m-std)\amp \approx 0.1359</mrow>
+                  <mrow>P(m-std\leq X\lt m)\amp \approx 0.3413</mrow>
+                  <mrow>P(m\leq X\lt m+std)\amp \approx 0.3413</mrow>
+                  <mrow>P(m+std\leq X\lt m+2std)\amp \approx 0.1359</mrow>
+                  <mrow>P(m+2std\leq X\lt m+3std)\amp \approx 0.0214</mrow>
+                  <mrow>P(X\geq m+3std)\amp \approx 0.0014</mrow>
+                </md>
+
+                <figure>
+<caption>A normal curve segemented into lengths of one standard deviation.</caption>      
+      <image>
+ <description>A normal curve segemented into lengths of one standard deviation.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=cyan!20, draw=none, domain=-3:-2] {gauss(0,1)} \closedcycle;
+  \addplot [fill=cyan!20, draw=none, domain=2:3] {gauss(0,1)} \closedcycle;
+  \addplot [fill=purple!20, draw=none, domain=-2:-1] {gauss(0,1)} \closedcycle;
+  \addplot [fill=purple!20, draw=none, domain=1:2] {gauss(0,1)} \closedcycle;
+  \addplot [fill=red!20, draw=none, domain=-1:0] {gauss(0,1)} \closedcycle;
+  \addplot [fill=red!20, draw=none, domain=0:1] {gauss(0,1)} \closedcycle;
+
+  \draw (axis cs:0,-0.02) --node[below]{$\mu$} (axis cs:0,-0.02);
+  \draw (axis cs:1,-0.02) --node[below]{\tiny$\mu+\sigma$} (axis cs:1,-0.02);
+  \draw (axis cs:2,-0.02) --node[below]{\tiny$\mu+2\sigma$} (axis cs:2,-0.02);
+  \draw (axis cs:3,-0.02) --node[below]{\tiny$\mu+3\sigma$} (axis cs:3,-0.02);
+  \draw (axis cs:-1,-0.02) --node[below]{\tiny$\mu-\sigma$} (axis cs:-1,-0.02);
+  \draw (axis cs:-2,-0.02) --node[below]{\tiny$\mu-2\sigma$} (axis cs:-2,-0.02);
+  \draw (axis cs:-3,-0.02) --node[below]{\tiny$\mu+-3\sigma$} (axis cs:-3,-0.02);
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.39894);
+  \draw (axis cs:1,-0.02) -- (axis cs:1,0.24197);
+  \draw (axis cs:2,-0.02) -- (axis cs:2,0.054);
+  \draw (axis cs:3,-0.02) -- (axis cs:3,0.00443);
+  \draw (axis cs:-1,-0.02) -- (axis cs:-1,0.24197);
+  \draw (axis cs:-2,-0.02) -- (axis cs:-2,0.054);
+  \draw (axis cs:-3,-0.02) -- (axis cs:-3,0.00443);
+
+  
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+
+                <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+                    </p>
+                  </task>    
+
+            <task>
+              <p>
+                Run the following code to compute the actual number of adult males were less than <m>m-3std</m> inches.
+                <sage language="r">
+                      <input>
+                        length(which(m-3*std>male_heights$heights))
+                      </input>
+                      </sage>
+                  
+              </p> 
+            </task>            
+
+            <task>
+              <p>
+                Run the following code to compute the actual number of adult males whose heights were between <m>m-3std, m-2std</m> inches.
+                <sage language="r">
+                      <input>
+                        length(which(male_heights$heights>=m-3*std &amp; m-2*std>male_heights$heights))
+                      </input>
+                      </sage>
+                  
+              </p> 
+            </task>
+
+            <task>
+              <p>
+                Edit and run the above code for the remaining intervals, and record the number of adult males within them.
+                
+                  
+              </p> 
+            </task>
+
+           
+
+              <task>
+              <p>
+                Edit and run the following code to run the <m>\chi^2</m> goodness of fit test to see if the number of occurences in each interval corresponds to the theoritical value.
+                <sage language="r">
+                      <input>
+                      chisq.test(c(FIXME, FIXME, FIXME, FIXME, FIXME, FIXME, FIXME, FIXME), p=c(0.0014, 0.0214, 0.1359, 0.3413, 0.3413, 0.1359, 0.0214, 0.0014), correct=FALSE)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>    
+
+                  <task>
+                <p>
+                  State a null hypothesis for this <m>\chi^2</m> test.</p>
+                </task>
+
+              <task>
+                <p>
+                  State an alternative hypothesis for this <m>\chi^2</m> test.</p>
+                </task>  
+
+
+                   <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                <task>
+                <p>
+                  If we had a level of significance <m>\alpha=0.05</m> do we  reject the null hypothesis?</p>
+                </task>
+
+                <task>
+                <p>
+                  Is it plausible for adult male heights to be normally distributed?
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Run the following code to plot a histogram of the adult male heights in inches and see how well a normal distribution matches this distribution.
+
+                  <sage language="r">
+                      <input>
+                      hist(male_heights$heights, prob=TRUE, breaks=15)
+                      curve(dnorm(x, mean=m, sd=std), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+
+                      </input>
+                      </sage>
+                </p>
+              </task>
+
+        </activity>
+
+
+
+
+
+
+
+
+
+
+
+
+        </subsection>
+
+
+</section>

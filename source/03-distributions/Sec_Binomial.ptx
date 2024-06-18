@@ -1,0 +1,418 @@
+<section xml:id="Sec_Binomial">
+
+    <title>Binomial Distribution (D4)</title>
+
+   <introduction>
+        <p> In this section, we explore the <em>binomial probability distribution</em> .</p>
+        
+
+    <exploration xml:id="exploration-freethrow">
+        <title>Free Throws</title>
+
+        <introduction>
+            <p>Suppose a basketball player has a 90% chance shot of making a free-throw, and suppose that the success of each free-throw was <em>independent</em> of each other.  If she took 4 shots, the probability that she makes the first two and misses the last two would be:
+
+            <me>P(F_1=\text{score})P(F_2=\text{score})P(F_3=\text{miss})P(F_4=\text{miss})=(0.9)(0.9)(0.1)(0.1)=0.0081</me>
+
+            where <m>F_i</m> denotes the outcome of the <m>i</m>th free throw.
+
+          </p>
+            
+        </introduction>
+
+        <task>
+            <p>What is the probability that she takes 4 free throws, makes the last two shots, but misses the first two?</p>
+        </task>
+
+        <task>
+            <p>What is the probability that she takes 4 free throws, makes the first and third shots, but misses the other two?</p>
+        </task>
+
+        <task>
+            <p>What do we notice about the probabilities found in (a) and (b)?</p>
+        </task>
+
+        <task>
+            <p>Using <xref ref="definition-combination"/>, how many ways can we select 2 our of 4 free-throws for her to make?</p>
+        </task>
+
+
+    </exploration>
+
+        </introduction>
+
+<subsection>
+  <title>Binomial Probabilities</title>
+
+
+    <definition xml:id="DefinitionBinomial">
+  <p>
+    Given <m>n</m> <em>independent</em> trials, each of which has <m>p</m> probability of success, let <m>X</m> denote the number of successes attained.  We call <m>X</m> a <term>binomial random variable</term>.  The probability that exactly <m>k</m> successes are attained is: <me>P(X=k)=C(n,k) p^k (1-p)^{n-k}.</me>
+  </p>
+</definition>  
+
+<remark>
+  <p>
+    <ul>
+      <li>The <m>C(n,k)</m> stems from the number of ways to select <m>k</m> out of <m>n</m> trials to be succesful.</li>
+      <li>The <m>p^k</m> comes from the probability that the <m>k</m> selected trials are succesful.</li>
+      <li>The <m>(1-p)^{n-k}</m> comes from the probability that the remaining <m>n-k</m> not-selected trials are unsuccesful.</li>
+    </ul>
+  </p>
+</remark>
+
+<activity xml:id="activity-snowwhite">
+    <title>Snow White</title>
+  <introduction>
+        <p>
+          A <em>binomial</em> random variable must:
+          <ul>
+            <li><p>Have a fixed number of trials.</p></li>
+            <li><p>Have a fixed probability of success per trial.</p></li>
+            <li><p>Have trials that are independent of each other.</p></li>
+          </ul>
+          For the following, identify which of the above fail.
+        </p>
+        
+    </introduction>
+    <task>
+            <p>There are 10 apples, 4 are poisoned, Snow White picks 3 at random and eats them, let <m>X</m> denote the number of poisoned apples she eats.</p>
+        </task>
+
+        <task>
+            <p>There are 10 apples, they are all either poisoned or all not poisoned with a 50/50 chance each.  Snow White eats 3 apples and let <m>X</m> denote the number of poisoned apples she eats.</p>
+        </task>
+
+        <task>
+            <p>There are 10 apples, each has a 10% chance of being poisoned, independently of the others.  Snow White eats  apples until she has a poisoned apple, let <m>X</m> denote the number of total apples she eats.</p>
+        </task>
+
+</activity>
+
+
+
+
+
+<activity xml:id="activity-freethrow">
+        <title>Free Throws</title>
+
+        <introduction>
+            <p>Consider the basketball player from <xref ref="exploration-freethrow"/>, taking <m>n=4</m> free throws with a <m>p=0.9</m> probability of each free-throw being a success.  Let <m>X</m> denote the number of succesful free throws.
+
+          </p>
+            
+        </introduction>
+
+        <task>
+            <p>What is the probability that she makes exactly 2 free throws, that is, <m>P(X=2)</m>?</p>
+        </task>
+
+        <task>
+      <p>
+        Run the following code to simulate 1000 trials of <c>freethrows=4</c> free throws taken with <c>p=0.9</c> probability of success each, and plot a histogram of the number of succesful free throws:
+        <sage language="r">
+          <input>
+        numbaskets = rep(0, 1000)
+
+        freethrows=4
+        p=0.9
+
+        for(i in 1:freethrows){
+          numbaskets=numbaskets+sample(c(1, 0), 1000, replace = TRUE, prob = c(p, 1-p)) 
+        }
+        hist(numbaskets)
+        print(freethrows)
+        </input>
+        </sage>
+      </p>
+      
+    </task>
+
+    <task>
+      <p>
+        Run the following code to see how many of these trials resulted in two succesful free throws:
+        <sage language="r">
+          <input>
+        length(which(numbaskets==2))
+        </input>
+        </sage>
+        How does this compare to what you found in (a)?
+      </p>
+      
+    </task>
+
+        <task>
+            <p>Suppose her less experienced teammate only has a <m>p=0.65</m> chance of making a shot.  If she takes 5 free throws, what are the chances she makes exactly <m>k=3</m> free throws? </p>
+        </task>
+
+
+        <task>
+      <p>
+        Modify and run the following code to simulate 1000 trials of  free throws for the teammate and plot a histogram of the number of succesful free throws:
+        <sage language="r">
+          <input>
+        numbasketsTM = rep(0, 1000)
+
+        freethrows=FIXME
+        p=FIXME
+
+        for(i in 1:freethrows){
+          numbasketsTM=numbasketsTM+sample(c(1, 0), 1000, replace = TRUE, prob = c(p, 1-p)) 
+        }
+        hist(numbasketsTM)
+        print(freethrows)
+        </input>
+        </sage>
+      </p>
+      
+    </task>
+
+    <task>
+      <p>
+        Modify and run the following code to see how many of these trials resulted in three succesful free throws:
+        <sage language="r">
+          <input>
+        length(which(numbasketsTM==FIXME))
+        </input>
+        </sage>
+        How does this compare to what you found in (a)?
+      </p>
+      
+    </task>
+
+
+    </activity>
+
+
+    <remark>
+      <p>
+        One can use <c>Desmos</c> or <c>R</c> to directly compute binomial probabilities.  The following compute the probability that a binomial random vairable <m>X</m> with <m>n=5</m> trials, each with probability <m>p=0.65</m> probability of success, has <m>k=4</m> successes</p>.
+        <p>
+          <interactive desmos="wylreozgmh"/>
+          <sage language="r">
+          <input>
+        dbinom(4, 5, 0.65)
+        </input>
+        </sage>
+        </p>
+      </remark>
+
+
+      <activity xml:id="activity-meeting">
+          <title>Meeting Time</title>
+          <introduction>
+              <p>A department chair calls for a meeting at a certain time.  The ten faculty in the department each have a 60% chance of making the meeting.  Assume whether or not a professor can make the meeting is independent of the other faculty.  Let <m>X</m> denote the number of professors who can make the meeting.</p>
+              <p>
+          <interactive desmos="7xuuzqjkdm"/>
+          <sage language="r">
+          <input>
+        dbinom(FIXME, FIXME, FIXME)
+        </input>
+        </sage>
+        </p>
+              
+          </introduction>
+
+          <task>
+            <p>Compute <m>P(X=k)</m> for <m>k=8, 9</m> and <m>10</m>.</p>
+          </task>
+
+          <task>
+            <p>Sum the values you found in (a) to find the probability that at least 8 professors make the meeting (<m>P(X\geq 8)</m>).</p>
+          </task>
+
+          <task>
+            <p>If less than 4 professors make the meeting, how many professors could have made the meeting?</p>
+          </task>
+
+          <task>
+            <p>Find the probability that less than 4 professors make the meeting.</p>
+          </task>
+
+          <task>
+           <p> In the <c>Desmos</c> above, set <c>Min:8</c>, <c>Max:10</c> and compare the output to what you found in (a).</p>
+          </task>
+
+          <task>
+            <p>In the <c>Desmos</c> above, set <c>Min:</c> and <c>Max:</c> to values which correspond to <q>less than 4</q>.  (Less than 4 would mean 4 is not included.)  Compare the output to what you found in (d).</p>
+          </task>
+
+          <task>
+            <p>
+            Run the following to compute the probability that 3 or fewer professors would make the meeting:
+
+             
+          <sage language="r">
+          <input>
+        pbinom(3, 10, 0.6, lower.tail = TRUE)
+        </input>
+        </sage>
+        </p>
+
+      </task>
+
+      <task>
+            <p>
+            Run the following to compute the probability that more than 7 professors would make the meeting:
+
+             
+          <sage language="r">
+          <input>
+        pbinom(7, 10, 0.6, lower.tail = FALSE)
+        </input>
+        </sage>
+        </p>
+
+      </task>
+
+      <task>
+        <p>
+          What is the probability that at least 4 and at most 7 professors make the meeting?
+        </p>
+      </task>
+
+
+
+
+
+
+      </activity>
+
+    </subsection>
+
+    <subsection>
+      <title>Expectation and Variance</title>
+
+      <activity xml:id="activity-freethrowexpvar">
+          <title>Free Throws Revisited.</title>
+          <introduction>
+              <p>Recall the basketball player from <xref ref="activity-freethrow"/> with a <m>p=0.9</m> chance of making a free throw.  Suppose she takes 4 shots and let <m>X</m> denote the number of succesful shots.
+        </p>
+              
+          </introduction>
+
+          <task>
+            <p>Since she makes 90% of her free throws, how many baskets on average would she make with 4 shots?</p>
+          </task>
+
+          <task>
+            <p>Compute <m>P(X=0)</m>, <m>P(X=1)</m>, <m>P(X=2)</m>, <m>P(X=3)</m>, <m>P(X=4)</m>.</p>
+          </task>
+
+          <task>
+            <p>Use <xref ref="remark-expectedvalue"/> to compute <m>E(X)</m>.  How does this value compare to (a)?</p>
+          </task>
+
+
+
+          <task>
+            <p>Use <xref ref="remark-varianceRV"/> to compute <m>Var(X)</m>.</p>
+          </task>
+
+          
+
+          <task>
+            <p>
+            Run the following to compute the average number of baskets made in the simulation from <xref ref="activity-freethrow"/>:
+
+             
+          <sage language="r">
+          <input>
+        mean(numbaskets)
+        </input>
+        </sage>
+        How does this value compare to what you found in (c)?
+        </p>
+
+      </task>
+
+      <task>
+            <p>
+            Run the following to compute the variance of baskets made in the simulation from <xref ref="activity-freethrow"/>:
+
+             
+          <sage language="r">
+          <input>
+        var(numbaskets)
+        </input>
+        </sage>
+        How does this value compare to what you found in (d)?
+        </p>
+
+      </task>
+
+
+
+
+
+
+      </activity>
+
+      <remark>
+        <p>
+          Because of the regularity of binomial random variables, there is a special way to compute mean and variance of <em>binomial</em> random variables.
+        </p>
+      </remark>
+
+
+      <activity xml:id="activity-freethrowexpvar2">
+          <title>Free Throws Revisited Again.</title>
+          <introduction>
+              <p>Recall the basketball player from <xref ref="activity-freethrow"/> with a <m>p=0.9</m> chance of making a free throw.  Suppose she takes 4 shots and let <m>X</m> denote the number of succesful shots.
+        </p>
+
+        <p>
+          Let <m>X_i</m> denote the number of baskets made by shot <m>i</m>.  Note that the probability distribution of each <m>X_i</m> would be:
+          
+          <me>
+  \begin{array}{|c|c|c|}
+  \hline
+  k \amp 0 \amp 1   \\
+  \hline
+  P(X_i=k) \amp 0.1 \amp 0.9  \\
+  \hline
+  \end{array}
+</me>
+        and that <me>X=X_1+X_2+X_3+X_4</me> that is, her total number of baskets is equal to the sum of the baskets scored per shot. 
+        </p>
+              
+          </introduction>
+
+          <task>
+            <p>Use <xref ref="remark-expectedvalue"/> to compute <m>E(X_i)</m>.</p>
+          </task>
+
+           <task>
+            <p>Use <xref ref="remark-linofEandV"/> to compute <m>E(X)</m>.  How does this value compare to what you found in <xref ref="activity-freethrowexpvar"/> (c)?</p>
+          </task>
+
+          <task>
+            <p>Use <xref ref="remark-varianceRV"/> to compute <m>Var(X_i)</m>.</p>
+          </task>
+
+           <task>
+            <p>Use <xref ref="remark-linofEandV"/> to compute <m>VarE(X)</m>.  How does this value compare to what you found in <xref ref="activity-freethrowexpvar"/> (d)?</p>
+          </task>
+
+
+
+      </activity>
+
+
+      <remark xml:id="remark-normalapproximation">
+        <p>
+          Given a <em>binomial</em> random variable <m>X</m> with <m>n</m> trials and <m>p</m> probability of success per trial, we have: <me>E(X)=np, Var(X)=np(1-p), \sigma_X=\sqrt{np(1-p)}.</me>  <em>This only applies to binomial random variables.</em>
+        </p>
+      </remark>
+
+
+
+
+    </subsection>
+
+
+
+
+
+
+</section>

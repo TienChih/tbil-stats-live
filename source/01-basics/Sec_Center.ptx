@@ -1,0 +1,569 @@
+<section xml:id="Sec_Center">
+
+    <title>Centers of Data (B4)</title>
+<introduction>
+  <p>
+    When using data to make predictions about random variables, it is useful to be able to discuss the notion of central or <q>average</q> values of that data.  There are different ways to approach this. 
+  </p>
+  
+  <p>
+    In this section, we will show how to identify and compute different notions of centrality.
+  </p>
+
+
+
+    <p>
+  Run the following code to download the <c>ncbirths.csv</c> data set:
+
+  <sage language="r">
+          <input>
+            ncbirths = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/ncbirths.csv")
+            names(ncbirths)
+            
+          </input>
+        </sage>
+
+</p>
+
+<p>
+  In 2004, the state of North Carolina released to the public a large data set containing information on births recorded in this state. This data set has been of interest to medical researchers who are studying the relation between habits and practices of expectant mothers and the birth of their children. This is a random sample of 1,000 cases from this data set.
+
+
+</p>
+
+</introduction>
+
+
+    <exploration xml:id="measurements-center-preview">
+        <introduction>
+            <p>
+A group of seven friends decides to compare their tax refunds,
+listed in <xref ref="measurements-center-refunds"/>.
+            </p>
+            <table xml:id="measurements-center-refunds">
+                <title>Seven tax refunds</title>
+                <tabular>
+                    <row>
+                        <cell>$3,000</cell>
+                        <cell>$3,000</cell>
+                        <cell>$3,000</cell>
+                        <cell>$3,500</cell>
+                    </row>
+                    <row>
+                        <cell>$3,700</cell>
+                        <cell>$3,800</cell>
+                        <cell>$15,000</cell>
+                        <cell></cell>
+                    </row>
+                </tabular>
+            </table>
+            <p>
+For each of the given quotes, write a sentence or two explaining whether you agree or disagree
+with the speaker.
+            </p>
+        </introduction>
+        <task>
+            <p>
+<q>The most common tax refund is $3,000. Therefore, the average tax refund in this group is $3,000.</q>
+            </p>
+        </task>
+        <task>
+            <p>
+<q>When ordered from least to greatest, the middle tax refund is $3,500.
+Therefore, the average tax refund in this group is $3,500.</q>
+            </p>
+        </task>
+        <task>
+            <p>
+<q>When the seven refunds are added together and divided by <m>7</m>, the result is $5,000.
+Therefore, the average tax refund in this group is $5,000.</q>
+            </p>
+        </task>
+    </exploration>
+    <activity>
+        <introduction>
+            <p>
+There are several notions of <q>average</q>, that is, several ways to describe the
+center of a dataset.
+            </p>
+            <p>
+Most commonly, <q>average</q> is used to describe the <term>mean</term> of a dataset.
+If a dataset contains the <m>n</m> values <m>x_0,x_1,\dots,x_{n-1}</m>, then the
+mean is defined by the following formula:
+            </p>
+            <me>
+\frac{1}{n}\sum_{0\leq k&lt; n} x_k = \frac{x_0+x_1+\dots+x_{n-1}}{n}
+            </me>
+            <p>
+For example, the mean of the counting numbers <m>2,3,5,7,18</m> is <m>\frac{2+3+5+7+18}{5}=7</m>:
+all the values in the collection are added together, and then divided by the amount of data
+in the collection.
+            </p>
+        </introduction>
+        <task>
+            <p>
+Show that <m>8</m> is the mean of the counting numbers <m>4,8,9,11</m>.
+            </p>
+        </task>
+        <task>
+            <p>
+Is it possible for the mean of a dataset to not belong to the dataset itself?
+If so, give an example of such a dataset. If not, explain why.
+            </p>
+        </task>
+        
+    </activity>
+
+<activity xml:id="activity-ncbirthsmean">
+    <title>Birth Weight Mean</title>
+    <task>
+      <p>
+      Run the following code to display the mean of the birth weight of babies from North Carolina in 2004 in pounds:
+      <sage language="r">
+          <input>
+          mean(ncbirths$weight)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+      <p>
+      Run the following code to display the histogram birth weight of babies from North Carolina in 2004 in pounds, along with the mean:
+      <sage language="r">
+          <input>
+          m=mean(ncbirths$weight)
+          hist(ncbirths$weight)
+          abline(v = m, col = "red")
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     
+
+
+
+</activity>
+
+
+<activity xml:id="activity-ncbirthsmean2">
+    <title>Mean of Variable of Choice</title>
+    <task><p>
+      Follow this link and identify a numerical vairable whose mean you wish to find. <url href="https://www.openintro.org/data/index.php?data=ncbirths"/>.
+    </p></task>
+    <task>
+      <p>
+      Edit the following code to display the mean of your chosen variable:
+      <sage language="r">
+          <input>
+          mean(ncbirths$FIXME)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+
+          <task>
+      <p>
+      Run the following code to display the histogram for your variable, along with the mean:
+      <sage language="r">
+          <input>
+          m=mean(ncbirths$FIXME)
+          hist(ncbirths$FIXME)
+          abline(v = m, col = "red")
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+</activity>
+
+
+
+<p>
+  For smaller data sets, <c>Desmos</c> is a useful way to compute the mean.  Enter your Data into <c>L=[...]</c>
+
+      <interactive desmos="gvpcc933r0"/>
+
+</p>
+
+
+<definition>
+  <p> We use:
+    <ul>
+      <li><m>\bar{x}</m> the <em>sample mean</em> to denote the mean of data set representing a sample.</li>
+      <li><m>\mu</m> the <em>population mean</em> to denote the mean of data set representing a population.</li>
+    </ul>
+  </p>
+</definition>
+
+
+
+
+<activity>
+        <introduction>
+            <p>
+When data is ordered from least to greatest, the middle value is called its <term>median</term>.
+For example, the median of <m>1,1,6,7,9</m> is <m>6</m>.
+            </p>
+        </introduction>
+        <task>
+            <p>
+Find the median of <m>9,12,3,0,11,9,2</m>.
+            </p>
+        </task>
+        <task>
+            <p>
+If a dataset has two middle values, <m>a</m> and <m>b</m>, then their mean <m>\frac{a+b}{2}</m>
+is used as the median. For example, the median of <m>4,6,7,9,10,13</m> is <m>\frac{7+9}{2}=8</m>.
+            </p>
+            <p>
+Make up a collection of six numbers such that its median is <m>5.5</m>.
+            </p>
+        </task>
+        
+    </activity>
+
+
+
+
+
+
+
+
+<activity xml:id="activity-ncbirthsmedian">
+    <title>Birth Weight Median</title>
+    <task>
+      <p>
+      Run the following code to display the median of the birth weight of babies from North Carolina in 2004 in pounds:
+      <sage language="r">
+          <input>
+          median(ncbirths$weight)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+      <p>
+      Run the following code to display the histogram birth weight of babies from North Carolina in 2004 in pounds, along with the mean:
+      <sage language="r">
+          <input>
+          md=median(ncbirths$weight)
+          hist(ncbirths$weight)
+          abline(v = md, col = "blue")
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     
+
+
+
+</activity>
+
+
+
+
+
+
+<activity xml:id="activity-ncbirthsmedian2">
+    <title>Median of Variable of Choice</title>
+    <task><p>
+      Follow this link and identify a numerical vairable whose median you wish to find. <url href="https://www.openintro.org/data/index.php?data=ncbirths"/>.
+    </p></task>
+    <task>
+      <p>
+      Edit the following code to display the mean of your chosen variable:
+      <sage language="r">
+          <input>
+          median(ncbirths$FIXME)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+
+          <task>
+      <p>
+      Run the following code to display the histogram for your variable, along with the median:
+      <sage language="r">
+          <input>
+          md=median(ncbirths$FIXME)
+          hist(ncbirths$FIXME)
+          abline(v = md, col = "blue")
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+</activity>
+
+
+
+
+
+
+<activity xml:id="activity-meanvsmedian">
+    <title>Comparing Means to Medians</title>
+<task>
+  <p>
+    In the following list of data, would you describe the difference between the mean and median minor or significant?
+
+    <interactive desmos="wyzhftpu0y"/>
+   </p> 
+</task>
+
+<task>
+  <p>
+    In the following list of data, would you describe the difference between the mean and median minor or significant?
+
+    <interactive desmos="k9utln7vtj"/>
+   </p> 
+</task>
+
+<task>
+  <p>
+    In the <c>Desmos</c> graph below, add data points to the end of <c>L=[4,4,5,5,5,6,6,6,7,7]</c> so that the median is significantly greater than the mean.
+
+    <interactive desmos="kedaxao5sn"/>
+   </p> 
+</task>
+
+<task>
+  <p>
+    In the <c>Desmos</c> graph below, add data points to the end of <c>L=[4,4,5,5,5,6,6,6,7,7]</c> so that the median is significantly less than the mean.
+
+    <interactive desmos="kedaxao5sn"/>
+   </p> 
+</task>
+
+<task>
+  <p>
+    What do you suppose causes a data set to have a median be significantly greater than or less than the mean?
+  </p>
+</task>
+
+</activity>
+
+
+
+
+<definition>
+  <p>
+    <ul>
+      <li>A numerical variable is said to have <em>positive skew</em> or <em>right skew</em> if there is a tail or outliers to the right of the bulk of the data.  This is categorized by the mean being greater than the median.  (Intuitively, the tail values or outliers <q>pull up</q> the value of the mean.)
+
+      <figure>
+      <image source="images/positiveskew.png" width="75%" >
+      <description>A Positive Skewed Data Set.</description>
+    </image>
+    <caption>A Positive Skewed Data Set.</caption>
+  </figure>
+
+    </li>
+
+      <li>A numerical variable is said to have <em>negative skew</em> or <em>left skew</em> if there is a tail or outliers to the left of the bulk of the data.  This is categorized by the mean being less than the median.  (Intuitively, the tail values or outliers <q>pull down</q> the value of the mean.)
+
+
+      <figure>
+      <image source="images/negativeskew.png" width="75%" >
+      <description>A Negative Skewed Data Set.</description>
+    </image>
+    <caption>A Negative Skewed Data Set.</caption>
+  </figure>
+
+
+    </li>
+
+
+    <li>A numerical variable is said to have <em>no skew</em> or <em>symmetric</em> if the left and right extremal behavior resemble each other.  This is categorized by the mean being equal than the median. 
+
+
+      <figure>
+      <image source="images/noskew.png" width="75%" >
+      <description>A Symmetric Data Set.</description>
+    </image>
+    <caption>A Symmetric Data Set.</caption>
+  </figure>
+
+
+    </li>
+
+    </ul>
+   </p>
+   
+ </definition>   
+
+
+
+
+
+
+
+
+
+<activity xml:id="activity-ncbirthsskew">
+    <title>Birth Weight Skew</title>
+    <task>
+      <p>
+      Run the following code to create a new data set, which consists of the subset of the originasl data set where the Mother was a smoker:
+      <sage language="r">
+          <input>
+          smoke=subset(ncbirths, habit=="smoker")
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+      <p>
+      Run the following code to display the histogram birth weight of babies whose mother smoked, along with the mean and median weights:
+      <sage language="r">
+          <input>
+          m=mean(smoke$weight)
+          md=median(smoke$weight)
+          hist(smoke$weight)
+          abline(v = m, col = "red")
+          abline(v = md, col = "blue")
+
+          print(m)
+          print(md)
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+
+     <task>
+         <p>What does this tell you about the skewness of the birth weights of babies who's mothers smoked?</p>
+     </task>
+     
+
+
+
+</activity>
+
+
+
+
+<activity xml:id="activity-ncbirthsskew2">
+    <title>Skew of Variable of Choice</title>
+    <task>
+      <p>
+      Edit the following code and run it to create a new data set, based on whatever criteria you want this set to have:
+      <sage language="r">
+          <input>
+          FIXME=subset(ncbirths, FIXME)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+     <task>
+      <p>
+      Edit  the following code to display the histogram of whatever numerical variable you choose, along with the mean and median:
+      <sage language="r">
+          <input>
+          m=mean(FIXME$FIXME)
+          md=median(FIXME$FIXME)
+          hist(FIXME$FIXME)
+          abline(v = m, col = "red")
+          abline(v = md, col = "blue")
+
+          print(m)
+          print(md)
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+
+     <task>
+         <p>What does this tell you about the skewness of the the variable in question?</p>
+     </task>
+     
+
+
+
+</activity>
+
+
+
+
+
+
+
+    <activity>
+        <introduction>
+            <p>
+The <term>mode</term> of a dataset is simply its most-repeated value.
+For example, the mode of the collection of values <m>3,3,5,5,5,8,8,9,10,10</m> is <m>5</m>.
+            </p>
+        </introduction>
+        <task>
+            <p>
+Find the mode of the values <m>7, 5, 1, 3, 3, 1, 9, 9, 1, 5</m>.
+            </p>
+        </task>
+        <task>
+            <p>
+It's possible that a dataset may have many different modes. For example,
+both <m>2</m> and <m>5</m> are modes for the values in the list
+<c>[4,2,8,5,5,9,2,7]</c>.
+            </p>
+            <p>
+Make up an example of a dataset with
+seven values that has both <m>4</m> and <m>7</m> as modes.
+            </p>
+        </task>
+        
+    </activity>
+    
+    
+
+<activity xml:id="activity-ncbirthsmode">
+    <title>Length of Pregnancy Mode</title>
+    
+     <task>
+      <p>
+      Run the following code to display the histogram length of pregnancies for mothers from North Carolina in 2004 in weeks:
+      <sage language="r">
+          <input>
+          hist(ncbirths$weeks)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+     
+
+     <task>
+         <p>How is the mode reflected in the histogram?</p>
+     </task>
+
+</activity>
+
+
+
+<activity xml:id="activity-averagecategorical">
+    <title>Averages for Categorical Variables</title>
+
+    <task>
+        <p>For <em>Categorical Varibles</em> which of the notions of average: mean, median, mode, makes sense?  </p>
+    </task>
+</activity>
+
+
+
+</section>

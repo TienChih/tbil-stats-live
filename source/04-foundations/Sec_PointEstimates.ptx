@@ -1,0 +1,483 @@
+<section xml:id="Sec_PointEstimates">
+
+    <title>Point Estimates (F1)</title>
+
+   <introduction>
+        <p> We now begin combining the concepts learned in previous chapters to get to the real heart of statistics.  <em>Variables</em> that occur in the world that we care about are <em>Random Variables</em> that we discuss in <xref ref="Chap_Probability"/>.  But we almost never can work with the variable directly, just a sample of data from that variable as in <xref ref="Chap_DataBasics"/>.  We will use what we learned about <xref ref="Chap_Distributions"/> to make predictions about the original random variable.  </p>
+
+        <p>
+          In this section, we identify point estimates for true parameters.
+        </p>
+    </introduction>
+
+
+        <subsection>
+          <title>Point Estimates vs Parameters of interest</title>
+
+
+ <definition>
+          <p>
+            A statistic about a population we wish to measure or estimate is a <em>parameter of interest</em>.    An estimate of that statistic is a <em>point estimate</em>.  The difference between the  the point estimate and the parameter of interest (positive or negative) is the <em>error</em>.  The <em> sampling error</em> is how much the error will tend to vary between samples.  The <em>sample size</em> is the size of the sample.
+          </p>
+          <p>
+            <em>Bias</em> describes a systematic tendency to over or underestimate the true population value.  We use the sampling techniques in <xref ref="Chap_DataBasics"/> to minimize bias.
+          </p>
+
+        </definition>
+
+
+        <example xml:id="example-parameterpoint">
+            <title>Male African Elephants</title>
+            <p>
+              To predict the mean weight of Male African Elephants, 100 Male African Elephants were weighed, and the average of these 100 elephants was 6175 kg.  The actual mean weight of Male African  Elephants is 6300 kg.
+            </p>
+
+            <p>
+              <ul>
+                <li>The <em>parameter of interest</em> is the mean weight of Male African Elephants.</li>
+                <li>The <em>point estimate</em> is the mean weight of the 100 sampled Male African Elephants, 6175 kg.</li>
+                <li>The <em>error</em> is the difference between the point estimate and the parameter of interest, -225 kg.</li>
+                <li>The <em>sample size</em> is 100 elephants.</li>
+              </ul>
+
+            </p>
+
+        </example>
+
+
+
+
+        <activity xml:id="activity-parameter-of-interest">
+            <title>Parameters of Interest</title>
+            <introduction>
+                <p>For each of the following, determine if the paramter of interest is a <em>mean</em> or a <em>proportion</em>.  (To help answer this, consider if the underlying variable is <em>numerical</em> or <em>categorical</em>.)</p>
+                
+            </introduction>
+
+            <task>
+              <p>
+                200 college students were surveyed to see what the cost of their textbooks were.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                200 college students were surveyed to see if their professors used Open Educational Resources in their courses.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                In a survey, adult women were asked if they experienced sexual discrimination in their place of work.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Adults were asked in a survey how much they spent on groceries every month.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Highschool students were asked how many hours a week they spend on the internet.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Adults were asked if an advanced degree was neccesary for their current occupation.
+              </p>
+            </task>
+
+        </activity>
+
+
+
+
+
+
+        </subsection> 
+      
+
+
+        <subsection>
+          <title>Variability in Point Estimates</title>
+
+          <exploration xml:id="exploration-solarenergy">
+              <title>American's Support for Solar Energy</title>
+
+              <introduction>
+                  <p>Suppose that the proportion of American adults who support the expansion of solar energy were 88%.  If we sampled 1000 random American's, we wouldn't neccesarily expect exactly 88% of them to support Solar Energy would we?  Maybe we would get a group of 1000 that had more support for solar, or less.  How much variability can we expect?</p>
+                  
+              </introduction>
+
+              
+              
+              <task>
+      <p>
+        Run the following code to create a vector of 250 million Americans, of whom 88% support solar energy and 12% do not:
+        <sage language="r">
+          <input>
+        pop_size = 250000000
+        possible_entries = c(rep("support", 0.88 * pop_size), rep("not", 0.12 * pop_size))
+        summary(possible_entries)
+        </input>
+        </sage>
+        
+      </p>
+      
+    </task>
+
+    <task>
+      <p>
+        Run the following code to sample 1000 Americans from this Population:
+        <sage language="r">
+          <input>
+        sample_group=sample(possible_entries, size=1000)
+        summary(sample_group)
+        </input>
+        </sage>
+       
+      </p>
+      
+    </task>
+
+    <task>
+      <p>
+        Run the following code to see what proportion of the sample group support solar energy:
+        <sage language="r">
+          <input>
+        length(which(sample_group=="support"))/1000
+        </input>
+        </sage>
+       What is the error?
+      </p>
+      
+    </task>
+
+    <task>
+            <p>Rerun (b) and (c), what do we notice about the error?</p>
+        </task>
+
+
+        <task>
+      <p>
+        Run the following code to simulate 10,000 possible surveys, and display a histogram of the proportion of respondents who support solar energy:
+        <sage language="r">
+          <input>
+        trials=10000       
+        solar_support= rep(0, trials)
+
+        sample_size=1000
+        
+
+        for(i in 1:trials){
+          samp=sample(possible_entries, size=sample_size)
+          solar_support[i]=length(which(samp=="support"))/1000
+        }
+        hist(solar_support, breaks=25)
+        print(sample_size)
+        </input>
+        </sage>
+        What do we notice about the shape of the histogram?
+      </p>
+      
+    </task>
+
+
+
+          </exploration>
+
+
+
+
+          <remark>
+            <p>
+              Notice that  every time we sampled, we get a potentially different proportion of respondents who support solar energy.  Thus, the proportion of respondents who support solar energy (<m>\hat{p}</m>) is a <em>random variable</em> and thus has a mean, and a standard deviation.  We will call this standard deviation the <em>standard error</em> as it measure the tendency of <m>\hat{p}</m> to deviate from it's mean.</p>
+
+              <p>
+                In general, we call <m>\hat{p}</m> the <em>sample proportion</em> or the proportion of a sample which satisfies some condition, which is a point-estimate for <m>p</m> the population proportion (which satisfies the same condition). The distribution of <m>\hat{p}</m> is the <em>sampling distribution</em>.
+            </p></remark>
+
+            <theorem xml:id="theorem-CLTprop">
+              <title>The Central Limit Theorem (Proportion)</title>
+              <p>
+                For a sufficiently large sample (typically <m>pn, (1-p)n\geq 10</m> or at least 10 <q>successes</q> and <q>failures</q>) the sampling distribution of<m>\hat{p}</m> is approximately <em>normally distributed</em> with pararmeters <me>\mu_{\hat{p}}=p,\ \ \  SE_{\hat{p}}=\sqrt{\frac{p(1-p)}{n}}.</me>
+              </p>
+
+              <p>This is very similar to <xref ref="remark-normalapproximation"/></p>
+
+            </theorem>
+
+
+              <activity xml:id="activity-solar">
+                  <title>Normal Approximation for Solar Energy Support</title>
+                  <introduction>
+                      <p>In <xref ref="exploration-solarenergy"/> we have a population where the proportion of support for solar energy is <m>p=0.88</m>.  Moreover, we have a sample size of <m>n=1000</m>.</p>
+                      
+                  </introduction>
+
+                  <task>
+                    <p>Compute <m>np, n(1-p)</m> and ensure that both values are at least 10.</p>
+                   </task>
+
+                   <task>
+                    <p>Follow <xref ref="theorem-CLTprop"/> to compute <m>\mu_{\hat{p}}</m> and <m>SE_{\hat{p}}</m>.</p>
+                   </task>
+
+                   <task>
+                   <p>
+        Fix and run un the following code to display the histogram from <xref ref="exploration-solarenergy"/> (e), overlayed with a normal curve with mean <c>mu_p</c>=<m>\mu_{\hat{p}}</m> and <c>SE_p</c>=<m>SE_{\hat{p}}</m>.
+        <sage language="r">
+          <input>
+        mu_p=FIXME
+        SE_p=FIXME
+        
+        hist(solar_support, prob=TRUE, breaks=25)
+        curve(dnorm(x, mean=mu_p, sd=SE_p), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+        print(sample_size)
+        </input>
+        </sage>
+        How well does the normal curve match the histogram?
+      </p>
+
+            </task>
+
+            <task>
+            <p>
+              Use the normal approximation for <m>\hat{p}</m> with mean <m>\mu_{\hat{p}}</m> and standard deviation <m>SE_{\hat{p}}</m> to compute <m>P(\hat{p}\lt0.85)</m>.
+
+              <sage language="r">
+          <input>
+
+        </input>
+        </sage>
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Use the normal approximation for <m>\hat{p}</m> to find an interval <m>[0.88-k, 0.88+k]</m> so that there is a 95% chance <m>\hat{p}</m> falls in this interval.
+
+               <sage language="r">
+          <input>
+          
+        </input>
+        </sage>
+
+            </p>
+          </task>
+
+          <task>
+            <p>Take a moment and appreciate how closely the sample proportions model the population proportion, despite 1000 adults being a paltry percentage of 250 million adults.</p>
+          </task>
+
+
+              </activity>
+
+            
+
+
+
+      <activity xml:id="activity-merchandise">
+          <title>Merchandise Purchasing</title>
+
+          <introduction>
+              <p>A recording artist wants to know what percentage of attendees of their shows purchase merchandise at the shows.  They randomly survey 100 attendees of their recent shows, and found that 22 of them purchased merchandise.</p>
+              
+          </introduction>
+
+          <task>
+              <p>
+                What is the <em>population</em> under consideration?
+
+                <ol>
+                  <li>People who listen to music.</li>
+                  <li>100 attendees.</li>
+                  <li>People who attended the recording artist's shows.</li>
+                  <li>22 people who purchased merchandise.</li>
+                </ol>
+
+
+              </p>
+            </task>
+
+          <task>
+              <p>
+                What is the parameter of interest?
+
+                <ol>
+                  <li>The average number of shows fans attend a year.</li>
+                  <li>Proportion of show attendees who purchase merchandise.</li>
+                  <li>The average amount of money spent on merchandise.</li>
+                  <li>Proportion of people who bought the artist's album who attended shows.</li>
+                </ol>
+              </p>
+            </task>  
+          <task>
+              <p>
+                What is the point estimate (<m>\hat{p}</m>) for the parameter?
+              </p>
+            </task>  
+
+          <task>
+              <p>
+               Use <xref ref="theorem-CLTprop"/> and the point estimate to compute the Sample Error for the point estimate.
+              </p>
+            </task>  
+
+          <task>
+              <p>
+               Suppose that the actual percentage of show attendees who purchase merchandise is 25%.  Is this suprising? 
+              </p>
+            </task>
+
+            <task>
+              <p>
+               Recompute the Sample Error using <m>p=0.25</m>  Is it much different than what you found in (d)? 
+              </p>
+            </task>  
+
+
+            <task>
+                   <p>
+        Fix and run the following code to simulate the 1000 surveys of size <c>n</c>=100, probability <c>p</c>=0.25, and point estimate <c>phat</c><m>=\hat{p}=22/100</m>, as well as plot a histogram of the survey results, and the normal approximation:
+        <sage language="r">
+          <input>
+        trials=1000
+
+        n=FIXME
+        p=FIXME
+        phat=FIXME
+
+        mu_p=p
+        SE_p=sqrt(p*(1-p)/n)
+
+        results=rep(0,trials)
+
+        for(i in 1:n){
+          results=results+sample(c(1, 0), trials, replace = TRUE, prob = c(p, 1-p)) 
+        }
+
+        proportion=results/n
+        
+        hist(proportion, prob=TRUE, breaks=25)
+        curve(dnorm(x, mean=mu_p, sd=SE_p), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+        abline(v=phat, col="red",lwd=3, lty=2 )
+        print(trials)
+        </input>
+        </sage>
+        Would 22 respondents replying that they purchased merchandise be abnormal?
+      </p>
+
+            </task>   
+
+
+
+      </activity>
+
+
+      <activity xml:id="activity-smoking">
+          <title>Adults who Smoke</title>
+
+          <introduction>
+              <p>A research team wishes to decide what percentage of adults in a town smokes.  In an survey of 232 adults from the town, 48 of them smoke.</p>
+              
+          </introduction>
+
+          <task>
+              <p>
+                What is the population under consideration?
+
+                <ol>
+                  <li>Adults who smoke.</li>
+                  <li>The adults who live in the town.</li>
+                  <li>232 adults.</li>
+                  <li>48 smokers.</li>
+                </ol>
+              </p>
+            </task>
+
+          <task>
+              <p>
+                What is the parameter of interest?
+
+                <ol>
+                  <li>Proportion of adults who smoke.</li>
+                  <li>Proportion of adults living in this town who smoke.</li>
+                  <li>Average number of times adults smoke each week.</li>
+                  <li>Proportion of adult humans on earth who live in this town.</li>
+                </ol>
+
+              </p>
+            </task>  
+          <task>
+              <p>
+                What is the point estimate for the parameter?
+              </p>
+            </task>  
+
+          <task>
+              <p>
+               Use <xref ref="theorem-CLTprop"/> and the point estimate to compute the Sample Error for the point estimate.
+              </p>
+            </task>  
+
+          <task>
+              <p>
+               Suppose that the actual percentage of adults who smoke in the town is 20%.  Is this suprising? 
+              </p>
+            </task>
+
+            <task>
+              <p>
+               Recompute the Sample Error using <m>p=0.2</m>  Is it much different than what you found in (d)? 
+              </p>
+            </task>  
+
+
+            <task>
+                   <p>
+        Fix and run the following code to simulate the 1000 surveys of size <c>n</c>, probability <c>p</c> and point estimate <c>phat</c>, as well as plot a histogram of the survey results, and the normal approximation:
+        <sage language="r">
+          <input>
+        trials=1000
+
+        n=FIXME
+        p=FIXME
+        phat=FIXME
+
+        mu_p=p
+        SE_p=sqrt(p*(1-p)/n)
+
+        results=rep(0,trials)
+
+        for(i in 1:n){
+          results=results+sample(c(1, 0), trials, replace = TRUE, prob = c(p, 1-p)) 
+        }
+
+        proportion=results/n
+        
+        hist(proportion, prob=TRUE, breaks=25)
+        curve(dnorm(x, mean=mu_p, sd=SE_p), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+        abline(v=phat, col="red",lwd=3, lty=2 )
+        print(trials)
+        </input>
+        </sage>
+        Would 48 respondents replying that they smoke be abnormal?
+      </p>
+
+            </task>   
+
+
+
+      </activity>
+
+
+
+      
+
+
+        </subsection>
+</section>

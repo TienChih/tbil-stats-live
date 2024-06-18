@@ -1,0 +1,575 @@
+<section xml:id="Sec_ConfidenceInterval">
+
+    <title>Introduction to Confidence Intervals (F2)</title>
+
+   <introduction>
+        <p> We saw in <xref ref="Sec_PointEstimates"/> that the point estimates can be a very accurate predictor of the parameter of interest.  However, it is rarely exactly the same, and of course there is always some cases where it deviates significantly.  </p>
+
+        <p>
+          The odds that your point estimate matches the parameter of interest may be very unlikely, but we can perhaps use the point estimate to find a range of probable values for the parameter of interest.
+        </p>
+
+        <p>
+          In this section we compute and interpret confidence intervals for population proportions.
+        </p>
+    </introduction>
+
+
+       <subsection>
+          <title>Defining the Confidence Interval</title>
+
+          <exploration xml:id="exploration-CI">
+              <title>Finding an Interval</title>
+              <introduction>
+                  <p>Recall from <xref ref="theorem-CLTprop"/> that <m>\hat{p}</m> can be approximated by a normal variable with parameters <m>\mu_{\hat{p}}=p,  SE_{\hat{p}}=\sqrt{\frac{p(1-p)}{n}}.</m></p>
+
+                  <p>
+
+                      <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+
+                </p>
+                  
+              </introduction>
+
+              <task>
+                <p>
+                  For the standard normal variable <m>Z</m> (<xref ref="Sec_StandardNormal"/>) verify that <m>P(-1.96\lt Z\lt 1.96)\approx 0.95</m>.
+                </p>
+
+              </task>
+
+
+              <task>
+                <p>
+                  Use the <m>z</m>-score <m>1.96</m> from (a) and <xref ref="definition-zscore"/> to find the corresponding <m>x</m> value for a normal variable with mean <m>\mu_{\hat{p}}=p</m>  and standard deviation <m>SE_{\hat{p}}=\sqrt{\frac{p(1-p)}{n}}.</m>.
+                </p>
+
+              </task>
+
+
+
+
+          </exploration>
+
+
+          <definition xml:id="definition-CIprop">
+            <p>
+              Given a parameter of interest, a C% confidence interval is an interval <m>[L, U]</m> such that there is a C% chance the parameter lies in this interval.
+            </p>
+          </definition>
+
+          <remark xml:id="remark-95prop">
+          <p>
+            Suppose you had a sample of size <m>n</m> and a sample proportion of <m>\hat{p}</m>.  Following <xref ref="exploration-CI"/>, we have that <me>[\hat{p}-1.96SE_{\hat{p}}, \hat{p}+1.96SE_{\hat{p}}]</me> is a 95% Confidence Interval for <m>p</m>.  In other words, there is a 95% chance that <m>p</m> lies in this interval.
+
+             <figure>
+<caption>A 95% confidence interval for <m>p</m>.  There is a 95% chance the population proportion <m>p</m> lies in this interval, and a 5% chance it does not.</caption>      
+      <image>
+ <description>A 95% confidence interval for <m>p</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=red!20, draw=none, domain=-1.96:1.96] {gauss(0,1)} \closedcycle;
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,0.02) --node[above]{$\hat{p}$} (axis cs:0,0.02);
+
+  \draw (axis cs:1.96,-0.02) -- (axis cs:1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) -- (axis cs:-1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) --node[below]{\tiny$\hat{p}-1.96SE_{\hat{p}}$} (axis cs:-1.96,-0.02);
+  \draw (axis cs:1.96,-0.02) --node[below]{\tiny$\hat{p}+1.96SE_{\hat{p}}$} (axis cs:1.96,-0.02);
+
+  \draw [yshift=-0.6cm, latex-latex](axis cs:-1.96,0) -- node [fill=white] {$95\%$} (axis cs:1.96,0);
+
+  \draw (axis cs:1,-0.02) -- (axis cs:1,0.02);
+  \draw (axis cs:1,0.02) --node[above]{$p?$} (axis cs:1,0.02);
+
+  \draw (axis cs:-2.5,-0.02) -- (axis cs:-2.5,0.02);
+  \draw (axis cs:-2.5,0.02) --node[above]{$p?$} (axis cs:-2.5,0.02);
+
+
+
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+          </p>
+        </remark>
+
+
+        <example xml:id="example-cordcut">
+          <title>Cord Cutting</title>
+          <statement>
+          <p>
+            In a survey of 150 Adult Americans, 33 of them said they were <q>cord-cutters</q>, people who only consume television through internet streaming.  Find a 95% Confidence Interval for the proportion of American Adults who are cord cutters.
+
+          </p>
+        </statement>
+        <solution>
+          <p>
+            We note that the the sample size is <m>n=150</m> and the sample proportion is <me>\hat{p}=\frac{33}{150}=0.22</me> or 22% of the sample were cord cutters.  The sample proportion is a random variable distributed with estimated standard error <me> SE_{\hat{p}}=\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}=\sqrt{\frac{0.22\cdot0.78}{150}}\approx 0.03382306.</me>
+          </p>
+          <p>
+            So following <xref ref="remark-95prop"/>, we have that the lower bound for our Confidence Interval is <me>\hat{p}-1.96SE_{\hat{p}}\approx 0.22-1.96\cdot0.03382306\approx 0.1537 </me> or 15.37%.  Similarly, the upper bound for our Confidence Interval is <me>\hat{p}+1.96SE_{\hat{p}}\approx 0.22+1.96\cdot0.03382306\approx 0.2863 </me> or 28.63%.
+          </p>
+          <p>
+            So the 95% Confidence Interval is <m>[0.1537, 0.2863]</m>, that is, there is a 95% chance the population proportion lies in this interval.  In other words: <em><q>There is a 95% chance that the proportion of American Adults who are cord-cutters is between 15.37% and 28.63% </q>.</em>
+          </p>
+
+          <p>
+            Note this means that there is a 5% chance that the proportion of American Adults who are cord-cutters is higher than 28.63% or lower than 15.37%.</p>
+        </solution>
+        </example>
+
+
+        <activity xml:id="activity-Steak">
+            <title>Medium Rare Steak</title>
+            <introduction>
+                <p>Suppose 23% of of Americans prefer their steak medium-rare.  A researcher, not knowing this, polls 50 Americans for their doneness preference.</p>
+                
+            </introduction>
+
+            <task>
+            <p>
+              If the researcher produces a 95% confidence interval, which of the following best describe this confidence interval?
+              <ol>
+                <li>95% of adult Americans lie in this interval</li>.
+                <li>There is a 23% chance that 95% of Americans prefer their steaks medium-rare.</li>
+                <li>There is a 95% chance that 23% of Americans perfer their steak medium-rare.</li>
+                <li>There is a 95% chance that the population proportion lies in this interval?
+                </li>
+              </ol>
+
+            </p>
+          </task>
+
+            <task>
+            <p>
+              If 10 respondents to the survey say they prefer medium-rare, use <xref ref="theorem-CLTprop"/> find <m>\hat{p}</m> and <m>SE_{\hat{p}}</m>.
+            </p>
+          </task>
+
+          
+
+          <task>
+            <p>
+              Use <xref  ref="remark-95prop"/> to compute a 95% confidence interval for <m>p</m>: the proportion of Americans who prefer their steaks medium-rare.  Is 23% in this interval?
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+
+
+
+          <task>
+            <p>
+              Run the following code to conduct your own survey of 50 Americans, and see how many of them like their steak medium-rare.
+
+              <sage language="r">
+          <input>
+        steak_survey=sample(c("YES", "NO"), 50, replace = TRUE, prob = c(0.23, 0.77))
+        print(length(which(steak_survey=="YES")))
+        
+        </input>
+        </sage>
+            </p>
+            </task>
+
+            <task>
+              <p>
+                Use this new result to compute <m>\hat{p}, SE_{\hat{p}}</m> and a new 95% Confidence Interval.  Does THIS new interval contain 23%?
+              </p>
+            </task>
+
+             <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences.</p>
+            </task>
+
+            <task>
+            <p>
+              Run the following code to, for 100 times, sample 50 Americans and construct a 95% confidence interval based on the results.
+
+          <sage language="r">
+            <input>
+          numsamp=100
+        n=50
+        p=0.23
+
+        samp_phat = rep(NA, numsamp)
+        samp_SE = rep(NA, numsamp)
+        color_vec=rep(NA, numsamp)
+        
+        for(i in 1:numsamp){
+          samp = rbinom(1,n,p) # obtain a sample of size n  from the population
+          samp_phat[i] = samp/n    # Find the proportion for this sample
+          samp_SE[i] = sqrt(samp_phat[i]*(1-samp_phat[i])/n)  # Find the standard error
+        }
+        lower_vector = samp_phat - 1.96 * samp_SE
+        upper_vector = samp_phat + 1.96 * samp_SE
+
+        for (j in 1:numsamp){
+          color_vec[j]="red"
+          if(p>=lower_vector[j] &amp; upper_vector[j]>=p){color_vec[j]="blue"}
+        }
+        plot(c(min(lower_vector),max(upper_vector)), c(0, 1 + numsamp), type = "n")
+        for (i in 1:numsamp) lines( c(lower_vector[i], upper_vector[i]),c(i, i), lwd = 2, col=color_vec[i], add=TRUE)
+        abline(v = p, lwd = 2, lty = 2)
+
+        
+            </input>
+          </sage>
+            </p>
+            <p>
+              How many of these intervals do <em>not</em> contain 23%?  Is this suprising?
+            </p>
+            </task>
+
+        </activity>
+
+
+
+
+        </subsection>
+
+
+
+
+        <subsection>
+          <title>Other Confidences</title>
+
+          <exploration xml:id="exploration-otherCI">
+            <introduction>
+                <p>Recall from <xref ref="example-cordcut"/> that the 95% confidence interval for the proportion of American Adult cord cutters was <m>[0.1537, 0.2863]</m>.</p>
+                
+            </introduction>
+            <task>
+              <p>If you needed an interval that had a 99% chance to contain the population proportion, should it be wider or narrower?</p>
+            </task>
+
+            <task>
+              <p>If you only needed an interval that had a 90% chance to contain the population proportion, should it be wider or narrower?</p>
+            </task>
+          </exploration>
+
+
+          <remark xml:id="remark-otherCI">
+            <p>
+              In general, if we wanted to find a <m>C\%</m> confidence interval given <m>\hat{p}, SE_{\hat{p}}</m> we would find this via:
+              <me>[\hat{p}-z^*SE_{\hat{p}}, \hat{p}+z^*SE_{\hat{p}}]</me> where <m>s^*</m> is a standard normal value such that given the standard normal random variable <m>Z</m>, <m>P(-z^*\lt Z\lt z^*)=C%</m>.
+            </p>
+
+            <p>
+              One can check that the following <m>z^*</m> values correspond to the following commonly used confidence levels:
+              <me>
+              \begin{array}{|c|c|}
+              \hline
+              C\% \amp z^*\\
+              \hline
+              90\% \amp 1.645\\
+              95\% \amp 1.96\\
+              99\% \amp 2.576 \\
+              \hline
+              \end{array}
+            </me>
+
+
+                      <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+
+            <figure>
+<caption>Confidence intervals <m>[\hat{p}-z^*SE_{\hat{p}}, \hat{p}+z^*SE_{\hat{p}}]</m> where<m>z^*</m> corresponds to different levels of confidence.</caption>      
+      <image>
+ <description>A 95% confidence interval for <m>p</m>.</description>     
+<latex-image>
+<![CDATA[\begin{tikzpicture}[line width=1pt,>=latex]
+\begin{axis}[
+  no markers, domain=-5:5, samples=100,
+  axis lines*=left,% xlabel=$x$, ylabel=$y$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick=\empty, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  
+  \addplot [very thick,cyan!50!black] {gauss(0,1)};
+  \addplot [fill=orange!20, draw=none, domain=-1.645:1.645] {gauss(0,1)} \closedcycle;
+  \addplot [fill=red!20, draw=none, domain=-1.96:-1.645] {gauss(0,1)} \closedcycle;
+  \addplot [fill=red!20, draw=none, domain=1.645:1.96] {gauss(0,1)} \closedcycle;
+  \addplot [fill=yellow!20, draw=none, domain=-2.576:-1.96] {gauss(0,1)} \closedcycle;
+  \addplot [fill=yellow!20, draw=none, domain=1.96:2.576] {gauss(0,1)} \closedcycle;
+
+
+  \draw (axis cs:0,-0.02) -- (axis cs:0,0.02);
+  \draw (axis cs:0,0.02) --node[above]{$\hat{p}$} (axis cs:0,0.02);
+
+  \draw (axis cs:1.96,-0.02) -- (axis cs:1.96,0.058);
+  \draw (axis cs:-1.96,-0.02) -- (axis cs:-1.96,0.058);
+
+  \draw (axis cs:1.645,-0.02) -- (axis cs:1.645,0.103);
+  \draw (axis cs:-1.645,-0.02) -- (axis cs:-1.645,0.103);
+
+  \draw (axis cs:2.576,-0.02) -- (axis cs:2.576,0.01445);
+  \draw (axis cs:-2.576,-0.02) -- (axis cs:-2.576,0.01445);
+  
+
+  \draw [yshift=-0.6cm, latex-latex](axis cs:-1.645,0) -- node [fill=white] {$90\%$} (axis cs:1.645,0);
+   \draw [yshift=-1.2cm, latex-latex](axis cs:-1.96,0) -- node [fill=white] {$95\%$} (axis cs:1.96,0);
+    \draw [yshift=-1.8cm, latex-latex](axis cs:-2.576,0) -- node [fill=white] {$99\%$} (axis cs:2.576,0);
+
+  
+    \draw (axis cs:-2.5,0.1)-- node{\tiny$\hat{p}-z^*SE_{\hat{p}}$} (axis cs:-2.5,0.1);
+     \draw (axis cs:2.5,0.1)-- node{\tiny$\hat{p}-z^*SE_{\hat{p}}$} (axis cs:2.5,0.1);
+
+\end{axis}
+
+
+
+\end{tikzpicture}]]>
+</latex-image>
+      </image>
+      </figure>
+
+
+          </remark>
+
+
+          <activity xml:id="activity-productreviews">
+              <title>Product Reviews</title>
+
+              <introduction>
+                  <p>In a random survey of 250 customers who purchased a product, 33 of them gave the product a negative review.</p>
+                  
+              </introduction>
+
+              <task>
+                <p> Find <m>\hat{p}</m>, the sample proportion of customers who gave the product a negative review, as well as <m>SE_{\hat{p}}</m>.
+              </p>
+            </task>
+
+            <task>
+                <p> Use <xref ref="remark-otherCI"/> to find 90%, 95%, and 99% confidence intervals for the proportion of all customers who thought negatively of the product.  What do we notice as the confidence level increases?
+              </p>
+            </task>
+
+             <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences.</p>
+            </task>
+
+            <task>
+              <p>
+                Find a value <m>z^*</m> so that given the standard normal random variable <m>Z</m>, <m>P(-z^*\lt Z\lt z^*)=0.85</m>.
+
+                <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Use <m>z^*</m> to find an 85% confidence intervals for the proportion of all customers who thought negatively of the product.  How does this value compare to what we found in (b)?
+              </p>
+            </task>
+
+             <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences.</p>
+            </task>
+
+
+
+
+
+
+          </activity>
+
+
+
+          <activity xml:id="activity-military">
+      <title>Branches of the US Military</title>
+      <introduction>
+          <p>We consider what proportion of the Military belongs to which branch of service.</p>
+
+          <p>
+            Run the following code to download <c>military.csv</c> and display it's variables.
+             <sage language="r">
+                      <input>
+                      military = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/military.csv")
+                      names(military)
+                      </input>
+                      </sage>
+                  This dataset contains demographic information on every member of the US armed forces including gender, race, and rank.
+
+
+          </p>
+
+          <p>Let <m>p</m> denote the proportion of military members who are in the Army.
+        </p>
+
+          
+      </introduction>
+
+     
+
+
+      <task>
+        <p>
+          Run the following to sample <c>n=50</c> random members of the military:
+          <sage language="r">
+                      <input>
+                      n=50
+                      index = sample(1:nrow(military), n)
+                      samp=military[index,]
+                      </input>
+                      </sage>
+                  </p>
+              </task>
+
+              <task>
+                <p>
+          Run the following to see how many members of our sample are in the Army:
+          <sage language="r">
+                      <input>
+                      length(which(samp$branch=="army"))
+                      </input>
+                      </sage>
+                      Let <m>\hat{p}</m> denote the proportion of the sample that's in the army.
+                  </p>
+          </task>
+
+
+          <task>
+                <p>
+          Use <m>\hat{p}</m> above and <m>n=50</m>. to compute a 95% confidence interval for the proportion of miliary members in the Army.
+           <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+          </task>
+
+          <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences.</p>
+            </task>
+
+
+            <task>
+                <p>
+          Run the following to see the actual proportion of military members in the Army:
+          <sage language="r">
+                      <input>
+                      length(which(military$branch=="army"))/nrow(military)
+                      </input>
+                      </sage>
+                      Is this in your condidence interval?
+                  </p>
+          </task>
+
+  </activity>
+
+
+
+
+
+
+        </subsection>
+
+
+
+
+
+
+
+
+
+
+
+</section>

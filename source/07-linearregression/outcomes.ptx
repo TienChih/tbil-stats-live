@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<li xmlns:xi="http://www.w3.org/2001/XInclude">
+        <p>
+R: Can I perform regression for paired numerical variables?
+        </p>
+        <ul>
+            <li>
+                <p>
+R1: I can compute and interpret the correlation coefficient and it's square for a regression analysis.
+                </p>
+            </li>
+            <li>
+                <p>
+R2: I can find the parameters for the regression line, explain the parameters, and use it to make predictions from the linear model.
+                </p>
+            </li>
+            <li>
+                <p>
+R3: I can perform hypothesis tests and compute confidence intervals for the parameters of the regression line and explain the results.
+                </p>
+            </li>
+        </ul>
+</li>

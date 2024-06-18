@@ -1,0 +1,629 @@
+<section xml:id="Sec_ChiIndependence">
+    <title>Chi-Squared Test and Independence (C4)</title>
+
+   <introduction>
+        <p> In this section, we compare samples from two different populations, to see if the populations may have the same distribution.  In other words, are the outcomes equally likely, no matter which population I draw from?
+        </p>
+
+        
+ <exploration xml:id="exploration-predatory">
+      <title>OER vs Predatory Publishers and Student Access</title>
+
+      <introduction>
+          <p>Students across different sections of the same course are assigned  different texts.  Some students are assigned free OER resources as their text, and others are assigned overpriced  texts from predatory publishers.  After 2 weeks the professors take a random anonymous poll of their classes to see how many students have managed to begun the assigned readings in their respective texts.  The results are as follows:  <me>
+\begin{array}{|c|c|c|}
+\hline
+\textbf{Sample Frequency} \amp \text{Has Done Reading} \amp \text{Has Not Yet Done Reading} \\
+\hline
+\text{OER} \amp 66 \amp 14 \\
+\hline
+\text{Predatory Publisher} \amp 112 \amp 58 \\
+\hline
+
+\end{array}
+</me>
+One professor claims that this constitutes a clear difference between the type of resource assigned to students and whether or not they can complete their assigned tasks.  Their colleague dismisses it and says any difference is purely due to random chance, and the type of material has no impact on student accesibility, in other words these things are independent.
+</p>
+          
+      </introduction>
+
+      <task>
+        <p>
+          How many students in all were surveyed?  This is the sample size <m>n</m>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Let <m>R</m> denote the event <q>student has done the reading</q>.  What proportion of the sample has done the reading?  This is <m>P(R)</m>.  
+        </p>
+      </task>
+
+       <task>
+        <p>
+          Note the event <m>R^c</m> would denote <q>student has not done the reading</q>.  Compute <m>P(R^c)</m>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Let <m>O</m> denote the event <q>student was assigned an OER</q>.  What proportion of the sample were assigned OER's?  This is <m>P(O)</m>.  (Note the event <m>O^c</m> would denote <q>student was assigned a publisher text</q>.)
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Note the event <m>O^c</m> would denote <q>student was assigned a publisher text</q>.  Compute <m>P(O^c)</m>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Suppose we took the colleague at their word and assumed these events were <alert>independent</alert>.  
+        </p>
+
+        <p>
+          Using <xref ref="remark-proddefofind"/> compute <m>P(R\text{ and }O), P(R\text{ and }O^c), P(R^c\text{ and }O)</m> and <m>P(R^c\text{ and }O^c)</m>.
+        </p>
+      </task>
+
+      <task>
+        <p>
+          Using the probabilities found in (f), fill out the following table with the <em>expected</em> frequencies if one took a sample of size <m>n</m> and the probabilities were as in (f).
+          <me>
+\begin{array}{|c|c|c|}
+\hline
+\textbf{Expected Frequency} \amp \text{Has Done Reading} \amp \text{Has Not Yet Done Reading} \\
+\hline
+\text{OER} \amp   \amp   \\
+\hline
+\text{Predatory Publisher} \amp \phantom{\text{Has Not Yet Done Reading}}  \amp   \\
+\hline
+
+\end{array}
+</me>
+How different are these values from the sample?
+</p>
+</task>
+
+
+</exploration>
+
+        
+    </introduction>
+
+
+    <subsection>
+      <title>Testing for Independence</title>
+
+
+      <remark xml:id="remark-chiteststatind">
+        <title>Test statistics for <m>\chi^2</m> tests for independence</title>
+        
+            <p>When we test to see if the distributions of a variable is independent of which population it comes from, we approach this very similarly to when we did so in <xref ref="remark-chiteststat"/>.  In <xref ref="remark-chiteststat"/>, we quantify the difference between the frequencies of the sample and the expected frequencies of the outcomes if we assumed they came from a certain distribution.  <em>Here</em>, we will quantify the difference between the frequencies of the sample and the expected frequencies of the outcomes if we assumed distributions and populations were different.</p>
+
+            <p>
+              Suppose we had <m>\ell</m> populations <m>P_1, \ldots, P_\ell</m>, from which each random variable has <m>k</m> outcomes <m>O_1,\ldots O_k</m>.  We also have a sample of size <m>n</m> where the frequency of occurences from Population <m>i</m> and Outcome <m>j</m> is <m>n_{i,j}</m>:  <me>
+\begin{array}{|c|c|c|c|c|}
+\hline
+\textbf{Sample Frequency} \amp O_1 \amp O_2 \amp \cdots \amp O_k  \\
+\hline
+P_1 \amp n_{1,1} \amp n_{1,2} \amp \cdots \amp n_{1,k} \\
+\hline
+P_2 \amp n_{2,1} \amp n_{2,2} \amp \cdots \amp n_{2,k} \\
+\hline
+\vdots \amp \vdots \amp \vdots \amp \vdots \amp \vdots \\
+\hline
+P_\ell \amp n_{\ell,1} \amp n_{\ell,2} \amp \cdots \amp n_{\ell,k} \\
+\hline
+\end{array}
+</me>
+
+            </p>
+
+            <p>
+              We first note that the probability that if we selected an arbitrary data point from this sample, the probability it has Population <m>P_i</m>  is the sum of row <m>i</m> divided by <m>n</m> the size of the sample. Similarly, the probability it has Outcome <m>O_j</m>  is the sum of column <m>j</m> divided by <m>n</m> the size of the sample.  From this, <em>IF</em> we were to assume events <m>P_i, O_j</m> were independent, we would have <m>P(P_i\cap O_j)=P(P_i)P(O_j)</m> and the expected number of occurences from a sample of size <m>n</m> from Population <m>P_i</m> with Outcome <m>O_j</m> is: <me>E_{i,j}=n\cdot P(P_i)P(O_j)=n\cdot \frac{\text{sum of row $i$}}{n}\frac{\text{sum of column $j$}}{n}=\frac{\text{sum of row $i$}\cdot \text{sum of column $j$}}{n}.</me>  From here we can compute a table of <em>expected frequencys</em>.  <me>
+\begin{array}{|c|c|c|c|c|}
+\hline
+\textbf{Expected Frequency} \amp O_1 \amp O_2 \amp \cdots \amp O_k  \\
+\hline
+P_1 \amp E_{1,1} \amp E_{1,2} \amp \cdots \amp E_{1,k} \\
+\hline
+P_2 \amp E_{2,1} \amp E_{2,2} \amp \cdots \amp E_{2,k} \\
+\hline
+\vdots \amp \vdots \amp \vdots \amp \vdots \amp \vdots \\
+\hline
+P_\ell \amp E_{\ell,1} \amp E_{\ell,2} \amp \cdots \amp E_{\ell,k} \\
+\hline
+\end{array}
+</me>
+
+            </p>
+
+            <p>
+              Then, much like <xref ref="remark-chiteststat"/>, <m>Z_{i,j}</m> computes the test statistic for <m>P_i\cap O_j</m> and is computed in a similar way: <me>Z_{i,j}=\frac{n_{i,j}-E_{i,j}}{\sqrt{E_{i,j}}}.
+            </me>
+            Then once again <m>\chi^2</m> is the sum of the squares of the <m>Z_{i,j}</m>:<me>\chi^2=\sum Z_{i,j}^2.</me>
+          </p>
+
+
+
+            
+        </remark>
+
+        <activity xml:id="activity-predatorytest">
+            <title>OER vs Predatory Publishers and Student Access: test statistics</title>
+            <introduction>
+                <p>Recall from <xref ref="exploration-predatory"/> the following table of sample frequencies: <me>
+\begin{array}{|c|c|c|}
+\hline
+\textbf{Sample Frequency} \amp \text{Has Done Reading} \amp \text{Has Not Yet Done Reading} \\
+\hline
+\text{OER} \amp 66 \amp 14 \\
+\hline
+\text{Predatory Publisher} \amp 112 \amp 58 \\
+\hline
+
+\end{array}
+</me>
+As well as the table of computed expected frequencies computed in <xref ref="exploration-predatory"/> (g).
+</p>
+                
+            </introduction>
+
+            <task>
+              <p>
+                Use these two tables and  <xref ref="remark-chiteststatind"/> to compute <m>Z_{1,1}</m> the test statistic for <q>OER and Has Done Reading</q>.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Use these two tables and  <xref ref="remark-chiteststatind"/> to compute <m>Z_{1,2}</m> the test statistic for <q>OER and Has not Done Reading</q>.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Use these two tables and  <xref ref="remark-chiteststatind"/> to compute <m>Z_{2,1}</m> the test statistic for <q>Predatory Publisher and Has Done Reading</q>.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Use these two tables and  <xref ref="remark-chiteststatind"/> to compute <m>Z_{2,2}</m> the test statistic for <q>Predatory Publisher and Has not Done Reading</q>.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Use  <xref ref="remark-chiteststatind"/> to compute <m>\chi^2</m>. 
+              </p>
+            </task>
+
+        </activity>
+
+
+        <remark xml:id="remark-hypothesistestingchisquareind">
+            <title>Steps to <m>\chi^2</m> Hypothesis Testing: Independence</title>
+            <p>
+              Given the set of hypothesis:
+              <ul>
+            <li><m>H_0</m>:<q>The outcomes are independent of the populations.</q></li>
+            <li><m>H_A</m>:<q>The outcomes are <em>not</em> independent of the populations.</q></li>
+          </ul>
+            We compute the <m>p</m>-value to be the area of the tail on the <m>\chi^2</m> distribution corresponding to the <m>\chi^2</m> value computed via <xref ref="remark-chiteststatind"/> and with <m>(k-1)(\ell-1)</m> degrees of freedom (recall that <m>k</m> is the number of possible values of the categorical variable.)
+          </p>
+          <p>
+            As in other hypothesis testing scenarios, the <m>p</m>-value measures the probability that, if we assume the null hypothesis, that we see values as or more extreme than what was observed.
+          </p>
+          <p>
+            We then reject or accept the null based on the level of significance <m>\alpha</m> which is as before usually 0.05 or 5%.  If the <m>p</m>-value is less than <m>\alpha</m>, we reject the null hypothesis, otherwise we accept it.  In this context, accepting the null is to say the the populations and outcomes are independent.  If we reject that then we say it is implausible that they are.
+          </p>
+        </remark>
+
+        <activity xml:id="activity-predatorypvalue">
+            <title>OER vs Predatory Publishers and Student Access: test statistics</title>
+            <introduction>
+                <p>Recall from <xref ref="activity-predatorytest"/> the <m>\chi^2</m> value you computed.
+        </p>
+          
+                
+            </introduction>
+
+            <task>
+              <p>
+                What is <m>k</m> in this problem, what is <m>\ell</m>?  How many degrees of freedom do we have?
+              </p>
+            </task>
+
+            <task>
+                <p>
+                  Use any method to compute a <m>p</m>-value.
+
+                </p>
+
+                <p>
+                 <sage language="r">
+                      <input>
+                      
+        
+                      </input>
+                      </sage>
+
+                      <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="gtwsvcggpo"/>
+                     
+
+                    </p>
+
+                  </hint>
+                </p>
+
+                
+                </task>
+
+                <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                <task>
+                <p>
+                  If we had a level of significance <m>\alpha=0.05</m> do we  reject the null hypothesis?</p>
+                </task>
+
+                <task>
+                <p>
+                  Is it plausible for the type of assigned materials and whether or not students do the reading, to be independent?
+                </p>
+              </task>
+
+        </activity>
+
+
+        <activity xml:id="activity-chiindwithR">
+            <title><m>\chi^2</m> independence testing with R</title>
+            <introduction>
+                <p>We can use <c>R</c> to enter the data and compute the <m>\chi^2</m> statistic and <m>p</m>-value.</p>
+                
+            </introduction>
+
+            <task>
+              
+              <p>
+                Run the following code to input the sample data from <xref ref="exploration-predatory"/> as a matrix.
+                <sage language="r">
+                      <input>
+                      Input =("
+MaterialType   DoneReading    NoReading
+OER             66              14
+Predatory       112             58
+")
+
+datamatrix = as.matrix(read.table(textConnection(Input),header=TRUE,row.names=1))
+                      </input>
+                      </sage>
+                      If you use this method <em>be sure to not use spaces in your names</em>.
+                    </p>
+                  </task>
+
+                  <task>
+              
+              <p>
+                Run the following code to compute a <m>\chi^2</m> statistic, <m>p</m>-value and degrees of freedom.
+                <sage language="r">
+                      <input>
+                      chisq.test(datamatrix, correct=FALSE)
+                      </input>
+                      </sage>
+                      How do these values compare to what you found in <xref ref="activity-predatorypvalue"/>?
+                    </p>
+                  </task>
+        </activity>
+
+
+        <activity xml:id="activity-GenderFood">
+            <title>Gender and Protein Preferences</title>
+            <introduction>
+                <p>A restaurateur wonders if there's any difference in  the type of meat her customers order and their gender.  She surveys 500 customers, 218 men and 282 women.  The choices for meat are Beef, Chicken and Pork.  The results are as follows: 
+                  <me>
+\begin{array}{|c|c|c|c|}
+\hline
+\textbf{Sample Frequency} \amp \text{Beef} \amp \text{Chicken} \amp \text{Pork} \\
+\hline
+\text{Men} \amp 65 \amp 108 \amp 45 \\
+\hline
+\text{Women} \amp 84 \amp 136 \amp 62 \\
+\hline
+
+\end{array}
+</me>
+
+                </p>
+
+
+                
+            </introduction>
+
+            <task>
+              <p>
+                State a null and alternative hypothesis for the <m>\chi^2</m> independence test.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Use any method to compute a <m>\chi^2</m> statistic and a <m>p</m>-value.
+              </p>
+
+              <p>
+                 <sage language="r">
+                      <input>
+                      
+        
+                      </input>
+                      </sage>
+
+                      <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="gtwsvcggpo"/>
+                     
+
+                    </p>
+
+                  </hint>
+                </p>
+            </task>
+
+            <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                <task>
+                <p>
+                  If we had a level of significance <m>\alpha=0.05</m> do we  reject the null hypothesis?</p>
+                </task>
+
+                <task>
+                <p>
+                  Is it plausible for the gender and meat choice to be independent?
+                </p>
+              </task>
+
+
+              <task>
+              
+              <p>
+                Fix and run the following code to input the sample data and perform a <m>\chi^2</m> independence test.
+                <sage language="r">
+                      <input>
+                      Input =("
+ProteinType   Beef    Chicken    Pork
+Men           FIXME   FIXME      FIXME
+Women         FIXME   FIXME      FIXME
+")
+
+datamatrix = as.matrix(read.table(textConnection(Input),header=TRUE,row.names=1))
+chisq.test(datamatrix, correct=FALSE)
+                      </input>
+                      </sage>
+                      How does the <m>\chi^2</m> value and the <m>p</m>-value compare to what you found in (b)?
+                    </p>
+                  </task>
+
+
+
+
+        </activity>
+
+
+        <activity xml:id="activity-Energy">
+            <title>Pew Survey on Energy Sources in 2018</title>
+            <introduction>
+                <p>
+                We examine data from a US-based survey on support for expanding six different sources of energy, including solar, wind, offshore drilling, hydrolic fracturing ("fracking"), coal, and nuclear.
+
+
+              </p>
+
+              <p>
+                Run the following code to download <c>pew_energy_2018.csv</c> data set and to display it's variables.  To learn more about this data click here: <url href="https://www.openintro.org/data/index.php?data=pew_energy_2018"/>
+
+                <sage language="r">
+                      <input>
+                      energy = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/pew_energy_2018.csv")
+                      names(energy)
+                      </input>
+                      </sage>
+              </p>
+
+
+
+
+            </introduction>
+
+            <task>
+              <p>
+                A researcher is curious to see if a person's position on expanding solar energy is independent of their attitude torwards expanding coal mining.  State a null and alternative for the <m>\chi^2</m> independence test.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Run the following code to display a sample frequency table comparing support levels for expanding solar energy as rows and expanding coal mining as columns.
+                <sage language="r">
+                      <input>
+                      table(energy$solar_panel_farms, energy$coal_mining)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+               <task>
+              <p>
+                Run the following code to show a mosaic plots comparing support of expansion for solar and coal energy.  What can you tell from this plot?
+                <sage language="r">
+                      <input>
+                      counts=table(energy$solar_panel_farms, energy$coal_mining)
+                      mosaicplot(counts)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>   
+
+              <task>
+              <p>
+                Run the following code to run the <m>\chi^2</m> independence test on <c>energy$solar_panel_farms</c> and <c>energy$coal_mining</c>.
+                <sage language="r">
+                      <input>
+                      chisq.test(energy$solar_panel_farms, energy$coal_mining, correct=FALSE)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>    
+
+
+                   <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                <task>
+                <p>
+                  If we had a level of significance <m>\alpha=0.05</m> do we  reject the null hypothesis?</p>
+                </task>
+
+                <task>
+                <p>
+                  Is it plausible for support for solar and coal expansion to be independent?
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Pick any two energy sources and repeat the steps above for those energy sources.
+                </p>
+              </task>
+
+        </activity>
+
+
+
+        <activity xml:id="activity-Movies">
+            <title>Movie Data</title>
+            <introduction>
+                <p>
+                We examine data  obtained from IMDB and Rotten Tomatoes. The data represent 456 randomly sampled movies released between 1972 to 2014 in the Unites States.
+
+
+              </p>
+
+              <p>
+                Run the following code to download <c>movies.Rdata</c> data set and to display it's variables.
+
+                <sage language="r">
+                      <input>
+                      load(url("https://github.com/TienChih/tbil-stats/raw/main/data/movies.Rdata"))
+                      names(movies)
+                      </input>
+                      </sage>
+              </p>
+
+
+
+
+            </introduction>
+
+            <task>
+              <p>
+                We're curious to see if genre of a movie, and how Rotten Tomatoes rates it, are independent.  State a null and alternative for the <m>\chi^2</m> independence test.
+              </p>
+            </task>
+
+            <task>
+              <p>
+                Run the following code to display a sample frequency table comparing the genre of a movie and their Rotten Tomatoes score.
+                <sage language="r">
+                      <input>
+                      table(movies$genre, movies$critics_rating)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+
+               <task>
+              <p>
+                Run the following code to show a mosaic plots comparing the genre of a movie and their Rotten Tomatoes score.  What can you tell from this plot?
+                <sage language="r">
+                      <input>
+                      counts=table(movies$genre, movies$critics_rating)
+                      mosaicplot(counts)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>   
+
+              <task>
+              <p>
+                Run the following code to run the <m>\chi^2</m> independence test on <c>movies$genre</c> and <c>movies$critics_rating</c>.
+                <sage language="r">
+                      <input>
+                      chisq.test(movies$genre, movies$critics_rating, correct=FALSE)
+                      </input>
+                      </sage>
+                    </p>
+                  </task>    
+
+
+                   <task>
+                <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+              </task>
+
+                <task>
+                <p>
+                  If we had a level of significance <m>\alpha=0.05</m> do we  reject the null hypothesis?</p>
+                </task>
+
+                <task>
+                <p>
+                  Is it plausible for support for the genre of a movie and the Rotten Tomatoes rating to be independent?
+                </p>
+              </task>
+
+              <task>
+                <p>
+                  Run the following code to obtain summaries of the variables.  Which are categorical?
+                   <sage language="r">
+                      <input>
+                      summary(movies)
+                      </input>
+                      </sage>
+                </p>
+              </task>
+
+              <task>
+                <p>
+                 Repeat the above steps comparing any two categorical variables of your choice.
+                </p>
+              </task>
+
+        </activity>
+
+
+
+       
+
+</subsection>
+</section>

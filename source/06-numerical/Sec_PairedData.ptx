@@ -1,0 +1,662 @@
+<section xml:id="Sec_PairedData">
+    <title>Paired Numerical Data (N3)</title>
+
+   <introduction>
+        <p> In this section, we consider differences in numerical data between populations where there is a natural pairing between the populations.
+        </p>
+
+        
+
+
+        
+ <exploration xml:id="exploration-bookstore">
+      <title>UCLA Bookstore vs Amazon</title>
+
+      <introduction>
+          <p>
+             The authors of the excellent OpenIntro Statistics text noticed that their text was much more expensive at the UCLA bookstore than on Amazon in 2010.  Since then, more bookstores have transitioned to the online model, and have adapted to Amazon's presence in the marketplace.  Is there any average difference between UCLA and Amazon prices now?
+</p>
+        <p>
+                Run the following code to download  the <c>textbooks.csv</c> data set which contains information about 73 textbooks sold by both the UCLA bookstore and Amazon, and display the variables:
+
+                <sage language="r">
+                <input>
+                textbooks = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/textbooks.csv")
+                
+                names(textbooks)
+                </input>
+                </sage>
+
+                Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=textbooks"/>.
+
+              </p>
+          
+      </introduction>
+
+      <task>
+        <p>
+          Each row of this data frame represents a textbook sold by both the UCLA bookstore and Amazon.  Run the following to display the prices by the UCLA bookstore:
+          <sage language="r">
+                <input>
+                textbooks$ucla_new
+                </input>
+                </sage>
+        </p>
+        </task>
+
+        <task>
+        <p>
+           Run the following to display the prices of the same books by Amazon:
+          <sage language="r">
+                <input>
+                textbooks$amaz_new
+                </input>
+                </sage>
+        </p>
+        </task>
+
+        <task>
+        <p>
+           Run the following to compute the difference between the two stores for each text:
+          <sage language="r">
+                <input>
+                pricediff=textbooks$ucla_new-textbooks$amaz_new
+                </input>
+                </sage>
+          This is a sample  of the differences. The true mean difference in textbook costs is denoted: <m>\mu_{diff}</m>.      
+        </p>
+        </task>        
+
+         <task>
+                        <p>
+                          Which of the following best describes the null hypothesis <m>H_0</m>, that on average there is no difference on average between the cost of textbooks from either store?
+                          <ul>
+                            <li><m>\mu_{diff}\lt \$0</m>.</li>
+                            <li><m>\mu_{diff}> \$0</m>.</li>
+                            <li><m>\mu_{diff}\neq \$0</m>.</li>
+                            <li><m>\mu_{diff}= \$0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>, that there <em>is</em> some difference on average between the two stores?
+                          <ul>
+                            <li><m>\mu_{diff}\lt \$0</m>.</li>
+                            <li><m>\mu_{diff}> \$0</m>.</li>
+                            <li><m>\mu_{diff}\neq \$0</m>.</li>
+                            <li><m>\mu_{diff}= \$0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                      <p>
+                Run the following code to display a histogram of the differences between stores:
+
+                <sage language="r">
+                <input>
+                hist(pricediff)
+                abline(v = 0, col="red", lwd=3, lty=2)
+                </input>
+                </sage>
+                Based on this graphic, do we think the null hypothesis is plausible?
+
+              </p>   
+              </task> 
+         <task>
+        <p>
+           Run the following to show the sample mean and standard deviation of the differences:
+          <sage language="r">
+                <input>
+                print(mean(pricediff))
+                print(sd(pricediff))
+                </input>
+                </sage>
+          This is a sample mean of the differences, <m>\bar{x}_{diff}</m>, and sample standard deviation of differences <m>s_{diff}</m>.      
+        </p>
+        </task>
+
+
+        <task>
+                  <p>      
+                    Find the standard error <m>SE_{diff}</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Find <m>t</m>-score for <m>\bar{x}_{diff}</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="odp3hiqj8r"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+                 
+
+
+                  <task>
+                 <p>
+                 Run the following to compute the <m>p</m>-value another way, how does this compare to what you found above?
+                 <sage language="r">
+                      <input>
+                      t.test(pricediff, mu=0, alternative="two.sided")
+        
+                      </input>
+                      </sage>
+                    </p>
+                  </task>
+      
+                  <task>
+                        <p>What store do we think charges more on average?  Or do we think they're the same?</p>
+                      </task>
+
+</exploration>
+
+        
+    </introduction>
+
+
+    <subsection>
+      <title>Paired Data</title>
+
+
+      <definition xml:id="definition-paireddata">
+        <p>
+          We say two sets of observations from two different populations are <em>paired</em> if:
+          <ul>
+            <li>The observations are of the same size.</li>
+            <li>There is a <em>special</em> or <em>natural</em> relationship or pairing between each data point of one set and a data point of the other.</li>
+          </ul>
+          So in <xref ref="exploration-bookstore"/> the natural pairing is between prices of the same book.
+        </p>
+      </definition>
+
+
+
+      <activity xml:id="activity-whichpaired">
+          <title>Which are paired?</title>
+          <introduction>
+              <p>For each of the following, describe whether or not the resulting data would be paired.  If not, explain why not.</p>
+              
+          </introduction>
+
+          
+            <p>
+            <ol>
+              <li>A nutritionist studying the effect of a diet takes data from 50 subjects who are on the diet, and a control group of 50 subjects who are not.</li>
+               <li>A pharmacist studying the side-effects of a medication take's 50 patient's vital information one week before taking a medication, and a second time one week after the medication.</li>
+             <li>A social scientist studying gender inequality survey 100 randomly selected men and 100 randomly selected women to complete a survey on wages, salaries and income.</li>  
+             <li>A pharmacist studying the side-effects of a medication take's a patients vital information one week before taking a medication, and a second time one week after the medication.</li>
+             <li>A math educator asks 40 students to rate their feelings about certain topics in math before and after a course.</li>
+             <li>An engineer at a automotive manufacturer crashes 80 cars with a newly designed safety feature and 80 cars without and measures the damage to the crash-test dummies.</li>
+           </ol>
+         </p>
+       
+      </activity>
+
+
+      <remark xml:id="remark-paireddata">
+        <title>Hypothesis Testing and Confidence Intervals with Paired Data</title>
+        <p>
+          If you have a collection of paired data, say <m>x_1, x_2, \ldots, x_n</m> and <m>y_1, y_2, \ldots, y_n</m>, this gives rise to a natural difference variable <m>d=x-y</m>:
+          <me>
+          \begin{array}{|c|c||c|}
+          \hline
+          \mathbf{x} \amp \mathbf{y} \amp \mathbf{d}\\
+          \hline
+          x_1 \amp y_1 \amp d_1=x_1-y_1\\
+          x_2 \amp y_2 \amp d_2=x_2-y_2\\
+          \vdots \amp \vdots \amp \vdots\\
+          x_n \amp y_n \amp d_n=x_n-y_n\\
+          \hline
+
+          \end{array}
+        </me>
+      </p>
+      <p>
+        The difference between these variables is <em>itself</em> a random variable, with a population mean <m>\mu_{d}</m> and population standard deviation <m>\sigma_{d}</m>.  We can then perform any one variable numerical inference exactly as in we were in <xref ref="Sec_OneVarNum"/>.  We just have to properly interpret what statements about the difference mean:
+        <ul>
+          <li>A C% <em>confidence interval</em> for <m>\mu_d</m> is an interval that has a C% chance of containing the average difference between our two populations.</li>
+          <li> The null hypothesis <m>\mu_d=\mu_0</m> is the assumption that the average difference between the two populations could be <m>\mu_0</m>.</li>
+          <li> The alternative hypothesis <m>\mu_d\lt \mu_0</m> is the claim that the average difference between the two populations is less than <m>\mu_0</m>.</li>
+          <li> The alternative hypothesis <m>\mu_d> \mu_0</m> is the claim that the average difference between the two populations is greater than <m>\mu_0</m>.</li>
+          <li> The alternative hypothesis <m>\mu_d\neq \mu_0</m> is the claim that the average difference between the two populations is different from <m>\mu_0</m>.</li>
+        </ul>
+      </p>
+    </remark>
+
+    <activity xml:id="activity-covidanxiety">
+        <title>Student Anxiety and COVID-19</title>
+        <introduction>
+            <p>
+              Ten students were surveyed and were asked to rank their anxiety about school on a scale from 1-10.  This was prior to the COVID pandemic.  The same students were surveyed again and asked the same question a year later after the pandemic begun.  The results are as follows:
+              <me>
+          \begin{array}{|c|c|}
+          \hline
+          \text{Anxiety pre-Pandemic} \amp \text{Anxiety post-Pandemic}\\
+          \hline
+          5 \amp 7 \\
+          3 \amp 6 \\
+          10 \amp 10 \\
+          8 \amp 9 \\
+          7 \amp 4 \\
+          8 \amp 10 \\
+          4 \amp 4 \\
+          1 \amp 3 \\
+          7 \amp 6 \\
+          2 \amp 2 \\
+          \hline
+
+          \end{array}
+        </me>
+            </p>
+            
+        </introduction>
+        <task>
+          <p>
+            Find the pairwise difference between these observations.
+          </p>
+        </task>
+        <task>
+          <p>
+            Compute the sample mean and standard deviation for the differences <m>\bar{x}_d, s_d</m>.
+          </p>
+        </task>
+
+        <task>
+                        <p>
+                          Suppose we hypothesis that student anxiety went up from pre to post Pandemic.  Which of the following best describes the null hypothesis <m>H_0</m>?  Which the alternative?
+                          <ul>
+                            <li><m>\mu_d\lt 0</m>.</li>
+                            <li><m>\mu_d> 0</m>.</li>
+                            <li><m>\mu_d\neq 0</m>.</li>
+                            <li><m>\mu_d= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                  <task>
+                  <p>      
+                    Find the standard error <m>SE</m>.
+                  </p>
+                </task>
+
+                <task>
+                  <p>      
+                    Find <m>t</m>-score for <m>\bar{x}</m>.
+                  </p>
+                </task>    
+
+                <task>
+                  <p>      
+                    Use any method to compute a <m>p</m>-value (be sure to use the appropriate level of significance).
+
+                    <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="odp3hiqj8r"/>
+
+                    </p>
+
+                  </hint>
+                  </p>
+                </task>
+
+                <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+              <task>
+              <p>
+              If instead we wanted to find a 99% confidence interval for  <m>\mu_d</m>, find <m>t^*</m> so that for the appropriate degrees of freedom, <m>P(-t^*\lt t\lt t^*)=0.99</m>.
+
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="odp3hiqj8r"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+
+            <task>
+              <p>
+              Compute the  99% confidence interval for  <m>\mu_d</m>.
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="cim5hkaws3"/>
+                      <interactive desmos="odp3hiqj8r"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task> 
+
+          <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences.</p>
+            </task>         
+
+    </activity>
+
+    <activity xml:id="activity-studentscores">
+        <title>Online Tutoring and Changes in Test Scores</title>
+        <introduction>
+            <p>
+              The <c>studentscleaned.csv</c> data set consists of a sample of 4892 students who have taken a statistics course.  It records information such as their gender, major, whether or not they've participated in online statistics tutoring and their scores on the two exams in the course.
+            </p>
+
+            <p>
+            Run the following code to download <c>studentscleaned.csv</c> and display it's variables.
+             <sage language="r">
+                      <input>
+                      students = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/studentscleaned.csv")
+                      names(students)
+                      </input>
+                      </sage>
+          
+          </p>
+
+
+            
+        </introduction>
+
+        <task>
+          <p>
+            We are curious to see for students who have done the online tutoring, whether or not on average they will improve from test 1 to test 2.  Let <m>d</m> denote the score from the first test, subtracted from the score from the second test.
+            Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu_d\lt 0</m>.</li>
+                            <li><m>\mu_d> 0</m>.</li>
+                            <li><m>\mu_d\neq 0</m>.</li>
+                            <li><m>\mu_d= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu_d\lt 0</m>.</li>
+                            <li><m>\mu_d> 0</m>.</li>
+                            <li><m>\mu_d\neq 0</m>.</li>
+                            <li><m>\mu_d= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+          <task>
+                <p>
+                  We first subset out the students who took online tutoring.  Run the following to define <c>studentstutor</c>, the subset of students who took online tutoring, and summarize the findings:
+                  <sage language="r">
+                      <input>
+                      studentstutor=subset(students, students$online.tutorial==1)
+                      summary(studentstutor)
+          
+                      </input>
+                      </sage>
+                </p>
+              </task>
+
+          <task>
+                      <p>
+                Run the following code to define the difference of the scores between exams <c>changeinscore</c> and display a histogram of the changes, including a line indicating 0 change, and a line indicating the sample average change:
+
+                <sage language="r">
+                <input>
+                changeinscore=studentstutor$score2-studentstutor$score1
+                hist(changeinscore)
+                abline(v = 0, col="red", lwd=3, lty=2)
+                abline(v = mean(changeinscore), col="blue", lwd=3, lty=2)
+                </input>
+                </sage>
+                Based on this graphic, do we think the null hypothesis is plausible?
+
+              </p>
+              <p>
+                Fix and run the following code to perform the appropriate hypothesis test and compute a <m>p</m>-value:
+
+                <sage language="r">
+                <input>
+                t.test(changeinscore, mu=FIXME, alternative="FIXME")
+                </input>
+                </sage>
+
+              </p>   
+              </task>    
+
+              <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+            <task>
+              <p>
+              Fix and run the following to compute a  95% confidence interval for  <m>\mu_d</m>.
+              <sage language="r">
+                      <input>
+                      t.test(changeinscore, conf.level=FIXME)$conf.int
+        
+                      </input>
+                      </sage>
+                  
+            </p>
+          </task> 
+
+          <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences.</p>
+            </task> 
+
+           <task>
+           <p>
+           Repeat the above for students who did not do the online tutoring.
+           </p>
+           </task>          
+    </activity>
+
+
+
+    <activity xml:id="activity-climatechage">
+        <title>Days of Extreme Temperature</title>
+        <introduction>
+            <p>
+              The National Oceanic and Atmospheric Administration (NOAA) collects data on daily temperatures all across the globe.  We are interested in the number of days of extreme temperature at a sample of these locations, and how they may have changed over time.
+            </p>
+
+            <p>
+            Run the following code to download <c>climate70.csv</c> and display it's variables.
+             <sage language="r">
+                      <input>
+                      climate = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/climate70.csv")
+                      names(climate)
+                      </input>
+                      </sage>
+          We record the Station ID, latitude and logitude of the NOAA stations, the number of days over 70 degrees in 1948 and 2018 at each of these locations, and the number of days over 90 degrees in both years at each of these locations. 
+          </p>
+
+          <p>
+            Click here to learn more about this data set: <url href="https://www.openintro.org/data/index.php?data=climate70"/>.
+          </p>
+
+
+            
+        </introduction>
+
+        <task>
+          <p>
+            Let <m>d</m> denote the number of days over 70 degrees in 1948 subtracted from the number of days over 70 degrees in 2008. We are curious to see if there is any change in the average number of days over 70 degrees from 1948 to 2018.
+            Which of the following best describes the null hypothesis <m>H_0</m>?
+                          <ul>
+                            <li><m>\mu_d\lt 0</m>.</li>
+                            <li><m>\mu_d> 0</m>.</li>
+                            <li><m>\mu_d\neq 0</m>.</li>
+                            <li><m>\mu_d= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+
+                      <task>
+                         <p>
+                          Which of the following best describes the alternative hypothesis <m>H_A</m>?
+                          <ul>
+                            <li><m>\mu_d\lt 0</m>.</li>
+                            <li><m>\mu_d> 0</m>.</li>
+                            <li><m>\mu_d\neq 0</m>.</li>
+                            <li><m>\mu_d= 0</m>.</li>
+                          </ul>
+                        </p>
+                      </task>
+          
+
+          <task>
+                      <p>
+                Run the following code to define the difference in number of days over 70 degrees <c>changeindays70</c> and display a histogram of the changes, including a line indicating 0 change, and a line indicating the sample average change:
+
+                <sage language="r">
+                <input>
+                changeindays70=climate$dx70_2018-climate$dx70_1948
+                hist(changeindays70)
+                abline(v = 0, col="red", lwd=3, lty=2)
+                abline(v = mean(changeindays70), col="blue", lwd=3, lty=2)
+                </input>
+                </sage>
+                Based on this graphic, do we think the null hypothesis is plausible?
+
+              </p>
+              <p>
+                Fix and run the following code to perform the appropriate hypothesis test and compute a <m>p</m>-value:
+
+                <sage language="r">
+                <input>
+                t.test(changeindays70, mu=FIXME, alternative="FIXME")
+                </input>
+                </sage>
+
+              </p>   
+              </task>    
+
+              <task>
+                  <p>
+                  State the meaning of the <m>p</m>-value within the context of this problem in a complete sentence.
+                </p>
+                </task>
+
+                <task>
+                        <p>Do we  reject the null hypothesis?</p>
+                      </task>
+
+                      <task>
+                        <p>What sort of error could have been made? (Type 1 or Type 2)</p>
+                      </task>
+
+            <task>
+              <p>
+              Fix and run the following to compute a  95% confidence interval for  <m>\mu_d</m>.
+              <sage language="r">
+                      <input>
+                      t.test(changeindays70, conf.level=FIXME)$conf.int
+        
+                      </input>
+                      </sage>
+                  
+            </p>
+          </task> 
+
+          <task>
+            <p>
+              State what this confidence interval means in the context of this problem using complete sentences.</p>
+            </task> 
+
+            <task>
+           <p>
+           Repeat the above for days over 90.
+           </p>
+           </task>         
+    </activity>
+
+
+
+
+</subsection>
+
+</section>

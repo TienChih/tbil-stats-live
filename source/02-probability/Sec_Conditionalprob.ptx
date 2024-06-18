@@ -1,0 +1,734 @@
+<section xml:id="Sec_Conditionalprob">
+
+    <title>Conditional Probability (P2)</title>
+<introduction>
+<p>
+  Let's say you know the probability you get into a car accident while driving.  Then it starts snowing, would that change what we think the likelihood of accidents are?  Lung cancer occurs at a certain rate, but if you knew someone smoked, would that affect how you feel about the likelihood of lung cancer?
+</p>
+
+<p>
+  We define <em>conditional probability</em> to be the likelihood of some event <m>A</m> <em>given</em> (or <em>conditioned</em>, <em>assuming</em> etc.) some other event <m>B</m>.  Sometimes, this information can raise, lower, or leave unchanged our understanding of the likelihood of <m>A</m>.
+  </p>
+
+  <p>
+    In this section we compute and interpret probability of events involving conditional probabilities.
+  </p>
+
+
+    <p>
+  Run the following code to download the <c>loans_full_schema</c> data set, and display the variables it records:
+
+  <sage language="r">
+          <input>
+            loans = read.csv("https://github.com/TienChih/tbil-stats/raw/main/data/loans_full_schema.csv")
+            
+            names(loans)
+          </input>
+        </sage>
+
+</p>
+
+<p>
+This data set represents thousands of loans made through the Lending Club platform, which is a platform that allows individuals to lend to other individuals.
+
+</p>
+
+</introduction>
+
+
+<subsection>
+  <title>Defining Conditional Probability</title>
+
+
+  <exploration xml:id="rolling-die-conditional">
+        <introduction>
+            <p>
+Consider the experiment rolling a dice.  Let <m>A</m> denote the event <q>the outcome is even</q>, and let <m>B</m> denote <q>the outcome is greater than 3</q>.
+            </p>
+        </introduction>
+        <task>
+            <p>
+Run the following code to show the results of 20 die rolls.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          roll=sample(1:6,20,replace=TRUE)
+
+          roll
+          </input>
+          </sage>
+        </p>
+        </task>
+        <task>
+            <p>
+Out of the 20 die rolls, how many satisfy <m>A</m>?  List them:
+            </p>
+        </task>
+
+        <task>
+            <p>
+Out of the die rolls which satisfy <m>A</m>, how many also satisfy <m>B</m>? List them:
+            </p>
+        </task>
+
+
+        
+        <task>
+            <p>
+Out of the 20 die rolls, how many satisfy <m>B</m>?  List them:
+            </p>
+        </task>
+
+        <task>
+            <p>
+Out of the die rolls which satisfy <m>B</m>, how many also satisfy <m>A</m>?  List them:
+            </p>
+        </task>
+
+<task>
+            <p>
+Out of the 20 die rolls, what <em>proportion</em> of them satisfy <m>A</m>?
+            </p>
+        </task>
+
+        <task>
+            <p>
+Out of the  die rolls that satisfy <m>B</m>, what <em>proportion</em> of them satisfy <m>A</m>?
+            </p>
+        </task>
+
+        <task>
+            <p>
+Out of the 20 die rolls, what <em>proportion</em> of them satisfy <m>B</m>?
+            </p>
+        </task>
+
+        <task>
+            <p>
+Out of the  die rolls that satisfy <m>A</m>, what <em>proportion</em> of them satisfy <m>B</m>?
+            </p>
+        </task>
+
+
+        <task>
+            <p>
+Out of the 20 die rolls, how many satisfy both <m>A</m> and <m>B</m>?  List them:
+            </p>
+        </task>
+
+        
+
+    </exploration>
+
+
+    <activity xml:id="activity-conditional-on-die">
+        <title>Conditional Probability and Dice</title>
+        <introduction> <p>Consider rolling a die, and let <m>A</m> denote the event <q>the outcome is even</q>, and let <m>B</m> denote <q>the outcome is greater than 3</q> as in <xref ref="rolling-die-conditional"/>
+      </p>
+    </introduction>
+    <task>
+            <p>
+Out of the possible outcomes 1 though 6, which satisfy <m>B</m>?
+            </p>
+        </task>
+         <task>
+            <p>
+Out of the outcomes which satisfy <m>B</m>, how many also satisfy <m>A</m>?  What are they?
+            </p>
+        </task>
+
+         <task>
+            <p>
+If you picked an outcome at random which satisfied <m>B</m>, what is the <em>probability</em> that it satisfies <m>A</m> as well?
+            </p>
+        </task>
+
+         <task>
+            <p>
+How does this compare to <m>P(A)</m>, the probability that <m>A</m> occurs in general?
+            </p>
+        </task>
+
+    </activity>
+
+
+<definition xml:id="DefinitionConditional">
+  <statement>
+    <p>
+      We say the probability of <m>A</m> <term>given</term> <m>B</m> is the probability <m>A</m>occurs assuming that <m>B</m> occurs, denoted <m>P(A|B)</m>.
+    </p>
+    <p>
+      We can imagine this by taking the proportion of sample space that is <m>B</m> i.e. <m>P(B)</m> and inside of that, finding the proportion that  <em>also</em> satisfies A i.e. <m>P(A\  \text{and}\ B)</m>
+
+      <figure>
+<caption> <m>B</m>, the new sample space.  </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}
+\fillB
+
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>
+
+<figure>
+<caption> <m>A</m> when restricted to <m>B</m>.  </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}
+\fillACapB
+
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>      
+    </p>
+
+    <p>
+      Since we now treat <m>B</m> as the entire sample space, we take this proportion out of <m>P(B)</m> so <me>P(A|B)=\frac{P(A\ \text{and}\ B)}{P(B)}.</me>
+    </p>
+  </statement>
+</definition>
+
+
+<activity xml:id="activity-conditional-on-die-def">
+        <title>Conditional Probability and Dice using the Definition</title>
+        <introduction> <p>Consider rolling a die, and let <m>A</m> denote the event <q>the outcome is even</q>, and let <m>B</m> denote <q>the outcome is greater than 3</q> as in <xref ref="rolling-die-conditional"/>, <xref ref="activity-conditional-on-die"/>.
+      </p>
+    </introduction>
+    <task>
+            <p>
+              Find <m>P(A), P(B), P(A\ \text{and}\ B )</m>.
+            </p>
+        </task>
+         <task>
+            <p>
+Use <xref ref="DefinitionConditional"/> to find <m>P(A|B)</m>.
+            </p>
+        </task>
+
+         <task>
+            <p>
+How does this value compare to what you in in <xref ref="activity-conditional-on-die"/> (c)?
+            </p>
+        </task>
+
+         
+
+    </activity>
+
+
+
+    <activity xml:id="activity-conditional-on-die-sim">
+        <title>Conditional Probability and Dice Simulation</title>
+        <introduction> <p>Consider rolling a die, and let <m>A</m> denote the event <q>the outcome is even</q>, and let <m>B</m> denote <q>the outcome is greater than 3</q> as in <xref ref="rolling-die-conditional"/>, <xref ref="activity-conditional-on-die"/>, <xref ref="activity-conditional-on-die-def"/>.  We will simulate 1000 die rolls and observe the results.
+      </p>
+    </introduction>
+    
+
+         <task>
+            <p>
+Run the following code to show the results of 1000 die rolls as a histogram.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          roll=sample(1:6,1000,replace=TRUE)
+
+          hist(roll)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+
+        <task>
+            <p>
+Run the following code to seperate out the die rolls which are greater than 3 as it's own vector <c>B</c>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          B=subset(roll, roll>3)
+
+          hist(B)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+
+        <task>
+            <p>
+Run the following code to count the length of <c>B</c>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(B)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to count the elements of <c>B</c> that are even (i.e. satisfy <m>A</m>).
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(B%%2==0))
+          </input>
+          </sage>
+        </p>
+        </task>
+
+
+
+        <task>
+            <p>
+What proportion the  die rolls who satisfy <m>B</m>  also satisfy <m>A</m>?
+            </p>
+        </task>
+
+        <task>
+            <p>
+How does this value compare to what you found in <xref ref="activity-conditional-on-die-def"/>(b)?
+            </p>
+        </task>
+
+    </activity>
+
+
+
+
+
+    <activity xml:id="activity-conditionalprobstudents">
+        <title>Conditional Probability Students</title>
+        <introduction xml:id="introduction-">
+            <p> Suppose that in a Mathematics department, 20% of the students have done undergraduate research, 25% have gone to conferences.  We also have that 30% have done either one or the other.</p>
+            <p> Let <m>R</m> denote the event <q>has done undergraduate research</q> and <m>C</m> denote <q>has gone to a conference.</q>.</p>
+        </introduction>
+
+        <task>
+            <p>
+              Fill out the proportion of students that fit in each piece of this Venn Diagram:
+
+              <figure>
+<caption> <m>R</m> research, <m>C</m> conferences.  </caption>      
+      <image>
+ <description>Test Venn Diagram.</description>     
+<latex-image>
+<![CDATA[\begin{venndiagram2sets}[labelA={$R$}, labelB={$C$}]
+
+\end{venndiagram2sets}]]>
+</latex-image>
+      </image>
+      </figure>   
+
+            </p>
+        </task>
+
+        <task>
+            <p>
+If a student doesn't do undergraduate research, whats the probability that they go to a conference?
+            </p>
+        </task>
+
+        <task>
+            <p>
+If a student goes to a conference, what is the probability that they did undergrad research?
+            </p>
+        </task>
+
+
+    </activity>
+
+
+    <activity xml:id="activity-loan-conditional">
+        <title>Conditional Probability and Loan Data</title>
+        <introduction> <p>We show how conditioning by one variable affects (if at all) another variable.
+      </p>
+      <p>
+        Recall that there are 10000 loans in the <c>loans</c> data set.
+      </p>
+    </introduction>
+
+    
+    
+
+         <task>
+            <p>
+Run the following code to show how many loans were from applicants who owned their homes.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(loans$homeownership=="OWN"))
+          </input>
+          </sage>
+        </p>
+        </task>
+
+<task>
+    <p>What proportion of the loans went to home owners?</p>
+</task>
+
+<task>
+            <p>
+Run the following code to subset the loans with grade <q>A</q>, and show how many loans this is.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          gradeAloans=subset(loans, loans$grade=="A")
+          nrow(gradeAloans)
+          </input>
+          </sage>
+        </p>
+        </task>
+
+
+        <task>
+            <p>
+Run the following code to show how many  grade <q>A</q> loans  were from applicants who were home owners.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(gradeAloans$homeownership=="OWN"))
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+    <p>What proportion of grade <q>A</q> loans went to home owners?  How does this answer compare to what you found in (b)</p>
+</task>
+
+<task>
+      <p>
+      Run the following code to take a sample of 1000 loans and display a contingency table comparing loan grades to home-ownership from this sample.  What proportion of the homeowners got grade <q>A</q> loans?
+      <sage language="r">
+          <input>
+          index = sample(1:nrow(loans), 1000)
+          samp=loans[index,]
+
+          table(samp$grade,samp$homeownership)
+
+          </input>
+        </sage>
+      </p>
+     </task> 
+
+    </activity>
+
+
+</subsection>
+
+
+
+
+<subsection>
+  <title>Independence</title>
+
+  <activity xml:id="activity-doubledie">
+      <introduction>
+          <p>Suppose you roll a pair of dice, a blue dice and a green dice.  Consider the possible blue-green outcomes:
+
+            <me>
+          \begin{array}{cccccc}
+          (1,1)\amp(2,1)\amp(3,1)\amp(4,1)\amp(5,1)\amp(6,1)\\
+          (1,2)\amp(2,2)\amp(3,2)\amp(4,2)\amp(5,2)\amp(6,2)\\
+          (1,3)\amp(2,3)\amp(3,3)\amp(4,3)\amp(5,3)\amp(6,3)\\
+          (1,4)\amp(2,4)\amp(3,4)\amp(4,4)\amp(5,4)\amp(6,4)\\
+          (1,5)\amp(2,5)\amp(3,5)\amp(4,5)\amp(5,5)\amp(6,5)\\
+          (1,6)\amp(2,6)\amp(3,6)\amp(4,6)\amp(5,6)\amp(6,6)\\
+          \end{array}
+        </me>
+
+        Let <m>A</m> denote the outcome <q>The blue die comes up a 5</q>, and <m>B</m> denote the outcome <q>The green comes up even</q>.
+
+
+          </p>
+
+          
+      </introduction>
+
+      <task>
+        <p>Which of these outcomes correspond to <m>A</m>?</p>
+    </task>
+
+    <task>
+        <p>What is <m>P(A)</m>?</p>
+    </task>
+
+     <task>
+        <p>Which of these outcomes correspond to <m>B</m>?</p>
+    </task>
+
+    <task>
+        <p>What is <m>P(B)</m>?</p>
+    </task>
+
+     <task>
+        <p>Out of the outcomes which correspond to <m>B</m>, which of them correspond to <m>A</m>?</p>
+    </task>
+
+    <task>
+        <p>What is <m>P(A|B)</m>?</p>
+    </task>
+
+    <task>
+        <p>What do you notice about <m>P(A)</m> compared to <m>P(A|B)</m>?   How does restricting to even green outcomes change (if at all) the likelihood of blue coming up a 5? </p>
+    </task>
+
+
+
+  </activity>
+
+
+
+  <activity xml:id="activity-doubledie-simulate">
+        <title>Simulating the double die</title>
+        <introduction> <p>We simulate 100 rolls of a pair of dice.
+      </p>
+      
+    </introduction>
+
+
+    <task>
+            <p>
+Run the following code to simulate 1000 blue die rolls and 1000 green die rolls, and show the first 10 pairs.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          bluedie = sample(1:6, 1000, replace = TRUE)
+          greendie = sample(1:6, 1000, replace = TRUE)
+
+          doubledie=data.frame(bluedie, greendie)
+
+          head(doubledie, n=10)
+
+
+
+
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+        <task>
+            <p>
+Run the following code to see how many of these rolls satisfied <m>A</m>: <q>the blue die comes up a 5</q>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(doubledie$bluedie==5))
+
+          </input>
+          </sage>
+          What proportion of the die rolls was <m>A</m> satisfied? 
+        </p>
+        
+        </task>
+
+        <task>
+            <p>
+Run the following code to see how many of these rolls satisfied <m>B</m>: <q>the green die comes up even</q>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(doubledie$greendie%%2==0))
+
+          </input>
+          </sage>
+          What proportion of the die rolls was <m>B</m> satisfied? 
+        </p>
+        
+        </task>
+
+        <task>
+            <p>
+Run the following code to subset out the pairs satisfying <m>B</m> i.e. where the green die was even, and display the first 10 rows.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          greendieeven=subset(doubledie, doubledie$greendie%%2==0)
+
+          head(greendieeven, n=10)
+
+          </input>
+          </sage>
+        </p>
+        </task>
+
+
+         <task>
+            <p>
+Run the following code to see how many of the rolls satisfying <m>B</m> also satisfied <m>A</m>.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+          length(which(greendieeven$bluedie==5))
+
+          </input>
+          </sage>
+          What proportion of the die rolls satisfying <m>B</m> was <m>A</m> also satisfied? 
+        </p>
+        
+        </task>
+
+
+
+
+    </activity>
+
+
+  <definition xml:id="DefinitionIndependence">
+  <statement>
+    <p>
+      Events <m>A, B</m> are <term>independent</term> of each other if the outcome of one event does not change the probability of the other occuring.  That is <me>P(A|B)=P(A).</me>
+    </p>
+  </statement>
+</definition>
+
+
+<remark xml:id="remark-proddefofind">
+  <statement>
+    <p>
+      Events <m>A, B</m> are <term>independent</term> if and only if:
+       <md>
+        <mrow>P(A|B)\amp= P(A)</mrow>
+        <mrow>\frac{P(A\ \text{and}\ B)}{P(B)}\amp= P(A)</mrow>
+        <mrow>P(A\ \text{and}\  B)\amp= P(A)P(B).</mrow>
+        </md>
+    </p>
+  </statement>
+</remark>
+
+<remark>
+  <p>
+    We think of two events as <q>independent</q> if knowing the outcome of one event will not change how we think of the outcome of another event.
+  </p>
+  <p>
+    For example, <q>It rains today</q> and <q>I flip a coin and get a heads</q>.  The chance of getting that heads remains unchanged whether or not it rains!</p>
+
+    <p>
+      In general, it's hard to know if two events are independent or not!  Things may seem unrelated, but share hidden connections and causes.  The world is a complicated place!</p>
+
+  </remark>
+
+  <activity xml:id="activity-which-are-independent">
+    <title>Which are Independent?</title>
+    <task>
+      <p>In <xref ref="rolling-die-conditional"/> are <m>A</m> and <m>B</m> independent?  Why or why not?</p>
+    </task>
+
+    <task>
+      <p>In <xref ref="activity-conditionalprobstudents"/> are <m>R</m> and <m>C</m> independent?  Why or why not?</p>
+    </task>
+
+    <task>
+      <p>In <xref ref="activity-loan-conditional"/> are <q>applicant owns a home</q> and <q>applicant recieves grade <q>A</q> loan</q> independent?  Why or why not?</p>
+    </task>
+
+    
+
+    <task>
+      <p>In <xref ref="activity-doubledie"/> are <m>A</m> and <m>B</m> independent?  Why or why not?</p>
+    </task>
+
+  </activity>
+
+
+
+
+  <activity xml:id="activity-cards1">
+    <title>Cards and Independence</title>
+    <introduction>
+        <p>Consider the standard 52 card deck, with 4 suits (Diamonds, Clubs, Hearts, Spades) and 13 values (2-10, Jack, Queen, King, Ace).  Suppose we draw one card from this deck.</p>
+        
+    </introduction>
+    <task>
+      <p>Suppose</p>
+    </task>
+
+    <task>
+      <p>What is the probability that you draw a Spade?</p>
+    </task>
+
+    <task>
+      <p>What is the probability that you draw an Ace?</p>
+    </task>
+
+    <task>
+      <p>What is the probability that you draw an Ace of Spades?</p>
+    </task>
+
+    <task>
+      <p>Are drawing an Ace and a Spade Independent?  Why or why not?</p>
+    </task>
+
+    <task>
+      <p>Suppose I draw a second card without replacement.  Is the event that this second card an Ace independent of the event that the original card were an Ace?  (Hint: Does the outcome that the first card is or is not an ace effect the outcome that the second card would be?)</p>
+    </task>
+
+  </activity>
+
+  <activity xml:id="activity-cards2">
+    <title>Cards and Independence part 2</title>
+    <introduction>
+        <p>Consider the standard 52 card deck, with 4 suits (Diamonds, Clubs, Hearts, Spades) and 13 values (2-10, Jack, Queen, King, Ace).  Suppose we draw a card from this deck, record the value, put it back, reshuffle, and draw again.</p>
+        
+    </introduction>
+    <task>
+      <p>Explain using the meaning of independence (without using arithmetic) to explain why the outcomes of these draws are independent.</p>
+    </task>
+
+    <task>
+      <p>What is the probability the first card is a Heart?</p>
+    </task>
+
+    <task>
+      <p>What is the probability the second card is a Heart?</p>
+    </task>
+
+    <task>
+      <p>Using the fact that the draws are independent, what is the probability the cards are both Hearts?</p>
+    </task>
+
+    <task>
+      <p>What is the probability that the first card is a Queen and the second note a Queen?</p>
+    </task>
+
+  </activity>
+
+
+
+
+
+
+
+
+
+
+
+</subsection>
+
+
+
+
+
+</section>

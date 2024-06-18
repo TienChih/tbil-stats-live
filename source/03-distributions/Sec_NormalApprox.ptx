@@ -1,0 +1,259 @@
+<section xml:id="Sec_NormalApprox">
+
+   <title>Normal Approximation (D5)</title>
+
+   <introduction>
+        <p> In this section, we use the normal distribution to approximate  the binomial probability distribution for large <m>n</m>.</p>
+
+        </introduction>
+      
+
+
+      <exploration xml:id="exploration-flipmanycoins">
+          <title>Flip Many Coins</title>
+          <task>
+      <p>
+        Run the following code to simulate 1000 events where you flip <c>coinflips=10</c> coins, and record the number of resulting heads:
+          <sage language="r">
+          <input>
+        numheads = rep(0, 1000)
+        coinflips=10
+
+        for(i in 1:coinflips){
+          numheads=numheads+sample(c(1, 0), 1000, replace = TRUE, prob = c(0.5, 0.5)) 
+        }
+        hist(numheads, breaks=25)
+        print(coinflips)
+        </input>
+        </sage>
+      </p>
+      
+    </task>
+
+    <task>
+            <p>Repeat the above task but chance <c>coinflips</c> to <c>20, 30, 50, 100, 200</c>.  As you increase <c>coinflips</c>, what do you notice about the shape of the histogram?</p>
+          </task>
+
+
+
+      </exploration>
+
+      <remark>
+        <p>
+          Given a binomial random variable <m>X</m> wnere <m>np, n(1-p)\geq 10</m>, that is, there are at least 10 expected successes and failures, <m>X</m> can be approximated by a normal random variable with parameters <me>\mu=np, \sigma=\sqrt{np(1-p)}.</me>
+        </p>
+      </remark>
+
+
+       <activity xml:id="activity-manycoinflips2">
+          <title>Flip Many Coins - Normal Approximation</title>
+
+          <introduction>
+            <p>
+             Suppose we flip 100 coins and let <m>X</m> denote the number of heads, as in <xref ref="exploration-flipmanycoins"/>.  Let <m>N_X</m> denote the normal random variable which approximates <m>X</m> as in <xref ref="remark-normalapproximation"/>.
+            </p>
+            
+          </introduction>
+
+
+          <task>
+            <p>
+              Use <xref ref="remark-normalapproximation"/> to find the mean and standard deviation of the normal random variable <m>N_X</m> that approximates <m>X</m>.
+            </p>
+          </task>
+
+          <task>
+      <p>
+        Fix and run the following code to simulate 1000 events where you flip  <c>coinflips=1000</c> coins, and record the number of resulting heads, as well as display a normal curve over the histogram:
+          <sage language="r">
+          <input>
+        numheads = rep(0, 1000)
+        coinflips=100
+
+        m=coinflips*0.5
+        std=sqrt(coinflips*0.5*(1-0.5))
+
+        for(i in 1:coinflips){
+          numheads=numheads+sample(c(1, 0), 10000, replace = TRUE, prob = c(0.5, 1-0.5)) 
+        }
+        hist(numheads, breaks=25, prob=TRUE)
+        curve(dnorm(x, mean=m, sd=std), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+        print(coinflips)
+        </input>
+        </sage>
+      </p>
+          </task>
+
+
+      <task>
+            <p>
+              Fix and run the following code to see the probability that you get less than 45 heads:
+              <sage language="r">
+          <input>
+          pnorm(45, mean=FIXME, sd=FIXME)
+
+        </input>
+        </sage>
+            </p>
+          </task>
+
+        <task>
+            <p>
+              Fix and run the following code to find a value <m>k</m> so that the probability of getting more than <m>k</m> heads is 25%:
+              <sage language="r">
+          <input>
+          qnorm(0.75, mean=FIXME, sd=FIXME)
+
+        </input>
+        </sage>
+            </p>
+          </task>  
+      
+
+
+          <task>
+            <p>
+              Do your outcomes make sense when looking at the histogram and curve?
+            </p>
+          </task>
+
+
+
+      </activity>
+
+
+
+
+
+
+      <activity xml:id="activity-surveyresponse">
+          <title>Survey Responses</title>
+
+          <introduction>
+            <p>
+              A research group emails 1000 city employees with a survey, each recipient has a 20% chance of responding to the survey.  Let <m>X</m> denote the number of employees who respond.  Use the normal approximation <xref ref="remark-normalapproximation"/> to answer the following.
+            </p>
+            <p>
+              <sage language="r">
+          <input>
+
+        </input>
+        </sage>
+      </p>
+          </introduction>
+
+
+          <task>
+            <p>
+              What is the mean and standard deviation of the normal random variable that approximates <m>X</m>?
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Use <xref ref="remark-normalapproximation"/> to determine the probability that between 175 and 200 employees respond to the survey.
+
+                      <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Use <xref ref="remark-normalapproximation"/> to determine the probability that more than 250 employees respond to the survey.
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+          <task>
+            <p>
+              Use <xref ref="remark-normalapproximation"/> to determine a value <m>k</m> so that there is a 95% chance between <m>200-k</m> and <m>200+k</m> employees respond to the survey.
+              <sage language="r">
+                      <input>
+        
+                      </input>
+                      </sage>
+                  <hint>
+                    <title>Desmos</title>
+                    <p>
+
+                      <interactive desmos="84dbdr69to"/>
+                      <interactive desmos="ca5xk6sbyl"/>
+
+                    </p>
+
+                  </hint>
+            </p>
+          </task>
+
+          <task>
+      <p>
+        Run the following code to simulate 10000 events where you send  <c>surveys=1000</c> surveys, and record the number of resulting responses, as well as display a normal curve over the histogram:
+          <sage language="r">
+          <input>
+        responses = rep(0, 10000)
+        surveys=1000
+        p=0.2
+
+        m=surveys*p
+        std=sqrt(surveys*p*(1-p))
+
+        for(i in 1:surveys){
+          responses=responses+sample(c(1, 0), 10000, replace = TRUE, prob = c(p, 1-p)) 
+        }
+        hist(responses, breaks=25, prob=TRUE)
+        curve(dnorm(x, mean=m, sd=std), col="darkblue", lwd=2, add=TRUE, yaxt="n")
+        print(surveys)
+        </input>
+        </sage>
+        Do your results make sense when looking at the histogram and curve?
+      </p>
+      
+    </task>
+
+
+      </activity>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</section>

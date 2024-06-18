@@ -1,0 +1,17 @@
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude"  xml:id="Chap_Numerical">
+  <title>Inference for Numerical Variables (N)</title>
+  <objectives>
+        <ul>
+            <xi:include href="outcomes.ptx"/>
+        </ul>
+    </objectives>
+  <xi:include  href="Sec_tVariable.ptx"/>
+  <xi:include  href="Sec_OneVarNum.ptx"/> 
+  <xi:include  href="Sec_PairedData.ptx"/>
+  <xi:include  href="Sec_TwoVarNum.ptx"/>
+  <xi:include  href="Sec_SizeofSampleNum.ptx"/> 
+  <xi:include  href="Sec_ANOVA.ptx"/> 
+
+
+  
+</chapter>

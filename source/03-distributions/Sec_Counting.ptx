@@ -1,0 +1,315 @@
+<section xml:id="Sec_Counting">
+
+    <title>Counting Principles (D3)</title>
+
+   <introduction>
+        <p> In this section, we explore counting principles for ordered and unordered selection.</p>
+        
+    </introduction>
+
+    <subsection>
+      <title>Ordered Counting</title>
+
+      <exploration xml:id="exploration-breakfast">
+          <title>Breakfast Choices</title>
+      
+      <introduction>
+          <p>Suppose you were eating breakfast, and you could choose from eggs, sausage or pancakes to eat, and coffee and juice to drink. </p>
+          
+      </introduction>
+
+      <task>
+          <p>List all of the possible food-beverage choices you could make.  (Assume you can't skip either, and can only have one food idea and one beverage.)</p>
+      </task>
+
+       <task>
+          <p>How many different choices could you make?</p>
+      </task>
+
+      </exploration>
+
+      <activity>
+        <introduction>
+            <p>
+One of the most useful counting tools in mathematics is the <term>multiplication principle</term>.
+This principle is used when all the items to be counted come from a sequence of choices.
+If each item is made by making a choice from <m>a</m> things, then a choice from <m>b</m> things,
+then a choice from <m>c</m> things, and so on, then the total number of items is given by the product:
+            </p>
+            <me>
+a\cdot b\cdot c\cdot \cdots
+            </me>
+            
+        </introduction>
+        <task>
+            <p>
+Suppose for a fancy dinner you are given four options as an appetizer, six options as an entree,
+three options as a beverage, and two options as a dessert. How many different dinners are possible?
+            </p>
+        </task>
+        <task>
+            <p>
+Suppose you could choose an appetizer or a dessert, but not both. How many different dinners
+are possible in that scenario?
+            </p>
+        </task>
+        <task>
+            <p>
+What if instead you consider the choice to skip any part of the meal, holding the appetizer, entree,
+beverage, and/or dessert. How many dinners are possible in that case?
+            </p>
+        </task>
+        <task>
+            <p>
+What is the size of the sample space for the experiment of rolling
+a six sided die, then flipping a coin, then drawing a card from a shuffled 52-card deck?
+            </p>
+        </task>
+    </activity>
+
+
+    
+
+    <activity xml:id="activity-letterrrangemnts">
+        <title>Letter Arrangements</title>
+
+        <introduction>
+            <p>Suppose you had the five tiles with A, B, C, D, E written on them.</p>
+            
+        </introduction>
+
+        <task>
+            <p>How many ways can you select two tiles and put them in a row? (Use the multiplication principle, how many choices do you have for the first tile?  The second?)</p>
+        </task>
+
+        <task>
+            <p>How many ways can you select three tiles and put them in a row?</p>
+        </task>
+
+        <task>
+            <p>How many ways can you select four tiles and put them in a row?</p>
+        </task>
+
+        <task>
+            <p>How many ways can you select all five tiles and put them in a row?</p>
+        </task>
+
+
+        <task>
+      <p>
+        Run the following code to display all the possible ways to select <c>k=2</c> tiles out of <c>A, B, C, D, E</c> and arrange them:  
+        <sage>
+          <input>
+          S=['A', 'B', 'C', 'D', 'E']
+          k=2
+          A=Arrangements(S,k)
+
+          print(A.list())            
+          print(A.cardinality() )   
+          
+          </input>
+          </sage>
+      </p>
+      <p>
+        How does this compare to what you found in (a)?
+      </p>
+    </task>
+
+    <task>
+            <p>Adjust the above code to let <c>k</c> be 3, 4 and 5.  How does the outputs compare to what you found in (b), (c), and (d)? </p>
+        </task>
+
+
+    </activity>
+
+
+    <definition xml:id="definition-permutation">
+  <statement>
+    <p>
+    A <term>permutation</term> is an ordered arrangement of objects.  In partcular, a <m>r</m> permutation on an <m>n</m> element set is a selection of <m>r </m> objects from this set and arranged.
+  </p>
+  <p>
+    The number of <m>r</m> permutations on an <m>n</m> element set would be computed <me>P(n,r)=\overbrace{n\cdot (n-1)\cdots(n-r+1)}^r.</me>
+  </p>
+  </statement>
+  </definition> 
+
+  <remark>
+  <statement>
+    <p>
+      We note that <m>n!</m> denotes <m>n!=\overbrace{n\cdot (n-1)\cdots 1}^{n}</m> where we let <m>0!=1</m>.
+    </p>  
+    <p>
+      Notice that <me>P(n,n)=\overbrace{n\cdot (n-1)\cdots 1}^{n}=n!.</me>
+    </p>
+    <p>
+      Also notice that more generally <me>P(n,r)=\overbrace{n\cdot (n-1)\cdots (n-r+1)}^{r}=\frac{n\cdot (n-1)\cdots (n-r+1)\cdot \color{blue}{(n-r)\cdots 1}}{\color{blue}{(n-r)\cdots 1}}=\frac{n!}{(n-r)!}.</me>
+    </p>  
+  </statement>
+</remark>  
+
+
+<activity xml:id="activity-permutations">
+        <title>Permutations</title>
+
+        
+
+        <task>
+            <p>If a driver had to make 6 deliveries, how many ways could they pick an order to do so?</p>
+        </task>
+
+        <task>
+            <p>If a class of 30 had to select 4 students to be class president, vice president, secretary and treasurer, how many ways could you do this?</p>
+        </task>
+
+        <task>
+            <p>If you have 10 books, how many ways can you select 6 of them to arrange on a shelf?</p>
+        </task>
+
+
+    </activity>
+
+    </subsection>
+
+
+
+    <subsection>
+      <title>Unordered Counting</title>
+
+      <exploration xml:id="exploration-combinations">
+          <title>Combinations</title>
+          <introduction>
+              <p>Suppose you had 4 tiles with letters W, X Y and Z written on them.  We know from <xref ref="definition-permutation"/> that there the number of ways to select 3 out of these 4 tiles and arrange them is <m>P(4,3)=\frac{4!}{(4-3)!}=24</m>.</p>
+              
+          </introduction>
+
+          <task>
+            <p>Write out all 24 arrangements, grouping together the arrangemnets that use the same letters.  For example WXY and WYX would be in the same group along with other possible arrangements of the same letters.</p>
+        </task>
+
+        <task>
+            <p>How many different groups do you have?</p>
+        </task>
+
+        <task>
+            <p>How many arrangements are in each group?</p>
+        </task>
+
+         <task>
+            <p>How many ways could we select 3 out of 4 tiles if we were <em>unconcerned</em> about the order in which we selected them?</p>
+        </task>
+
+        <task>
+        <p>
+        Run the following code to display all the possible ways to select <c>k=3</c> tiles out of <c>W, X, Y, Z</c> without arranging them:  
+        <sage>
+          <input>
+          S=['W', 'X', 'Y', 'Z']
+          k=3
+          C=Subsets(S,k)
+
+          print(C.list())            
+          print(C.cardinality() )   
+          
+          </input>
+          </sage>
+      </p>
+      <p>How does this compare to what you've done above?</p>
+
+    </task>
+
+
+
+      </exploration>
+
+
+      <definition xml:id="definition-combination">
+    <title>Combination</title>
+    <statement>
+      <p>
+        Given <m>n</m> objects, the number of ways to select <m>k</m> of them <em>without order</em>, also called a <term>combination</term> is: <me>C(n,k)=\frac{P(n,k)}{k!}=\frac{n!}{k!(n-k)!}.</me>
+        This is also commonly denoted <m>{n\choose k}</m>, which we will avoid to prevent confusion with fractions.
+      </p>
+    </statement>
+   </definition> 
+
+
+
+   <activity xml:id="activity-combinations">
+        <title>Combinations</title>
+
+        
+
+       
+
+        <task>
+            <p>If a class of 30 had to select 4 students to be class representatives, how many ways could you do this?</p>
+        </task>
+
+        <task>
+            <p>If you have 10 books, how many ways can you select 6 of them to give away?</p>
+        </task>
+
+        <task>
+            <p>If you have 10 books, how many ways can you select 4 of them to keep?</p>
+        </task>
+
+        <task>
+            <p>How do the questions (b) and (c), and their answers compare?</p>
+        </task>        
+
+
+    </activity>
+
+    <remark>
+  
+    <p>
+      Here are some useful facts about combinations.
+      <ul>
+        <li> <m>C(n,n)=1</m>.  There is only one way to pick <m>n</m> of <m>n</m> objects.  Pick them all.</li>
+        <li> <m>C(n,r)=C(n,n-r)</m>.  Picking <m>r</m> objects is the same as selecting <m>n-r</m> objects to <em>not</em> pick. </li>
+        <li> <m>C(n,0)=1</m>.  Combine the above facts.  Alternatively, the only selection of no objects is the empty selection.</li>
+
+      </ul>  
+    </p>
+  
+ </remark>
+
+
+ <activity xml:id="activity-permutationorcombinations">
+        <title>Permutation or Combination</title>
+
+      <introduction>
+            <p>For each of the following determine if the problem describes a permutation (order matters) or a combination (order doesn't matter) and find the answer.</p>
+            
+        </introduction>
+
+       
+
+        <task>
+            <p>Out of 20 shirts, how many can I pick to wear for each day of the week Sunday through Saturday?</p>
+        </task>
+
+        <task>
+            <p>How many ways can I pick 3 out of 25 ice cream flavors to buy?</p>
+        </task>         
+
+        <task>
+            <p>How many 5 card hands out of a 52 card deck are there?</p>
+        </task>
+
+        <task>
+            <p>If I deal 5 cards from a 52 card deck, one to each of 5 people, how many ways could this happen?</p>
+        </task>
+
+
+    </activity>
+
+
+
+
+</subsection>
+
+
+
+</section>

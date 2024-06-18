@@ -1,0 +1,15 @@
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude"  xml:id="Chap_LinearRegression">
+  <title>Linear Regression (R)</title>
+  <objectives>
+        <ul>
+            <xi:include href="outcomes.ptx"/>
+        </ul>
+    </objectives>
+  <xi:include  href="Sec_Correlation.ptx"/>
+  <xi:include  href="Sec_InterpretingRegression.ptx"/>
+  <xi:include  href="Sec_InferenceRegression.ptx"/>
+  
+
+
+  
+</chapter>
